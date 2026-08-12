@@ -69,7 +69,9 @@ import {
     becomeAnEarlyYearsTeacherContent,
     becomeAnEarlyYearsTeacherContent2,
     postRatioRequirementManagerContent,
-    postRatioRequirementManagerContentList
+    postRatioRequirementManagerContentList,
+    practitionerNotFullAndReleventRequirementsTextParagraphOne,
+    practitionerNotFullAndReleventRequirementsTextParagraphTwo
 } from './regression-test-content';
 
 type Scenario = {
@@ -193,12 +195,7 @@ const level2Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "Not on the list",
         qualificationToSelect: "EYQ-001",
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate',
@@ -211,12 +208,7 @@ const level2Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "Not on the list",
         qualificationToSelect: "EYQ-001",
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2MaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded after June 2016 - Paediatric first aid certificate',
@@ -229,96 +221,77 @@ const level2Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "Not on the list",
         qualificationToSelect: "EYQ-001",
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2PaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Not Approved - Null requirements',
         scenarioId: 4,
-        monthStarted: "01",
-        yearStarted: "2013",
+        monthStarted: "09",
+        yearStarted: "2019",
         monthAwarded: "06",
-        yearAwarded: "2018",
+        yearAwarded: "2020",
         selectedLevel: 2,
-        selectedAwardingOrganisation: "Not on the list",
-        qualificationToSelect: "EYQ-300",
-        additionalRequirements: [noAtQuestionOne],
+        selectedAwardingOrganisation: "NCFE",
+        qualificationToSelect: "EYQ-216",
+        additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', notApproved, '', {
             fullAndRelevantHeading: qualificationNotFullAndRelevantHeading,
             fullAndRelevantContent: qualificationNotFullAndRelevantHeadingContent,
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: noQualificationNeededContent },
-            { selector: "#requirements-heading + p + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
         scenarioName: 'Level 3 - Not Approved - If the Level 2 qualification is NOT full and relevant - No other requirements',
         scenarioId: 5,
-        monthStarted: "01",
-        yearStarted: "2013",
+        monthStarted: "09",
+        yearStarted: "2019",
         monthAwarded: "06",
-        yearAwarded: "2018",
+        yearAwarded: "2020",
         selectedLevel: 2,
-        selectedAwardingOrganisation: "Not on the list",
-        qualificationToSelect: "EYQ-300",
-        additionalRequirements: [noAtQuestionOne],
+        selectedAwardingOrganisation: "NCFE",
+        qualificationToSelect: "EYQ-216",
+        additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', notApproved, '', {
             fullAndRelevantHeading: qualificationNotFullAndRelevantHeading,
             fullAndRelevantContent: qualificationNotFullAndRelevantHeadingContent,
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: noQualificationNeededContent },
-            { selector: "#requirements-heading + p + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
-        scenarioName: 'Level 3 - Not Approved - If the Level 2 qualification is NOT full and relevant - No other requirements',
+        scenarioName: 'Level 3 - Not Approved - If the Level 2 qualification is full and relevant - No other requirements',
         scenarioId: 6,
-        monthStarted: "01",
-        yearStarted: "2013",
+        monthStarted: "09",
+        yearStarted: "2019",
         monthAwarded: "06",
-        yearAwarded: "2018",
+        yearAwarded: "2020",
         selectedLevel: 2,
-        selectedAwardingOrganisation: "Not on the list",
-        qualificationToSelect: "EYQ-300",
-        additionalRequirements: [yesAtQuestionOne],
+        selectedAwardingOrganisation: "NCFE",
+        qualificationToSelect: "EYQ-216",
+        additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', possibleRouteAvailable, ebrLevel3),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 6 - Not Approved - Null requirements',
         scenarioId: 7,
-        monthStarted: "01",
-        yearStarted: "2013",
+        monthStarted: "09",
+        yearStarted: "2019",
         monthAwarded: "06",
-        yearAwarded: "2018",
+        yearAwarded: "2020",
         selectedLevel: 2,
-        selectedAwardingOrganisation: "Not on the list",
-        qualificationToSelect: "EYQ-300",
-        additionalRequirements: [yesAtQuestionOne],
+        selectedAwardingOrganisation: "NCFE",
+        qualificationToSelect: "EYQ-216",
+        additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 6', notApproved),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
 ];
 
@@ -335,17 +308,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-077",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate',
@@ -359,17 +322,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-077",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2MaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded after June 2016 - Paediatric first aid certificate',
@@ -383,17 +336,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-077",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2PaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - started between September 2014 and August 2019 and awarded before June 2016 - Explanation of why the qualification is approved even though it's not full and relevant",
@@ -412,15 +355,8 @@ const level3Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level2 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -440,15 +376,8 @@ const level3Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level2 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -468,15 +397,8 @@ const level3Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level2 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -496,14 +418,8 @@ const level3Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -518,17 +434,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-077",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded between September 2014 and May 2016 - Level 2 English qualification',
@@ -542,17 +448,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-224",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2English),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded in June 2016 - Level 2 English qualification + maybe Paediatric first aid certificate',
@@ -566,17 +462,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-224",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishMaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded after June 2016 - Level 2 English qualification + Paediatric first aid certificate',
@@ -590,17 +476,7 @@ const level3Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-224",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishPaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Possible route available - Level 3 or above qualification that is NOT full and relevant - Experience-based route (EBR)',
@@ -619,15 +495,8 @@ const level3Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level2 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -647,15 +516,8 @@ const level3Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level2 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
 ];
@@ -673,17 +535,7 @@ const level4Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-090",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate',
@@ -697,17 +549,7 @@ const level4Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-090",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2MaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded after June 2016 - Paediatric first aid certificate',
@@ -721,17 +563,7 @@ const level4Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-090",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2PaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded before September 2014 - No other requirements',
@@ -744,17 +576,7 @@ const level4Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "Not on the list",
         qualificationToSelect: "EYQ-100",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded between September 2014 and May 2016 - Level 2 English qualification',
@@ -767,17 +589,7 @@ const level4Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-253",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2English),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded in June 2016 - Level 2 English qualification + maybe Paediatric first aid certificate',
@@ -790,17 +602,7 @@ const level4Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-253",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishMaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded after June 2016 - Level 2 English qualification + Paediatric first aid certificate',
@@ -813,17 +615,7 @@ const level4Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-253",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishPaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Possible route available - Level 3 or above qualification that is NOT full and relevant - Experience-based route (EBR)',
@@ -842,14 +634,8 @@ const level4Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -863,17 +649,7 @@ const level4Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-254",
         expectedContent: createSingleRatioExpectedContent('Level 6', notApproved),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
 ];
 
@@ -890,17 +666,7 @@ const level5Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-147",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate',
@@ -914,17 +680,7 @@ const level5Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-147",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2MaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Approved - Awarded after June 2016 - Paediatric first aid certificate',
@@ -938,17 +694,7 @@ const level5Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-147",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2PaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
 
     // Level 3 scenarios
@@ -964,17 +710,7 @@ const level5Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "Not on the list",
         qualificationToSelect: "EYQ-158",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded between September 2014 and May 2016 - Level 2 English qualification',
@@ -987,17 +723,7 @@ const level5Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-262",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2English),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded in June 2016 - Level 2 English qualification + maybe Paediatric first aid certificate',
@@ -1010,17 +736,7 @@ const level5Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-262",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishMaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Approved - Awarded after June 2016 - Level 2 English qualification + Paediatric first aid certificate',
@@ -1033,17 +749,7 @@ const level5Scenarios: Scenario[] = [
         selectedAwardingOrganisation: "NCFE",
         qualificationToSelect: "EYQ-262",
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishPaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: managementHeading },
-            { selector: "#requirements-heading + h3 + p", content: managementContent },
-            { selector: "#requirements-heading + h3 + p + p", content: helpAndSupportContent2 },
-            { selector: "#requirements-heading + h3 + p + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3", content: higherEducationHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p", content: helpAndSupportContent4 },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Possible route available - Level 3 or above qualification that is NOT full and relevant - Experience-based route (EBR)',
@@ -1062,14 +768,8 @@ const level5Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -1089,14 +789,8 @@ const level5Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
 ];
@@ -1114,12 +808,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-192",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1133,12 +822,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-192",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1152,15 +836,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-192",
         additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2MaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: becomeAnEarlyYearsTeacherContent },
-            { selector: "#requirements-heading + p + h3", content: becomeAnEarlyYearsTeacher },
-            { selector: "#requirements-heading + p + h3 + p", content: becomeAnEarlyYearsTeacherContent2 },
-            { selector: "#requirements-heading + p + h3 + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - Awarded after June 2016 - Maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1174,12 +850,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-192",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - Awarded after June 2016 - Maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1193,15 +864,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-192",
         additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, approvedLevel2PaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: becomeAnEarlyYearsTeacherContent },
-            { selector: "#requirements-heading + p + h3", content: becomeAnEarlyYearsTeacher },
-            { selector: "#requirements-heading + p + h3 + p", content: becomeAnEarlyYearsTeacherContent2 },
-            { selector: "#requirements-heading + p + h3 + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
 
     // TODO might break peadiatric first aid certificate
@@ -1221,17 +884,7 @@ const level6Scenarios: Scenario[] = [
             fullAndRelevantContent: level36QualificationNotFullAndRelevantStartedBetweenSep2014AndAug2019HeadingContent,
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level36 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - started between September 2014 and August 2019 and awarded in June 2016 - Explanation of why the qualification is approved even though it's not full and relevant + Paediatric first aid certificate",
@@ -1250,15 +903,8 @@ const level6Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level36 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -1278,15 +924,8 @@ const level6Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level36 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
 
@@ -1307,14 +946,8 @@ const level6Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -1329,12 +962,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-179",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 3 - Approved - Awarded between September 2014 and May 2016 - Level 2 English qualification Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1348,12 +976,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-292",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 3 - Approved - Awarded between September 2014 and May 2016 - Level 2 English qualification Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1367,15 +990,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-283",
         additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2English),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: becomeAnEarlyYearsTeacherContent },
-            { selector: "#requirements-heading + p + h3", content: becomeAnEarlyYearsTeacher },
-            { selector: "#requirements-heading + p + h3 + p", content: becomeAnEarlyYearsTeacherContent2 },
-            { selector: "#requirements-heading + p + h3 + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 3 - Approved - Awarded in June 2016 - Level 2 English qualification + maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1389,12 +1004,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-283",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 3 - Approved - Awarded in June 2016 - Level 2 English qualification + maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1408,15 +1018,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-283",
         additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishMaybePaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: becomeAnEarlyYearsTeacherContent },
-            { selector: "#requirements-heading + p + h3", content: becomeAnEarlyYearsTeacher },
-            { selector: "#requirements-heading + p + h3 + p", content: becomeAnEarlyYearsTeacherContent2 },
-            { selector: "#requirements-heading + p + h3 + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 3 - Approved - Awarded after June 2016 - Level 2 English qualification + Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1430,12 +1032,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-283",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 3 - Approved - Awarded after June 2016 - Level 2 English qualification + Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1449,15 +1046,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-283",
         additionalRequirements: [noAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, approvedLevel3Level2EnglishPaediatricFirstAidCertificate),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + p", content: becomeAnEarlyYearsTeacherContent },
-            { selector: "#requirements-heading + p + h3", content: becomeAnEarlyYearsTeacher },
-            { selector: "#requirements-heading + p + h3 + p", content: becomeAnEarlyYearsTeacherContent2 },
-            { selector: "#requirements-heading + p + h3 + p + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + p + h3 + p + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Possible route available - Level 3 or above qualification that is NOT full and relevant - Experience-based route (EBR)',
@@ -1476,15 +1065,8 @@ const level6Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantStartedBetweenSeptember2014AndAugust2019RatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: workingAtLevel2Heading },
-            { selector: "#requirements-heading + h3 + p", content: helpAndSupportContent3Level36 },
-            { selector: "#requirements-heading + h3 + p + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p", content: experienceBasedRouteLevel2Content },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p + p + p + p + h3 + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -1499,12 +1081,7 @@ const level6Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-192",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 6', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 6 - Not Approved - Level 6 qualification that is NOT a degree and it is NOT approved at level 6 - QTS, EYTS, EYPS',
@@ -1523,14 +1100,8 @@ const level6Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -1550,14 +1121,8 @@ const level6Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
 ];
@@ -1575,12 +1140,7 @@ const level7Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-206",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - Awarded in June 2016 - Maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1594,12 +1154,7 @@ const level7Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-206",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: "Level 2 - Approved - Awarded after June 2016 - Maybe Paediatric first aid certificate Exception: if the qualification is approved at level 6, there aren't any requirements",
@@ -1613,12 +1168,7 @@ const level7Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-206",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 2', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 2 - Not Approved - Null requirements',
@@ -1637,14 +1187,8 @@ const level7Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
     createScenario({
@@ -1659,12 +1203,7 @@ const level7Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-206",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 3', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 3 - Possible route available - Level 3 or above qualification that is NOT full and relevant - Experience-based route (EBR)',
@@ -1682,16 +1221,7 @@ const level7Scenarios: Scenario[] = [
             fullAndRelevantContent: qualificationNotFullAndRelevantHeadingContent,
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 6 - Approved - No other requirements',
@@ -1705,12 +1235,7 @@ const level7Scenarios: Scenario[] = [
         qualificationToSelect: "EYQ-206",
         additionalRequirements: [yesAtQuestionOne],
         expectedContent: createSingleRatioExpectedContent('Level 6', approved, noAdditionalRequirements),
-        expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: refreshYourKnowledgeHeading },
-            { selector: "#requirements-heading + h3 + p", content: refreshYourKnowledgeContent },
-            { selector: "#requirements-heading + h3 + p + h3", content: trainForASpecialisedRoleHeading },
-            { selector: "#requirements-heading + h3 + p + h3 + p", content: trainForASpecialisedRoleContent },
-        ]
+        expectedPostRatioRequirementsContent: []
     }),
     createScenario({
         scenarioName: 'Level 6 - Not Approved - Level 6 qualification that is NOT a degree and it is NOT approved at level 6 - QTS, EYTS, EYPS',
@@ -1729,14 +1254,8 @@ const level7Scenarios: Scenario[] = [
             staffChildsRatiosContent: level2QualificationNotFullAndRelevantRatioContent,
         }),
         expectedPostRatioRequirementsContent: [
-            { selector: "#requirements-heading + h3", content: experienceBasedRouteHeading },
-            { selector: "#requirements-heading + h3 + p", content: experienceBasedRouteContent },
-            { selector: "#requirements-heading + h3 + p + p", content: experienceBasedRouteGeneralContent },
-            { selector: "#requirements-heading + h3 + p + p + p", content: experienceBasedRouteEmployerContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p", content: experienceBasedRouteReadMoreContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3", content: helpAndSupportHeading },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p", content: approvedQualificationRoutesContent },
-            { selector: "#requirements-heading + h3 + p + p + p + p + h3 + p + p", content: helpAndSupportContent },
+            { selector: "#requirements-heading + p", content: practitionerNotFullAndReleventRequirementsTextParagraphOne },
+            { selector: "#requirements-heading + p + p", content: practitionerNotFullAndReleventRequirementsTextParagraphTwo }
         ]
     }),
 ];

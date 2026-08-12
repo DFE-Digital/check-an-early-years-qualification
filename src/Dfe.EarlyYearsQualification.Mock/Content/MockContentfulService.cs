@@ -156,14 +156,15 @@ public class MockContentfulService : IContentService
                                      });
     }
     
-    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, int startMonth, int startYear, bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage)
+    public async Task<QualificationDetailsPage?> GetQualificationDetailsPage(bool userIsCheckingOwnQualification, bool isFullAndRelevant, int level, 
+                                                                             int startMonth, int startYear, int awardedMonth, int awardedYear,
+                                                                             bool isDegreeSpecificPage, bool isApprovedAtL6SpecificPage)
     {
         var ratioTextForNotFullAndRelevant = ContentfulContentHelper.Paragraph("This is not F&R");
         var ratioTextL3PlusNotFullAndRelevantBetweenSep14AndAug19 =
             ContentfulContentHelper.Paragraph("This is not F&R for L3 between Sep14 & Aug19");
         var ratioTextL3Ebr = ContentfulContentHelper.Paragraph("This is the ratio text L3 EBR");
-        var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
-
+        
         var labels = new DetailsPageLabels
         {
             AwardingOrgLabel = "Awarding Org Label",
@@ -214,72 +215,230 @@ public class MockContentfulService : IContentService
 
         var qualificationDetailsPages = new List<QualificationDetailsPage>
         {
-            new QualificationDetailsPage
-            {
-                IsPractitionerSpecificPage = false,
-                IsDegreeSpecificPage = false,
-                IsAutomaticallyApprovedAtLevel6 = false,
-                IsFullAndRelevant = true,
-                FromWhichYear = "Sep-14",
-                ToWhichYear = "Aug-19",
-                Level = "3",
-                Name = "Manager page 1",
-                RequirementsHeading = "Test requirements heading",
-                RequirementsText = requirementsText,
-                Labels = labels
-            },
-            new QualificationDetailsPage
-            {
-                IsPractitionerSpecificPage = true,
-                IsDegreeSpecificPage = false,
-                IsAutomaticallyApprovedAtLevel6 = false,
-                IsFullAndRelevant = true,
-                FromWhichYear = "Sep-23",
-                ToWhichYear = "Aug-24",
-                Level = "3",
-                Name = "Practitioner page 1",
-                RequirementsHeading = "This is F&R practitioner heading",
-                RequirementsText = ContentfulContentHelper.Paragraph("This is F&R practitioner text"),
-                Labels = labels
-            },
-            new QualificationDetailsPage
-            {
-                IsPractitionerSpecificPage = true,
-                IsDegreeSpecificPage = false,
-                IsAutomaticallyApprovedAtLevel6 = false,
-                IsFullAndRelevant = false,
-                FromWhichYear = "Sep-23",
-                ToWhichYear = "Aug-24",
-                Level = "3",
-                Name = "Practitioner page 2",
-                RequirementsHeading = "This is NF&R practitioner heading",
-                RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
-                Labels = labels
-            },
-            new QualificationDetailsPage
-            {
-                IsPractitionerSpecificPage = true,
-                IsDegreeSpecificPage = false,
-                IsAutomaticallyApprovedAtLevel6 = false,
-                IsFullAndRelevant = true,
-                FromWhichYear = "Sep-11",
-                ToWhichYear = "Aug-17",
-                Level = "6",
-                Name = "Practitioner page 3",
-                RequirementsHeading = "This is NF&R practitioner heading",
-                RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
-                Labels = labels
-            }
+            // Manager pages
+            CreateDetailsPage(false, false, 2, labels),
+            CreateDetailsPage(false, true, 2, labels),
+            CreateDetailsPage(false, false, 3, labels),
+            CreateDetailsPage(false, true, 3, labels),
+            CreateDetailsPage(false, false, 4, labels),
+            CreateDetailsPage(false, true, 4, labels),
+            CreateDetailsPage(false, false, 5, labels),
+            CreateDetailsPage(false, true, 5, labels),
+            CreateDetailsPage(false, false, 6, labels),
+            CreateDetailsPage(false, true, 6, labels),
+            CreateDetailsPage(false, false, 7, labels),
+            CreateDetailsPage(false, true, 7, labels),
+            // Practitioner pages
+            CreateDetailsPage(true, false, 2, labels),
+            CreateDetailsPage(true, true, 2, labels),
+            CreateDetailsPage(true, false, 3, labels),
+            CreateDetailsPage(true, true, 3, labels),
+            CreateDetailsPage(true, false, 4, labels),
+            CreateDetailsPage(true, true, 4, labels),
+            CreateDetailsPage(true, false, 5, labels),
+            CreateDetailsPage(true, true, 5, labels),
+            CreateDetailsPage(true, false, 6, labels),
+            CreateDetailsPage(true, true, 6, labels),
+            CreateDetailsPage(true, false, 7, labels),
+            CreateDetailsPage(true, true, 7, labels)
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = false,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = true,
+            //     FromWhichYear = "Sep-14",
+            //     ToWhichYear = "Aug-19",
+            //     Level = "2",
+            //     Name = "Manager page - L2 - F&R",
+            //     RequirementsHeading = "Test requirements heading",
+            //     RequirementsText = requirementsText,
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement - F&R - L2"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement - F&R - L2"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement - F&R - L2"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement - F&R - L2")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = false,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = false,
+            //     FromWhichYear = "Sep-19",
+            //     ToWhichYear = "Aug-26",
+            //     Level = "2",
+            //     Name = "Manager page - L2 - Not F&R",
+            //     RequirementsHeading = "Test requirements heading",
+            //     RequirementsText = requirementsText,
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement - not F&R - L2"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement - not F&R - L2"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement - not F&R - L2"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement - not F&R - L2")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = false,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = true,
+            //     FromWhichYear = "Sep-14",
+            //     ToWhichYear = "Aug-19",
+            //     Level = "3",
+            //     Name = "Manager page - L3 - F&R",
+            //     RequirementsHeading = "Test requirements heading",
+            //     RequirementsText = requirementsText,
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement - F&R - L3"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement - F&R - L3"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement - F&R - L3"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement - F&R - L3")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = false,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = false,
+            //     FromWhichYear = "Sep-19",
+            //     ToWhichYear = "Aug-26",
+            //     Level = "3",
+            //     Name = "Manager page - L3 - Not F&R",
+            //     RequirementsHeading = "Test requirements heading",
+            //     RequirementsText = requirementsText,
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement - not F&R - L3"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement - not F&R - L3"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement - not F&R - L3"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement - not F&R - L3")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = false,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = true,
+            //     FromWhichYear = "Sep-11",
+            //     ToWhichYear = "Aug-17",
+            //     Level = "6",
+            //     Name = "Manager page - L6 - F&R",
+            //     RequirementsHeading = "This is NF&R practitioner heading",
+            //     RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = true,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = true,
+            //     FromWhichYear = "Sep-23",
+            //     ToWhichYear = "Aug-24",
+            //     Level = "3",
+            //     Name = "Practitioner page 1",
+            //     RequirementsHeading = "This is F&R practitioner heading",
+            //     RequirementsText = ContentfulContentHelper.Paragraph("This is F&R practitioner text"),
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = true,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = false,
+            //     FromWhichYear = "Sep-23",
+            //     ToWhichYear = "Aug-24",
+            //     Level = "3",
+            //     Name = "Practitioner page 2",
+            //     RequirementsHeading = "This is NF&R practitioner heading",
+            //     RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement")
+            // },
+            // new QualificationDetailsPage
+            // {
+            //     IsPractitionerSpecificPage = true,
+            //     IsDegreeSpecificPage = false,
+            //     IsAutomaticallyApprovedAtLevel6 = false,
+            //     IsFullAndRelevant = true,
+            //     FromWhichYear = "Sep-11",
+            //     ToWhichYear = "Aug-17",
+            //     Level = "6",
+            //     Name = "Practitioner page 3",
+            //     RequirementsHeading = "This is NF&R practitioner heading",
+            //     RequirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text"),
+            //     Labels = labels,
+            //     Level2RatioRequirements = ContentfulContentHelper.Paragraph("Level 2 ratio requirement"),
+            //     Level3RatioRequirements = ContentfulContentHelper.Paragraph("Level 3 ratio requirement"),
+            //     Level6RatioRequirements = ContentfulContentHelper.Paragraph("Level 6 ratio requirement"),
+            //     UnqualifiedRatioRequirements = ContentfulContentHelper.Paragraph("Unqualified ratio requirement")
+            // }
         };
 
-        if (userIsCheckingOwnQualification)
-        {
-            return await Task.FromResult(qualificationDetailsPages
-                .FirstOrDefault(x => x.IsPractitionerSpecificPage == userIsCheckingOwnQualification &&
-                x.IsFullAndRelevant == isFullAndRelevant && x.Level == level.ToString()));
-        }
+        return await Task.FromResult(qualificationDetailsPages
+                                         .FirstOrDefault(x => x.IsPractitionerSpecificPage == userIsCheckingOwnQualification &&
+                                                              x.IsFullAndRelevant == isFullAndRelevant && x.Levels.Contains(level)));
+    }
 
-        return await Task.FromResult(qualificationDetailsPages.FirstOrDefault(x => !x.IsPractitionerSpecificPage));
+    private QualificationDetailsPage CreateDetailsPage(bool isPractitionerSpecificPage, bool isFullAndRelevant, int level, DetailsPageLabels labels)
+    {
+        var requirementsHeading = "Test requirements heading";
+        var requirementsText = ContentfulContentHelper.Paragraph("This is the requirements text");
+
+        if (isPractitionerSpecificPage)
+        {
+            if (isFullAndRelevant)
+            {
+                requirementsHeading = "This is F&R practitioner heading";
+                requirementsText = ContentfulContentHelper.Paragraph("This is F&R practitioner text");
+            }
+            else
+            {
+                requirementsHeading = "This is NF&R practitioner heading";
+                requirementsText = ContentfulContentHelper.Paragraph("This is NF&R practitioner text");
+            }
+        }
+        
+        return new QualificationDetailsPage
+        {
+            IsPractitionerSpecificPage = isPractitionerSpecificPage,
+            IsDegreeSpecificPage = false,
+            IsAutomaticallyApprovedAtLevel6 = false,
+            IsFullAndRelevant = isFullAndRelevant,
+            FromWhichYear = "Sep-14",
+            ToWhichYear = "Aug-19",
+            //Level = level.ToString(),
+            Levels = [level],
+            Name =
+                $"{(isPractitionerSpecificPage ? "Practitioner" : "Manager")} page - L{level} - {(isFullAndRelevant ? "" : "not")} F&R",
+            RequirementsHeading = requirementsHeading,
+            RequirementsText = requirementsText,
+            Labels = labels,
+            Level2RatioRequirements =
+                ContentfulContentHelper
+                    .Paragraph($"Level 2 ratio requirement -{(isFullAndRelevant ? "" : " not")} F&R"),
+            Level3RatioRequirements =
+                ContentfulContentHelper
+                    .Paragraph($"Level 3 ratio requirement -{(isFullAndRelevant ? "" : " not")} F&R"),
+            Level6RatioRequirements =
+                ContentfulContentHelper
+                    .Paragraph($"Level 6 ratio requirement -{(isFullAndRelevant ? "" : " not")} F&R"),
+            UnqualifiedRatioRequirements =
+                ContentfulContentHelper
+                    .Paragraph($"Unqualified ratio requirement -{(isFullAndRelevant ? "" : " not")} F&R")
+        };
     }
 
     public async Task<PhaseBanner?> GetPhaseBannerContent()

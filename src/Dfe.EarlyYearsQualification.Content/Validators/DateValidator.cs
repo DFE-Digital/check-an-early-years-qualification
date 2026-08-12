@@ -63,6 +63,74 @@ public class DateValidator(ILogger<DateValidator> logger) : IDateValidator
         return default;
     }
 
+    public T? ValidateDateEntry<T>(DateOnly? startDate, DateOnly? awardedAfterDate, DateOnly? endDate, DateOnly enteredStartDate, DateOnly enteredAwardedDate,
+                                   T entry)
+    {
+        if (startDate is not null
+            && awardedAfterDate is not null
+            && endDate is null
+            && enteredStartDate >= startDate
+            && enteredAwardedDate >= awardedAfterDate)
+        {
+            return entry;
+        }
+        
+        if (startDate is null
+            && awardedAfterDate is not null
+            && endDate is not null
+            && enteredAwardedDate <= endDate
+            && enteredAwardedDate >= awardedAfterDate)
+        {
+            return entry;
+        }
+        
+        if (startDate is not null
+            && awardedAfterDate is not null
+            && endDate is not null
+            && enteredStartDate >= startDate
+            && enteredAwardedDate >= awardedAfterDate
+            && enteredAwardedDate <= endDate)
+        {
+            return entry;
+        }
+        
+        if (awardedAfterDate is not null
+            && startDate is null
+            && endDate is null
+            && enteredAwardedDate >= awardedAfterDate)
+        {
+            return entry; 
+        }
+        
+        if (startDate is not null
+            && endDate is not null
+            && awardedAfterDate is null)
+        {
+            // There may be some instances when a page is for a qualification awarded in a specific month
+            // e.g. L3, F&R, started after Sept 14 but awarded in June 2016 where the start date is the same as the end date
+            if (startDate == endDate
+                && enteredAwardedDate == endDate)
+            {
+                return entry;
+            }
+        
+            // Check to see if the dates fall within the specific range
+            if (enteredStartDate >= startDate
+                && enteredAwardedDate <= endDate)
+            {
+                return entry;
+            }
+        }
+
+        // This covers the scenario where a page is created as a 'catch-all' page that is applicable if it doesn't meet one of the other scenarios
+        if (startDate is null && awardedAfterDate is null && endDate is null)
+        {
+            return entry;
+        }
+        
+        return ValidateDateEntry(startDate, endDate, enteredStartDate, entry);
+    }
+
     public DateOnly? GetDate(string? dateString)
     {
         if (string.IsNullOrEmpty(dateString) || dateString == "null")

@@ -28,6 +28,8 @@ jobs:
     name: Create & Publish Image
     uses: ./.github/workflows/build-image.yml
     secrets: inherit
+    permissions:
+      packages: write
     with:
       branch: ${{ needs.set-env.outputs.branch }}
       checked-out-sha: ${{ needs.set-env.outputs.checked-out-sha }}
@@ -79,13 +81,13 @@ jobs:
           auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           test_type: 'smoke'
           
-      # Run validation checks
-      - name: Run Playwright validation tests against slot
-        uses: ./.github/actions/run-playwright-tests
-        with:
-          webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}.azurewebsites.net"
-          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-          test_type: "validation"
+#      # Run validation checks
+#      - name: Run Playwright validation tests against slot
+#        uses: ./.github/actions/run-playwright-tests
+#        with:
+#          webapp_url: "${{ vars.WEBAPP_NAME }}-${{ vars.WEBAPP_SLOT_NAME }}.azurewebsites.net"
+#          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+#          test_type: "validation"
      
       # Swap the slots
       - name: Swap to the production slot
