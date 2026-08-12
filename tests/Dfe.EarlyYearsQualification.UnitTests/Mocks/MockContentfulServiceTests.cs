@@ -246,7 +246,7 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQualificationDetailsPage(false, false, 3, 6, 2001, false, false);
+        var result = await contentfulService.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, false, false);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<QualificationDetailsPage>();
         result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
@@ -280,7 +280,7 @@ public class MockContentfulServiceTests
     {
         var contentfulService = new MockContentfulService();
 
-        var result = await contentfulService.GetQualificationDetailsPage(true, false, 3, 1, 2024, false, false);
+        var result = await contentfulService.GetQualificationDetailsPage(true, false, 3, 1, 2024, 5, 2019, false, false);
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<QualificationDetailsPage>();
         result.Labels.AwardingOrgLabel.Should().NotBeNullOrEmpty();
