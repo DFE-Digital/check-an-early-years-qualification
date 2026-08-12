@@ -70,11 +70,6 @@ public class ContentfulContentService(
         return qualificationDetailsPageEntries.First();
     }
 
-    public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage(string entryId)
-    {
-        return await GetEntryById<AccessibilityStatementPage>(entryId);
-    }
-
     public async Task<CookiesPage?> GetCookiesPage()
     {
         var cookiesEntities = await GetEntriesByType<CookiesPage>();

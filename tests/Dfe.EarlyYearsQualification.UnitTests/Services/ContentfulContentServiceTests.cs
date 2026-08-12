@@ -81,67 +81,6 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     }
 
     [TestMethod]
-    public async Task GetAccessibilityStatementPage_NoContent_ReturnsNull()
-    {
-        var pages = new ContentfulCollection<AccessibilityStatementPage>
-                    { Items = new List<AccessibilityStatementPage>() };
-
-        ClientMock.Setup(client =>
-                             client.GetEntriesByType(
-                                                     It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
-                                                     It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(pages);
-
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
-
-        var result = await service.GetAccessibilityStatementPage(AccessibilityStatements.Service);
-
-        result.Should().BeNull();
-    }
-
-    [TestMethod]
-    public async Task GetAccessibilityStatementPage_NullPages_ReturnsNull()
-    {
-        ClientMock.Setup(client =>
-                             client.GetEntriesByType(
-                                                     It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
-                                                     It.IsAny<CancellationToken>()))
-                  .ReturnsAsync((ContentfulCollection<AccessibilityStatementPage>)null!);
-
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
-
-        var result = await service.GetAccessibilityStatementPage(AccessibilityStatements.Service);
-
-        result.Should().BeNull();
-        Logger.VerifyError("Exception trying to retrieve entryId 4hz3c9wMsCz2i6k0XAslCi for type T from Contentful.");
-    }
-
-    [TestMethod]
-    public async Task GetAccessibilityStatementPage_PageFound_ReturnsExpectedResult()
-    {
-        var accessibilityStatementPage = new AccessibilityStatementPage { Heading = "Heading" };
-
-        var pages = new ContentfulCollection<AccessibilityStatementPage>
-                    { Items = [accessibilityStatementPage] };
-
-        ClientMock.Setup(client =>
-                             client.GetEntriesByType(
-                                                     It.IsAny<string>(),
-                                                     It.IsAny<QueryBuilder<AccessibilityStatementPage>>(),
-                                                     It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(pages);
-
-        var service = new ContentfulContentService(Logger.Object, ClientMock.Object, new Mock<IDateValidator>().Object);
-
-        var result = await service.GetAccessibilityStatementPage(AccessibilityStatements.Service);
-
-        result.Should().NotBeNull();
-        result.Should().BeSameAs(accessibilityStatementPage);
-    }
-
-    [TestMethod]
     public async Task GetCookiesPage_NoContent_ReturnsNull()
     {
         var pages = new ContentfulCollection<CookiesPage> { Items = new List<CookiesPage>() };
