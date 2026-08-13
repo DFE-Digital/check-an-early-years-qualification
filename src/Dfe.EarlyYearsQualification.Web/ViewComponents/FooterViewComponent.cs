@@ -17,7 +17,7 @@ public class FooterViewComponent(
     {
         var footer = await GetFooterAsync();
 
-        var footerModel = await footerMapper.Map(footer, HttpContext.Request.Path.Value);
+        var footerModel = await footerMapper.Map(footer);
 
         return View(footerModel);
     }

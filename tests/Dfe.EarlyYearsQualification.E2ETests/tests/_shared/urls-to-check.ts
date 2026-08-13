@@ -1,7 +1,5 @@
 export const pages = [
     "/",
-    "/accessibility-statement",
-    "/early-years-qualification-list/accessibility-statement",
     "/cookies",
     "/questions/are-you-checking-your-own-qualification",
     "/questions/where-was-the-qualification-awarded",
