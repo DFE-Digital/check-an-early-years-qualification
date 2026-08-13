@@ -6,6 +6,7 @@ using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using System.Globalization;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 
 namespace Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 
@@ -39,14 +40,16 @@ public class QualificationSearchService(
         var searchCriteria = searchCriteriaOverride ?? userJourneyCookieService.GetSearchCriteria();
         var nationAwardedIn = userJourneyCookieService.GetWhereWasQualificationAwarded();
 
-        var qualifications = await qualificationsRepository.Get(
-                                                  level,
-                                                  startDateMonth,
-                                                  startDateYear,
-                                                  awardingOrganisation,
-                                                  searchCriteria,
-                                                  nationAwardedIn,
-                                                 false);
+        var qualifications = await qualificationsRepository.Get(new QualificationFilterOptions
+                                                                {
+                                                                    Level = level,
+                                                                    StartDateMonth = startDateMonth,
+                                                                    StartDateYear = startDateYear,
+                                                                    AwardingOrganisation = awardingOrganisation,
+                                                                    QualificationName = searchCriteria,
+                                                                    Nation = nationAwardedIn,
+                                                                    IncludeAllQualifications = false
+                                                                });
 
         // Not in list has been selected so we need to filter out qualifications with specific awarding organisations
         if (awardingOrganisation is null)

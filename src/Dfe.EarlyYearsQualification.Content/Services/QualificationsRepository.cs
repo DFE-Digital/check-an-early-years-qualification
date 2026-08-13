@@ -4,6 +4,7 @@ using Contentful.Core.Search;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Filters;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -30,18 +31,18 @@ public class QualificationsRepository(
         return qualifications.FirstOrDefault(x => string.Equals(x.QualificationId, qualificationId, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public async Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName, string? nation, bool includeAllQualifications)
+    public async Task<List<Qualification>> Get(QualificationFilterOptions filterOptions)
     {
         Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}, nation: {Nation}, includeAllQualifications: {includeAllQualifications}",
-                              level,
-                              startDateMonth,
-                              startDateYear,
-                              awardingOrganisation,
-                              qualificationName,
-                              nation,
-                              includeAllQualifications);
+                              filterOptions.Level,
+                              filterOptions.StartDateMonth,
+                              filterOptions.StartDateYear,
+                              filterOptions.AwardingOrganisation,
+                              filterOptions.QualificationName,
+                              filterOptions.Nation,
+                              filterOptions.IncludeAllQualifications);
         
-        var qualifications = await GetAllQualifications(includeAllQualifications);
+        var qualifications = await GetAllQualifications(filterOptions.IncludeAllQualifications);
 
         if (qualifications.Count == 0)
         {
@@ -49,8 +50,13 @@ public class QualificationsRepository(
         }
 
         var filteredQualifications =
-            qualificationListFilter.ApplyFilters(qualifications, level, startDateMonth, startDateYear,
-                                                    awardingOrganisation, qualificationName, nation);
+            qualificationListFilter.ApplyFilters(qualifications, 
+                                                 filterOptions.Level,
+                                                 filterOptions.StartDateMonth,
+                                                 filterOptions.StartDateYear,
+                                                 filterOptions.AwardingOrganisation,
+                                                 filterOptions.QualificationName,
+                                                 filterOptions.Nation);
         
         return filteredQualifications;
     }
@@ -71,7 +77,7 @@ public class QualificationsRepository(
         // However, we still want them in the webview and csv download.
         if (!includeAllQualifications)
         {
-            queryBuilder.FieldEquals("fields.excludeFromShowingInMainService", "0");
+            queryBuilder.FieldExcludes("fields.excludeFromShowingInMainService", ["1"]);
         }
                                                       
         try

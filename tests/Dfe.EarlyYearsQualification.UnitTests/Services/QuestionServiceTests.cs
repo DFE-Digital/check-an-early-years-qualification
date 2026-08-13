@@ -1,5 +1,6 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -316,14 +317,13 @@ public class QuestionServiceTests
         _ = await GetSut().GetFilteredQualifications();
 
         // Assert
-        _mockQualificationsRepository.Verify(x => x.Get(3,
-                                                        3,
-                                                        2002,
-                                                        null,
-                                                        null,
-                                                        QualificationAwardLocation.England,
-                                                        It.Is<bool>(b => b == false)),
-                                             Times.Once);
+        _mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                         q => q.IncludeAllQualifications == false
+                                                              && q.Level == 3
+                                                              && q.StartDateMonth == 3
+                                                              && q.StartDateYear == 2002
+                                                              && q.Nation == QualificationAwardLocation.England)), Times.Once);
+        
         _mockUserJourneyCookieService.Verify(x => x.GetWhereWasQualificationAwarded(), Times.Once);
     }
 

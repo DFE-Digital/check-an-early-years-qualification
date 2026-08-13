@@ -1,4 +1,5 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 
 namespace Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 
@@ -6,6 +7,5 @@ public interface IQualificationsRepository
 {
     Task<Qualification?> GetById(string qualificationId);
 
-    Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
-                                  string? awardingOrganisation, string? qualificationName, string? nation, bool includeAllQualifications);
+    Task<List<Qualification>> Get(QualificationFilterOptions filterOptions);
 }

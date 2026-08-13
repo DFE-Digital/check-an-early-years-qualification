@@ -1,5 +1,6 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Controllers;
@@ -132,8 +133,15 @@ public class QuestionService(
         var level = userJourneyCookieService.GetLevelOfQualification();
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var nation = userJourneyCookieService.GetWhereWasQualificationAwarded();
-
-        return await repository.Get(level, startDateMonth, startDateYear, null, null, nation, false);
+        
+        return await repository.Get(new QualificationFilterOptions
+                                    {
+                                        Level = level,
+                                        StartDateMonth = startDateMonth,
+                                        StartDateYear = startDateYear,
+                                        Nation = nation,
+                                        IncludeAllQualifications = false
+                                    });
     }
 
     public async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,
