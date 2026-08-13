@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Filters;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 using Dfe.EarlyYearsQualification.Mock.Content;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 
@@ -54,12 +55,11 @@ public class MockQualificationsRepositoryTests
         var repository = CreateRepository();
 
         var results =
-            await repository.Get(level,
-                                 null,
-                                 null,
-                                 null,
-                                 null,
-                                 null);
+            await repository.Get(new QualificationFilterOptions
+                                 {
+                                     Level = level,
+                                     IncludeAllQualifications = false
+                                 });
 
         results.Count.Should().Be(expectedQualificationIds.Length);
 
@@ -70,7 +70,11 @@ public class MockQualificationsRepositoryTests
     public async Task GetFilteredQualifications_PassInLevel3_ReturnsQualificationWithAdditionalRequirementQuestions()
     {
         var repository = CreateRepository();
-        var results = await repository.Get(3, null, null, null, null, null);
+        var results = await repository.Get(new QualificationFilterOptions
+                                           {
+                                               Level = 3,
+                                               IncludeAllQualifications = false
+                                           });
 
         var qualificationWithAdditionalRequirements =
             results.FirstOrDefault(q => q.QualificationId == "EYQ-909");
@@ -874,14 +878,13 @@ public class MockQualificationsRepositoryTests
     string nation, int expectedQualificationCount)
     {
         var repository = CreateRepository();
-
+        
         var results =
-            await repository.Get(null,
-                                 null,
-                                 null,
-                                 null,
-                                 null,
-                                 nation);
+            await repository.Get(new QualificationFilterOptions
+                                 {
+                                     Nation = nation,
+                                     IncludeAllQualifications = false
+                                 });
 
         results.Count.Should().Be(expectedQualificationCount);
     }
