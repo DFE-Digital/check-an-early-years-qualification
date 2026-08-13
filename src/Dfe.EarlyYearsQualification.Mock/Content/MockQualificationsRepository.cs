@@ -99,7 +99,7 @@ public class MockQualificationsRepository(IQualificationListFilter qualification
     }
 
     public Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear,
-                                         string? awardingOrganisation, string? qualificationName, string? nation)
+                                         string? awardingOrganisation, string? qualificationName, string? nation, bool includeAllQualifications)
     {
         const string dupeQualificationName = "dupe qualification name";
 

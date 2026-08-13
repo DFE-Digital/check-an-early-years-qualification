@@ -45,8 +45,8 @@ public class QualificationSearchService(
                                                   startDateYear,
                                                   awardingOrganisation,
                                                   searchCriteria,
-                                                  nationAwardedIn
-                                                 );
+                                                  nationAwardedIn,
+                                                 false);
 
         // Not in list has been selected so we need to filter out qualifications with specific awarding organisations
         if (awardingOrganisation is null)

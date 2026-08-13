@@ -18,7 +18,7 @@ public class QualificationsRepository(
 {
     public async Task<Qualification?> GetById(string qualificationId)
     {
-        var qualifications = await GetAllQualifications();
+        var qualifications = await GetAllQualifications(false);
         if (qualifications.Count == 0)
         {
             var encodedQualificationId = HttpUtility.HtmlEncode(qualificationId);
@@ -30,17 +30,18 @@ public class QualificationsRepository(
         return qualifications.FirstOrDefault(x => string.Equals(x.QualificationId, qualificationId, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    public async Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName, string? nation)
+    public async Task<List<Qualification>> Get(int? level, int? startDateMonth, int? startDateYear, string? awardingOrganisation, string? qualificationName, string? nation, bool includeAllQualifications)
     {
-        Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}, nation: {Nation}",
+        Logger.LogInformation("Filtering options passed in - level: {Level}, startDateMonth: {StartDateMonth}, startDateYear: {StartDateYear}, awardingOrganisation: {AwardingOrganisation}, qualificationName: {QualificationName}, nation: {Nation}, includeAllQualifications: {includeAllQualifications}",
                               level,
                               startDateMonth,
                               startDateYear,
                               awardingOrganisation,
                               qualificationName,
-                              nation);
+                              nation,
+                              includeAllQualifications);
         
-        var qualifications = await GetAllQualifications();
+        var qualifications = await GetAllQualifications(includeAllQualifications);
 
         if (qualifications.Count == 0)
         {
@@ -54,7 +55,7 @@ public class QualificationsRepository(
         return filteredQualifications;
     }
 
-    private async Task<List<Qualification>> GetAllQualifications()
+    private async Task<List<Qualification>> GetAllQualifications(bool includeAllQualifications)
     {
         var ratioRequirements = await GetEntriesByType<RatioRequirement>();
         if (ratioRequirements == null)
@@ -62,7 +63,17 @@ public class QualificationsRepository(
             logger.LogWarning("No ratio requirements returned");
             return [];
         }
-        var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(1000);
+        var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification)
+                                                      .Include(2)
+                                                      .Limit(1000);
+        
+        // Some qualifications have this flag set which means they shouldn't show in the main service.
+        // However, we still want them in the webview and csv download.
+        if (!includeAllQualifications)
+        {
+            queryBuilder.FieldEquals("fields.excludeFromShowingInMainService", "0");
+        }
+                                                      
         try
         {
             var qualifications = await ContentfulClient.GetEntries(queryBuilder);

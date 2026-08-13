@@ -170,7 +170,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
-        var result = await service.Get(null, null, null, null, null, null);
+        var result = await service.Get(null, null, null, null, null, null, false);
 
         Logger.VerifyWarning("No ratio requirements returned");
 
@@ -213,7 +213,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, mockQualificationFilterFactory.Object);
 
-        var result = await service.Get(null, null, null, null, null, null);
+        var result = await service.Get(null, null, null, null, null, null, false);
 
         result.Should().HaveCount(1).And.Contain(qualification);
     }
@@ -237,7 +237,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
-        var result = await service.Get(null, null, null, null, null, null);
+        var result = await service.Get(null, null, null, null, null, null, false);
 
         result.Should().BeEmpty();
     }
@@ -256,7 +256,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
             new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object,
                                          new Mock<IQualificationListFilter>().Object);
 
-        var filteredQualifications = await repository.Get(4, 5, 2016, null, null, null);
+        var filteredQualifications = await repository.Get(4, 5, 2016, null, null, null, false);
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();

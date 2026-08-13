@@ -32,7 +32,7 @@ public class QuestionServiceTests
     public async Task GetRadioQuestionPageContent_Calls_ContentService_GetRadioQuestionPage()
     {
         // Act
-        var result = await GetSut().GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification);
+        await GetSut().GetRadioQuestionPageContent(QuestionPages.AreYouCheckingYourOwnQualification);
 
         // Assert
         _mockContentService.Verify(x => x.GetRadioQuestionPage(It.IsAny<string>()), Times.Once);
@@ -321,7 +321,8 @@ public class QuestionServiceTests
                                                         2002,
                                                         null,
                                                         null,
-                                                        QualificationAwardLocation.England),
+                                                        QualificationAwardLocation.England,
+                                                        It.Is<bool>(b => b == false)),
                                              Times.Once);
         _mockUserJourneyCookieService.Verify(x => x.GetWhereWasQualificationAwarded(), Times.Once);
     }
@@ -345,11 +346,9 @@ public class QuestionServiceTests
                                                  new Qualification("5", "qualification title 5",
                                                                    AwardingOrganisations.Edexcel, 3)
                                              };
-        Qualification qualification = qualifications.First();
-
         string actionName = "";
         string controllerName = "";
-        string? selectedAwardingOrganisation = "";
+        string selectedAwardingOrganisation = "";
         bool selectedNotOnTheList = true;
 
         // Act
@@ -366,7 +365,7 @@ public class QuestionServiceTests
     public async Task GetDropdownQuestionPage_Calls_ContentService_GetDropdownQuestionPage()
     {
         // Act
-        var result = await GetSut().GetDropdownQuestionPage(It.IsAny<string>());
+        await GetSut().GetDropdownQuestionPage(It.IsAny<string>());
 
         // Assert
         _mockContentService.Verify(x => x.GetDropdownQuestionPage(It.IsAny<string>()), Times.Once);
@@ -393,7 +392,7 @@ public class QuestionServiceTests
     public async Task GetDropdownQuestionPage_Calls_ContentService_GetPreCheckPage()
     {
         // Act
-        var result = await GetSut().GetPreCheckPage();
+        await GetSut().GetPreCheckPage();
 
         // Assert
         _mockContentService.Verify(x => x.GetPreCheckPage(), Times.Once);
@@ -445,27 +444,27 @@ public class QuestionServiceTests
                                      };
         string actionName = "";
         string controllerName = "";
-        DatesValidationResult? validationResult = new()
-                                                  {
-                                                      AwardedValidationResult = new()
-                                                          {
-                                                              BannerErrorMessages =
-                                                                  new()
-                                                                  {
-                                                                      new("awarded validation error message",
-                                                                          FieldId.Month)
-                                                                  }
-                                                          },
-                                                      StartedValidationResult = new()
-                                                          {
-                                                              BannerErrorMessages =
-                                                                  new()
-                                                                  {
-                                                                      new("started validation error message",
-                                                                          FieldId.Month)
-                                                                  }
-                                                          }
-                                                  };
+        DatesValidationResult validationResult = new()
+                                                 {
+                                                     AwardedValidationResult = new()
+                                                                               {
+                                                                                   BannerErrorMessages =
+                                                                                       new()
+                                                                                       {
+                                                                                           new("awarded validation error message",
+                                                                                            FieldId.Month)
+                                                                                       }
+                                                                               },
+                                                     StartedValidationResult = new()
+                                                                               {
+                                                                                   BannerErrorMessages =
+                                                                                       new()
+                                                                                       {
+                                                                                           new("started validation error message",
+                                                                                            FieldId.Month)
+                                                                                       }
+                                                                               }
+                                                 };
 
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((3, 2002));
         _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationAwarded()).Returns((5, 2005));
@@ -487,7 +486,7 @@ public class QuestionServiceTests
     public async Task GetDatesQuestionPage_Calls_ContentService_GetDatesQuestionPage()
     {
         // Act
-        var result = await GetSut().GetDatesQuestionPage(It.IsAny<string>());
+        await GetSut().GetDatesQuestionPage(It.IsAny<string>());
 
         // Assert
         _mockContentService.Verify(x => x.GetDatesQuestionPage(It.IsAny<string>()), Times.Once);
@@ -497,7 +496,7 @@ public class QuestionServiceTests
     public void IsValid_Calls_DateQuestionModelValidator_IsValid()
     {
         // Act
-        var result = GetSut().IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>());
+        GetSut().IsValid(It.IsAny<DatesQuestionModel>(), It.IsAny<DatesQuestionPage>());
 
         // Assert
         _mockDateQuestionModelValidator.Verify(x => x.IsValid(It.IsAny<DatesQuestionModel>(),
@@ -563,7 +562,7 @@ public class QuestionServiceTests
                                        }
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(( (int?)null, (int?)null ));
+        _mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns(( null, null ));
 
         var sut = GetSut();
 
@@ -573,7 +572,7 @@ public class QuestionServiceTests
         // Assert
         model.Option.Should().Be(string.Empty);
         radioAndDateModel.Question.Should().NotBeNull();
-        radioAndDateModel.Question!.SelectedMonth.Should().BeNull();
+        radioAndDateModel.Question.SelectedMonth.Should().BeNull();
         radioAndDateModel.Question.SelectedYear.Should().BeNull();
     }
 

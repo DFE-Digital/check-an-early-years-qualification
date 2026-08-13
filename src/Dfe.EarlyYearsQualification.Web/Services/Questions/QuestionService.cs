@@ -133,7 +133,7 @@ public class QuestionService(
         var (startDateMonth, startDateYear) = userJourneyCookieService.GetWhenWasQualificationStarted();
         var nation = userJourneyCookieService.GetWhereWasQualificationAwarded();
 
-        return await repository.Get(level, startDateMonth, startDateYear, null, null, nation);
+        return await repository.Get(level, startDateMonth, startDateYear, null, null, nation, false);
     }
 
     public async Task<DropdownQuestionModel> MapDropdownModel(DropdownQuestionModel model,

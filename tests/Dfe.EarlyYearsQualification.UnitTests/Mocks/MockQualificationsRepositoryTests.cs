@@ -59,7 +59,8 @@ public class MockQualificationsRepositoryTests
                                  null,
                                  null,
                                  null,
-                                 null);
+                                 null,
+                                 false);
 
         results.Count.Should().Be(expectedQualificationIds.Length);
 
@@ -70,7 +71,7 @@ public class MockQualificationsRepositoryTests
     public async Task GetFilteredQualifications_PassInLevel3_ReturnsQualificationWithAdditionalRequirementQuestions()
     {
         var repository = CreateRepository();
-        var results = await repository.Get(3, null, null, null, null, null);
+        var results = await repository.Get(3, null, null, null, null, null, false);
 
         var qualificationWithAdditionalRequirements =
             results.FirstOrDefault(q => q.QualificationId == "EYQ-909");
@@ -881,7 +882,8 @@ public class MockQualificationsRepositoryTests
                                  null,
                                  null,
                                  null,
-                                 nation);
+                                 nation,
+                                 false);
 
         results.Count.Should().Be(expectedQualificationCount);
     }

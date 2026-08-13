@@ -41,7 +41,8 @@ public class WebViewService(
                                                   null,
                                                   null,
                                                   searchCriteria,
-                                                  nation
+                                                  nation,
+                                                  true
                                                  );
 
         qualifications = FilterQualificationsByStartDate(qualifications, filters.QualificationStartDate);
