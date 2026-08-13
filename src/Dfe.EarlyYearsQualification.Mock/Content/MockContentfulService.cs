@@ -23,42 +23,6 @@ public class MockContentfulService : IContentService
     private const string MonthOutOfBoundsStartedDateError = "The month the qualification was started must be between 1 and 12";
     private const string YearOutOfBoundsStartedDateError = "The year the qualification was started must be between 1900 and $[actual-year]$";
 
-    public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage(string? entryId)
-    {
-        return entryId switch
-               {
-                   AccessibilityStatements.Service =>
-                       await Task.FromResult(
-                           new AccessibilityStatementPage
-                           {
-                               Heading = "Test Accessibility Statement Heading",
-                               Body = ContentfulContentHelper.Paragraph("Test Accessibility Statement Body"),
-                               BackButton = new NavigationLink
-                               {
-                                   DisplayText = "TEST",
-                                   Href = "/",
-                                   OpenInNewTab = false
-                               }
-                           }
-                        ),
-                    AccessibilityStatements.EYQL =>
-                       await Task.FromResult(
-                           new AccessibilityStatementPage
-                           {
-                               Heading = "Test EYQL Accessibility Statement Heading",
-                               Body = ContentfulContentHelper.Paragraph("Test EYQL Accessibility Statement Body"),
-                               BackButton = new NavigationLink
-                               {
-                                   DisplayText = "Back to early years qualification list",
-                                   Href = "/early-years-qualification-list",
-                                   OpenInNewTab = false
-                               }
-                           }
-                        ),
-                   _ => null
-               };
-    }
-
     public async Task<StaticPage?> GetStaticPageById(string entryId)
     {
         var body = ContentfulContentHelper.Paragraph("Test Static Page Body");
@@ -803,12 +767,7 @@ public class MockContentfulService : IContentService
                                              new NavigationLink
                                              {
                                                  DisplayText = "Accessibility statement",
-                                                 Href = "/accessibility-statement"
-                                             },
-                                             new NavigationLink
-                                             {
-                                                 DisplayText = "Accessibility statement",
-                                                 Href = "/early-years-qualification-list/accessibility-statement"
+                                                 Href = "https://accessibility-statements.education.gov.uk/s/90"
                                              }
                                          ]
                                      });
