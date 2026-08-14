@@ -15,7 +15,6 @@ COPY --from=build /out/publish .
 RUN chown dotnet:dotnet /src .
 USER dotnet
 
-RUN chmod +x /src/Dfe.EarlyYearsQualification.Web/splunk-launch.sh
 EXPOSE 4318
 ENV OTEL_SERVICE_NAME=early-years-qualification 
 ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318 
@@ -26,4 +25,4 @@ ENV OTEL_TRACES_SAMPLER=parentbased_always_on
 ENV OTEL_METRICS_EXPORTER=none 
 ENV OTEL_LOGS_EXPORTER=none 
 ENV DOTNET_EnableDiagnostics=1 
-ENTRYPOINT ["/src/Dfe.EarlyYearsQualification.Web/splunk-launch.sh","dotnet", "Dfe.EarlyYearsQualification.Web.dll"]
+ENTRYPOINT ["splunk-launch.sh","dotnet", "Dfe.EarlyYearsQualification.Web.dll"]
