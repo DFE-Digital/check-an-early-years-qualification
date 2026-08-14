@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Download;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -24,6 +25,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
+using Dfe.EarlyYearsQualification.Web.Services.Questions;
 using Dfe.EarlyYearsQualification.Web.Services.ServiceCollection;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Dfe.EarlyYearsQualification.Web.Services.WebView;
@@ -35,10 +37,11 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Notify.Client;
 using Notify.Interfaces;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using OwaspHeaders.Core.Extensions;
 using System.Diagnostics.CodeAnalysis;
-using Dfe.EarlyYearsQualification.Content.Download;
-using Dfe.EarlyYearsQualification.Web.Services.Questions;
 
 namespace Dfe.EarlyYearsQualification.Web
 {
@@ -67,6 +70,25 @@ namespace Dfe.EarlyYearsQualification.Web
 
             if (!builder.Environment.IsDevelopment())
             {
+                builder.Services.AddOpenTelemetry()
+                .ConfigureResource(resource => ResourceBuilder.CreateDefault()
+                            .AddService(serviceName: "early-years-qualification", serviceVersion: "1.0.0"))
+                .WithTracing(tracing => tracing
+                    .AddAspNetCoreInstrumentation(options =>
+                    {
+                        options.Filter = context => !context.Request.Path.Value!.Contains("/health");
+                    })
+                    .AddHttpClientInstrumentation()
+                    .AddOtlpExporter())
+
+                .WithMetrics(metrics => metrics
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddRuntimeInstrumentation()
+                    .AddOtlpExporter());
+
+                builder.Services.AddOpenTelemetry();
+
                 builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
             }
 
