@@ -4,7 +4,7 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /
-#COPY src/ src/
+COPY src/ src/
 RUN dotnet publish "src/Dfe.EarlyYearsQualification.Web/Dfe.EarlyYearsQualification.Web.csproj" -c Release -o /out/publish
 RUN rm -rf /src
 
