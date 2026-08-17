@@ -25,4 +25,4 @@ ENV OTEL_TRACES_SAMPLER=parentbased_always_on
 ENV OTEL_METRICS_EXPORTER=none 
 ENV OTEL_LOGS_EXPORTER=none 
 ENV DOTNET_EnableDiagnostics=1 
-ENTRYPOINT ["splunk-launch.sh","dotnet", "Dfe.EarlyYearsQualification.Web.dll"]
+ENTRYPOINT ["/src/splunk-launch.sh","dotnet", "Dfe.EarlyYearsQualification.Web.dll"]

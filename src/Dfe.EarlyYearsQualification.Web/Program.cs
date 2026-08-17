@@ -70,9 +70,10 @@ namespace Dfe.EarlyYearsQualification.Web
 
             if (!builder.Environment.IsDevelopment())
             {
+                string? serviceName = builder.Configuration.GetValue<string>("Splunk:OTEL_SERVICE_NAME")?? "early-years-qualification";
                 builder.Services.AddOpenTelemetry()
                 .ConfigureResource(resource => ResourceBuilder.CreateDefault()
-                            .AddService(serviceName: "early-years-qualification", serviceVersion: "1.0.0"))
+                            .AddService(serviceName: serviceName, serviceVersion: "1.0.0"))
                 .WithTracing(tracing => tracing
                     .AddAspNetCoreInstrumentation(options =>
                     {
