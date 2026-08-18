@@ -2,7 +2,7 @@
 @model Dfe.EarlyYearsQualification.Web.Models.Content.EarlyYearsQualificationListModel
 
 @{
-    ViewData["Title"] = Model.Heading;
+    ViewData["Title"] = $"{Model.Heading} - {Model.ShowingAllQualificationsLabel}";
 }
 
 @section Scripts
@@ -171,7 +171,7 @@
             foreach (var qualification in Model.Qualifications)
             {
                 <govuk-summary-card>
-                    <govuk-summary-card-title>@qualification.QualificationName</govuk-summary-card-title>
+                    <govuk-summary-card-title heading-level="3">@qualification.QualificationName</govuk-summary-card-title>
                     <govuk-summary-list>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@Model.QualificationLevelLabel</govuk-summary-list-row-key>

@@ -23,23 +23,6 @@ public class MockContentfulService : IContentService
     private const string MonthOutOfBoundsStartedDateError = "The month the qualification was started must be between 1 and 12";
     private const string YearOutOfBoundsStartedDateError = "The year the qualification was started must be between 1900 and $[actual-year]$";
 
-    public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
-    {
-        var body = ContentfulContentHelper.Paragraph("Test Accessibility Statement Body");
-
-        return await Task.FromResult(new AccessibilityStatementPage
-                                     {
-                                         Heading = "Test Accessibility Statement Heading",
-                                         Body = body,
-                                         BackButton = new NavigationLink
-                                                      {
-                                                          DisplayText = "TEST",
-                                                          Href = "/",
-                                                          OpenInNewTab = false
-                                                      }
-                                     });
-    }
-
     public async Task<StaticPage?> GetStaticPageById(string entryId)
     {
         var body = ContentfulContentHelper.Paragraph("Test Static Page Body");
@@ -784,7 +767,7 @@ public class MockContentfulService : IContentService
                                              new NavigationLink
                                              {
                                                  DisplayText = "Accessibility statement",
-                                                 Href = "/link-to-accessibility-statement"
+                                                 Href = "https://accessibility-statements.education.gov.uk/s/90"
                                              }
                                          ]
                                      });

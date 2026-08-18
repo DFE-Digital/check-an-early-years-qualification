@@ -15,13 +15,13 @@ public class FooterMapper(IGovUkContentParser contentParser) : IFooterMapper
         var rightHandSideContentBody = footer.RightHandSideFooterSection is not null
                                        ? await contentParser.ToHtml(footer.RightHandSideFooterSection.Body)
                                        : null;
-        
+
         var result = new FooterModel
-               {
-                   NavigationLinks = footer.NavigationLinks
-                                           .Select(navigationLink => NavigationLinkMapper.Map(navigationLink)).ToList(),
-               };
-        
+        {
+            NavigationLinks = footer.NavigationLinks
+                                    .Select(navigationLink => NavigationLinkMapper.Map(navigationLink)).ToList(),
+        };
+
         if (footer.LeftHandSideFooterSection is not null && !string.IsNullOrEmpty(leftHandSideContentBody))
         {
             result.LeftHandSideFooterSection = new FooterSectionModel

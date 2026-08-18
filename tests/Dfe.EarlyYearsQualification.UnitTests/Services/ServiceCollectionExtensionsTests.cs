@@ -29,7 +29,7 @@ public class ServiceCollectionExtensionsTests
         ServiceCollectionExtensions.AddMappers(services);
 
         // Assert
-        services.Count.Should().Be(19);
+        services.Count.Should().Be(18);
 
         VerifyService<IStaticPageMapper, StaticPageMapper>(services, ServiceLifetime.Scoped);
 
@@ -40,8 +40,6 @@ public class ServiceCollectionExtensionsTests
         VerifyService<IHelpEmailAddressPageMapper, HelpEmailAddressPageMapper>(services, ServiceLifetime.Scoped);
 
         VerifyService<IHelpConfirmationPageMapper, HelpConfirmationPageMapper>(services, ServiceLifetime.Scoped);
-
-        VerifyService<IAccessibilityStatementMapper, AccessibilityStatementMapper>(services, ServiceLifetime.Scoped);
 
         VerifyService<IChallengePageMapper, ChallengePageMapper>(services, ServiceLifetime.Scoped);
 

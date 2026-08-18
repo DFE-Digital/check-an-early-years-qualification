@@ -66,20 +66,6 @@ public class ContentfulContentService(
                                                    qualificationDetailsPageEntries);
     }
 
-    public async Task<AccessibilityStatementPage?> GetAccessibilityStatementPage()
-    {
-        var accessibilityStatementEntities = await GetEntriesByType<AccessibilityStatementPage>();
-
-        // ReSharper disable once InvertIf
-        if (accessibilityStatementEntities is null || !accessibilityStatementEntities.Any())
-        {
-            Logger.LogWarning("No accessibility statement page entry returned");
-            return null;
-        }
-
-        return accessibilityStatementEntities.First();
-    }
-
     public async Task<CookiesPage?> GetCookiesPage()
     {
         var cookiesEntities = await GetEntriesByType<CookiesPage>();

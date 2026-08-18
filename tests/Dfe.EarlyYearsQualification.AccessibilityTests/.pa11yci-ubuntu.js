@@ -59,10 +59,6 @@ function getUrls(authSecret, port) {
             actions: basicActions.concat(`navigate to http://localhost:${port}/`)
         },
         {
-            url: `http://localhost:${port}/accessibility-statement`,
-            actions: basicActions.concat(`navigate to http://localhost:${port}/accessibility-statement`)
-        },
-        {
             url: `http://localhost:${port}/cookies`,
             actions: basicActions.concat(`navigate to http://localhost:${port}/cookies`)
         },

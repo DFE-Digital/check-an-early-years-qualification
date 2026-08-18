@@ -48,8 +48,8 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should()
                        .Be("""
                            Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
-                           Post-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Pre-September 2014,3,3,="2014",="2015",Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Post-September 2014,3,3,="2014",="2015",Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
                            """);
     }
 
@@ -120,10 +120,10 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should()
                        .Be("""
                            Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
-                           Post-September 2014,4,3,2015,2016,New Qualification,AO 2,ABC-123-DEF,Plain text additional requirements,Some notes
-                           Post-September 2024,3,3,2015,2024,New Qualification,AO 1,ABC-123-DEF,Plain text additional requirements,""
-                           Post-September 2024,3,3,2015,2024,Qualification 2,AO 1,ABC-123-DEF,"",""
+                           Pre-September 2014,3,3,="2014",="2015",Qualification 1,AO 1,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Post-September 2014,4,3,="2015",="2016",New Qualification,AO 2,ABC-123-DEF,Plain text additional requirements,Some notes
+                           Post-September 2024,3,3,="2015",="2024",New Qualification,AO 1,ABC-123-DEF,Plain text additional requirements,""
+                           Post-September 2024,3,3,="2015",="2024",Qualification 2,AO 1,ABC-123-DEF,"",""
                            """);
     }
     
@@ -153,7 +153,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should()
                        .Be("""
                            Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements, nothing",""
+                           Pre-September 2014,3,3,="2014",="2015",Qualification 1,AO 1,ABC-123-DEF,"No additional requirements, nothing",""
                            """);
     }
     
@@ -183,7 +183,7 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should()
                        .Be("""
                            Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
-                           Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,"No additional requirements "" nothing",""
+                           Pre-September 2014,3,3,="2014",="2015",Qualification 1,AO 1,ABC-123-DEF,"No additional requirements "" nothing",""
                            """);
     }
     
@@ -209,12 +209,72 @@ public class EyqlDownloadGeneratorTests
 
         var expectedContent = "Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes"
                               + Environment.NewLine
-                              + "Pre-September 2014,3,3,2014,2015,Qualification 1,AO 1,ABC-123-DEF,\"No additional requirements \n nothing\",\"\"";
+                              + "Pre-September 2014,3,3,=\"2014\",=\"2015\",Qualification 1,AO 1,ABC-123-DEF,\"No additional requirements \n nothing\",\"\"";
 
         var downloadContent = downloadGenerator.GenerateQualificationListContent(qualifications);
 
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be(expectedContent);
+    }
+
+    [TestMethod]
+    public void GenerateQualificationListContent_PassQualificationWithNullYears_LeavesYearColumnsEmpty()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = null,
+                                     QualificationNumber = "ABC-123-DEF"
+                                 }
+                             };
+
+        var downloadGenerator = new EyqlDownloadGenerator();
+
+        var downloadContent = downloadGenerator.GenerateQualificationListContent(qualifications);
+
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
+                           Pre-September 2014,3,3,,,Qualification 1,AO 1,ABC-123-DEF,"",""
+                           """);
+    }
+
+    [TestMethod]
+    public void GenerateQualificationListContent_PassQualificationWithOnlyOneYearValue_WrapsOnlyThePopulatedYear()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF"
+                                 }
+                             };
+
+        var downloadGenerator = new EyqlDownloadGenerator();
+
+        var downloadContent = downloadGenerator.GenerateQualificationListContent(qualifications);
+
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
+                           Pre-September 2014,3,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",""
+                           """);
     }
 }

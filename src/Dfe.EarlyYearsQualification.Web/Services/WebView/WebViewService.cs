@@ -1,4 +1,5 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
@@ -35,14 +36,13 @@ public class WebViewService(
         var qualificationLevel = GetQualificationLevel(filters.QualificationLevel);
         var nation = GetNation(filters.Nation);
 
-        var qualifications = await qualificationsRepository.Get(
-                                                  qualificationLevel,
-                                                  null,
-                                                  null,
-                                                  null,
-                                                  searchCriteria,
-                                                  nation
-                                                 );
+        var qualifications = await qualificationsRepository.Get(new QualificationFilterOptions
+                                                                {
+                                                                    Level = qualificationLevel,
+                                                                    QualificationName = searchCriteria,
+                                                                    Nation = nation,
+                                                                    IncludeAllQualifications = true
+                                                                });
 
         qualifications = FilterQualificationsByStartDate(qualifications, filters.QualificationStartDate);
 
