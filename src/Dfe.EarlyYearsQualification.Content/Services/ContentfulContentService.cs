@@ -381,33 +381,13 @@ public class ContentfulContentService(
         int awardedMonth, int awardedYear,
         ContentfulCollection<QualificationDetailsPage> qualificationDetailsPageEntries)
     {
+        
         var enteredStartDate = new DateOnly(startYear, startMonth, dateValidator.GetDay());
         var enteredAwardedDate = new DateOnly(awardedYear, awardedMonth, dateValidator.GetDay());
-
-        // Make sure dates are filtered to the most relevant
-        var orderedQualificationDetailsPageEntries = qualificationDetailsPageEntries
-                                                     .Where(x => 
-                                                                (x.ToWhichYear is not null && x.AwardedAfterWhichYear is not null &&
-                                                                 enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear) &&
-                                                                 enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
-                                                                || (x.ToWhichYear is not null && x.AwardedAfterWhichYear is null &&
-                                                                    enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
-                                                                || (x.ToWhichYear is null && x.AwardedAfterWhichYear is not null &&
-                                                                    enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear)))
-                                                     .OrderBy(x => dateValidator.GetDate(x.ToWhichYear))
-                                                     .ToList();
-
-        // Any that have dates that are null are the 'catch all' scenario. These are lower priority and will be added to the bottom of the list
-        var allNullDates = qualificationDetailsPageEntries
-                           .Where(x => 
-                                      x.FromWhichYear is null && x.AwardedAfterWhichYear is null && x.ToWhichYear is null
-                                      || x.FromWhichYear is not null && x.AwardedAfterWhichYear is null 
-                                                                     && x.ToWhichYear is null 
-                                                                     && enteredStartDate >= dateValidator.GetDate(x.FromWhichYear))
-                           .OrderByDescending(x => dateValidator.GetDate(x.FromWhichYear)).ToList();
-
-        orderedQualificationDetailsPageEntries.AddRange(allNullDates);
-
+        
+        var orderedQualificationDetailsPageEntries = GetOrderedQualificationDetailsPages(enteredStartDate, enteredAwardedDate,
+         [.. qualificationDetailsPageEntries]);
+        
         foreach (var page in orderedQualificationDetailsPageEntries)
         {
             var pageStartDate = dateValidator.GetDate(page.FromWhichYear);
@@ -431,6 +411,43 @@ public class ContentfulContentService(
 
         Logger.LogError("No qualification details page entry returned");
         return null;
+    }
+
+    private List<QualificationDetailsPage> GetOrderedQualificationDetailsPages(DateOnly enteredStartDate, DateOnly enteredAwardedDate, List<QualificationDetailsPage> qualificationDetailsPageEntries)
+    {
+        // Make sure dates are filtered to the most relevant
+        var orderedQualificationDetailsPageEntries = qualificationDetailsPageEntries
+                                                     .Where(x =>
+                                                                (x.FromWhichYear is not null && x.AwardedAfterWhichYear is not null && x.ToWhichYear is not null &&
+                                                                 enteredStartDate >= dateValidator.GetDate(x.FromWhichYear) &&
+                                                                 enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear) &&
+                                                                 enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
+                                                                 || (x.FromWhichYear is not null && x.AwardedAfterWhichYear is null && x.ToWhichYear is not null &&
+                                                                     enteredStartDate >= dateValidator.GetDate(x.FromWhichYear) &&
+                                                                     enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
+                                                                 || (x.FromWhichYear is not null && x.AwardedAfterWhichYear is not null && x.ToWhichYear is null &&
+                                                                     enteredStartDate >= dateValidator.GetDate(x.FromWhichYear) &&
+                                                                     enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear))
+                                                                 ||  (x.FromWhichYear is not null && x.AwardedAfterWhichYear is null && x.ToWhichYear is null && 
+                                                                      enteredStartDate >= dateValidator.GetDate(x.FromWhichYear)))
+                                                     .OrderBy(x => dateValidator.GetDate(x.ToWhichYear))
+                                                     .ToList();
+
+        // Any that have dates that are null are the 'catch all' scenario. These are lower priority and will be added to the bottom of the list
+        var allNullDates = qualificationDetailsPageEntries
+                           .Where(x => 
+                                      (x.FromWhichYear is null && x.AwardedAfterWhichYear is null && x.ToWhichYear is null)
+                                      || (x.FromWhichYear is null && x.AwardedAfterWhichYear is not null && x.ToWhichYear is null && 
+                                          enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear))
+                                      || (x.FromWhichYear is null && x.AwardedAfterWhichYear is null && x.ToWhichYear is not null && 
+                                          enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear))
+                                      || (x.FromWhichYear is null && x.AwardedAfterWhichYear is not null && x.ToWhichYear is not null && 
+                                          enteredAwardedDate <= dateValidator.GetDate(x.ToWhichYear) &&
+                                          enteredAwardedDate >= dateValidator.GetDate(x.AwardedAfterWhichYear)))
+                           .OrderBy(x => dateValidator.GetDate(x.ToWhichYear)).ToList();
+
+        orderedQualificationDetailsPageEntries.AddRange(allNullDates);
+        return orderedQualificationDetailsPageEntries;
     }
 
     public async Task<WebViewPage?> GetWebViewPage()
