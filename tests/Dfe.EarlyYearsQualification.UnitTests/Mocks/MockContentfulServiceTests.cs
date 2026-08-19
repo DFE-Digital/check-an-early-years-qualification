@@ -11,17 +11,6 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Mocks;
 public class MockContentfulServiceTests
 {
     [TestMethod]
-    public async Task GetAccessibilityStatementPage_ReturnsExpectedDetails()
-    {
-        var contentfulService = new MockContentfulService();
-
-        var result = await contentfulService.GetAccessibilityStatementPage();
-        result.Should().NotBeNull();
-        result.Should().BeAssignableTo<AccessibilityStatementPage>();
-        result.Heading.Should().NotBeNullOrEmpty();
-    }
-
-    [TestMethod]
     public async Task GetRadioQuestionPage_PassInWhenWasTheQualificationStarted_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
@@ -1183,6 +1172,7 @@ public class MockContentfulServiceTests
         result.NavigationLinks.Count.Should().Be(2);
         result.NavigationLinks[0].DisplayText.Should().Be("Privacy notice");
         result.NavigationLinks[1].DisplayText.Should().Be("Accessibility statement");
+        result.NavigationLinks[1].Href.Should().Be("https://accessibility-statements.education.gov.uk/s/90");
         result.LeftHandSideFooterSection.Should().NotBeNull();
         result.LeftHandSideFooterSection.Heading.Should().Be("Left section");
         result.LeftHandSideFooterSection.Body.Content[0].Should().BeAssignableTo<Paragraph>()

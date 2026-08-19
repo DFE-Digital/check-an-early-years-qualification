@@ -24,9 +24,9 @@ public class EyqlDownloadGenerator : IDownloadGenerator
                                                                                  StaffChildRatio =
                                                                                      qualification.StaffChildRatio,
                                                                                  FromWhichYear =
-                                                                                     qualification.FromWhichYear,
+                                                                                     ApplyFormula(qualification.FromWhichYear),
                                                                                  ToWhichYear =
-                                                                                     qualification.ToWhichYear,
+                                                                                     ApplyFormula(qualification.ToWhichYear),
                                                                                  QualificationNumber =
                                                                                      qualification
                                                                                          .QualificationNumber,
@@ -56,6 +56,17 @@ public class EyqlDownloadGenerator : IDownloadGenerator
         stringBuilder.Remove(stringBuilder.Length - Environment.NewLine.Length, Environment.NewLine.Length);
 
         return stringBuilder.ToString();
+    }
+
+    // Wrapping the value as a formula ensures the dates are not interpreted differently across Excel / Google Sheets etc.
+    private static string? ApplyFormula(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return input;
+        }
+
+        return $"=\"{input}\"";
     }
     
     private static string EscapeCsvValue(string? value)

@@ -62,12 +62,6 @@ test.describe("A spec used to test the main back button route through the journe
     });
 
     test.describe("back buttons should all navigate to the appropriate pages in the main journey", async () => {
-        test("the back button on the accessibility statement page navigates back to the home page", async ({page}) => {
-            await page.goto("/accessibility-statement");
-            await clickBackButton(page);
-            await checkUrl(page, process.env.WEBAPP_URL + "/");
-        });
-
         test("the back button on the cookies preference page navigates back to the home page", async ({page}) => {
             await page.goto("/cookies");
             await clickBackButton(page);
