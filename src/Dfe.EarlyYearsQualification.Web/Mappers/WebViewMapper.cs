@@ -3,6 +3,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
+using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 
 namespace Dfe.EarlyYearsQualification.Web.Mappers;
@@ -14,6 +15,9 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
 
     public async Task<EarlyYearsQualificationListModel> Map(WebViewPage content, WebViewFilters webViewFilters, List<Qualification> qualifications)
     {
+        var startDateFilters = OptionItemMapper.Map(content.StartDateFilters);
+        var nationFilters = OptionItemMapper.Map(content.NationFilters);
+
         var model = new EarlyYearsQualificationListModel
         {
             Heading = content.Heading,
@@ -47,13 +51,26 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             QualificationLevelHeading = content.QualificationLevelHeading,
             NationHeading = content.NationHeading,
             NoFiltersSelectedContent = content.NoFiltersSelectedContent,
-            StartDateFilters = OptionItemMapper.Map(content.StartDateFilters),
+            StartDateFilters = startDateFilters,
             LevelFilters = OptionItemMapper.Map(content.LevelFilters),
-            NationFilters = OptionItemMapper.Map(content.NationFilters),
+            NationFilters = nationFilters,
+            SelectedNationFilterLabel = ExtractFilterLabel(nationFilters, webViewFilters.Nation),
+            SelectedStartDateFilterLabel = ExtractFilterLabel(startDateFilters, webViewFilters.QualificationStartDate),
         };
         model.ShowingAllQualificationsLabel = GetShowingAllQualificationsLabel(model.HasFilters, qualifications.Count, content);
 
         return model;
+    }
+
+    private static string ExtractFilterLabel(List<IOptionItemModel> filters, string filterValue)
+    {
+        if (string.IsNullOrEmpty(filterValue))
+        {
+            return string.Empty;
+        }
+
+        var filter = filters.OfType<OptionModel>().FirstOrDefault(x => x.Value == filterValue);
+        return filter?.Label ?? string.Empty;
     }
 
     private static string GetShowingAllQualificationsLabel(bool hasFilters, int qualificationCount, WebViewPage content)

@@ -80,6 +80,10 @@ public class EarlyYearsQualificationListModel
 
     public string SearchTermFilter { get; init; } = string.Empty;
 
+    public string SelectedNationFilterLabel { get; init; } = string.Empty;
+
+    public string SelectedStartDateFilterLabel { get; init; } = string.Empty;
+
     public bool HasFilters
     {
         get
