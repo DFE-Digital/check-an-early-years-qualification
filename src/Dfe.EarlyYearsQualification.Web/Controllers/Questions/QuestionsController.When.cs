@@ -68,7 +68,7 @@ public partial class QuestionsController
         {
             // set a base date
             questionService.SetWhenWasQualificationStarted(
-                new DateQuestionModel()
+                new DateQuestionModel
                 {
                     SelectedMonth = 1,
                     SelectedYear = 1900

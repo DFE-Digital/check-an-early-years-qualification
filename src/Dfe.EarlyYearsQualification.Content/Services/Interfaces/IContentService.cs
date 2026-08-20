@@ -17,8 +17,6 @@ public interface IContentService
 
     Task<RadioQuestionPage?> GetRadioQuestionPage(string entryId);
 
-    Task<AccessibilityStatementPage?> GetAccessibilityStatementPage();
-
     Task<CookiesPage?> GetCookiesPage();
 
     Task<PhaseBanner?> GetPhaseBannerContent();

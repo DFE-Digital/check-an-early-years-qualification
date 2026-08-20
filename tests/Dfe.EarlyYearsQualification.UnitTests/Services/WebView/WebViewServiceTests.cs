@@ -1,4 +1,5 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Entities;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
@@ -92,8 +93,9 @@ public class WebViewServiceTests
         var expectedModel = new EarlyYearsQualificationListModel();
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
-        mockQualificationsRepository.Setup(x => x.Get(3, null, null, null, "Qualification", null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                                             q => q.IncludeAllQualifications == true && q.Level == 3 && q.QualificationName == "Qualification")))
+                                    .ReturnsAsync(qualifications);
         mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
             .ReturnsAsync(expectedModel);
 
@@ -109,7 +111,8 @@ public class WebViewServiceTests
         // Assert
         result.Should().Be(expectedModel);
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
-        mockQualificationsRepository.Verify(x => x.Get(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true && q.Level == 3 && q.QualificationName == "Qualification")), Times.Once);
         mockWebViewPageMapper.Verify(x => x.Map(content, filters, It.IsAny<List<Qualification>>()), Times.Once);
     }
 
@@ -134,8 +137,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -149,7 +153,8 @@ public class WebViewServiceTests
         // Assert
         result.Should().HaveCount(1);
         result[0].Should().Be(qualifications[0]);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true)), Times.Once);
     }
 
     [TestMethod]
@@ -173,8 +178,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -187,7 +193,8 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true)), Times.Once);
     }
 
     [TestMethod]
@@ -211,8 +218,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, "test search", null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true && q.QualificationName == "test search")))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -225,7 +233,8 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, "test search", null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true && q.QualificationName == "test search")), Times.Once);
     }
 
     [TestMethod]
@@ -249,8 +258,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 5)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(5, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true && q.Level == 5)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -263,7 +273,8 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(5, null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true && q.Level == 5)), Times.Once);
     }
 
     [TestMethod]
@@ -287,8 +298,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -301,7 +313,8 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true)), Times.Once);
 
     }
 
@@ -327,8 +340,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, "Northern-Ireland"))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true && q.Nation == "Northern-Ireland")))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -341,7 +355,8 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, "Northern-Ireland"), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true && q.Nation == "Northern-Ireland")), Times.Once);
     }
 
     [TestMethod]
@@ -366,8 +381,9 @@ public class WebViewServiceTests
             new("Q1", "Qualification 1", "Org 1", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -380,7 +396,8 @@ public class WebViewServiceTests
 
         // Assert
         result.Should().HaveCount(1);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true)), Times.Once);
     }
 
     [TestMethod]
@@ -424,8 +441,9 @@ public class WebViewServiceTests
             }
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -465,8 +483,9 @@ public class WebViewServiceTests
             new("Q2", "Qualification 2", "Org 2", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -505,8 +524,9 @@ public class WebViewServiceTests
             new("Q4", "A Qualification", "Org 4", 3)
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -818,8 +838,9 @@ public class WebViewServiceTests
             }
         };
 
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
 
         var service = new WebViewService(
             mockContentService.Object,
@@ -858,8 +879,9 @@ public class WebViewServiceTests
         var expectedModel = new EarlyYearsQualificationListModel();
 
         mockUserJourneyCookieService.Setup(x => x.GetWebViewFilters()).Returns(filters);
-        mockQualificationsRepository.Setup(x => x.Get(null, null, null, null, null, null))
-            .ReturnsAsync(qualifications);
+        mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                       q => q.IncludeAllQualifications == true)))
+                                    .ReturnsAsync(qualifications);
         mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
             .ReturnsAsync(expectedModel);
 
@@ -875,7 +897,8 @@ public class WebViewServiceTests
         // Assert
         result.Should().Be(expectedModel);
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
-        mockQualificationsRepository.Verify(x => x.Get(null, null, null, null, null, null), Times.Once);
+        mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                        q => q.IncludeAllQualifications == true)), Times.Once);
     }
 
     [TestMethod]
