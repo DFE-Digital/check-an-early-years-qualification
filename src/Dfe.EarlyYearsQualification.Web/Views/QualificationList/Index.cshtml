@@ -2,7 +2,7 @@
 @model Dfe.EarlyYearsQualification.Web.Models.Content.EarlyYearsQualificationListModel
 
 @{
-    ViewData["Title"] = Model.Heading;
+    ViewData["Title"] = $"{Model.Heading} - {Model.ShowingAllQualificationsLabel}";
 }
 
 @section Scripts
@@ -26,7 +26,7 @@
                 <h2 id="download-heading" class="govuk-heading-m">@Model.DownloadHeading</h2>
                 @Html.Raw(Model.DownloadSectionContent)
             </div>
-            @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary", id="download-button" })
+            @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary", id="download-button", role="button" })
         </div>
     </div>
 </div>
@@ -49,33 +49,37 @@
                         @if (!string.IsNullOrEmpty(Model.SearchTermFilter))
                         {
                             <h3 class="govuk-heading-s govuk-!-margin-bottom-2">@Model.KeywordHeading</h3>
-                            <button class="filter__button-active govuk-body" name="removeFilter" value="search-term-@Model.SearchTermFilter" aria-description="Remove search term @Model.SearchTermFilter filter">
+                            <button class="filter__button-active govuk-body" name="removeFilter" value="search-term-@Model.SearchTermFilter">
+                                <span class="govuk-visually-hidden">Remove search term </span>
                                 <span class="filter__button-active-text">@Model.SearchTermFilter</span>
-                                <span class="close-btn">&times;</span>
+                                <span class="close-btn" aria-hidden="true">&times;</span>
                             </button>
                         }
                         @if (!string.IsNullOrEmpty(Model.NationFilter))
                         {
                             <h3 class="govuk-heading-s govuk-!-margin-bottom-2">@Model.NationHeading</h3>
-                            <button class="filter__button-active govuk-body" name="removeFilter" value="nation-@Model.NationFilter" aria-description="Remove nation @Model.NationFilter filter">
-                                <span class="filter__button-active-text">@(Model.NationFilters.OfType<OptionModel>().First(x => x.Value == Model.NationFilter).Label)</span>
-                                <span class="close-btn">&times;</span>
+                            <button class="filter__button-active govuk-body" name="removeFilter" value="nation-@Model.NationFilter">
+                                <span class="govuk-visually-hidden">Remove nation </span>
+                                <span class="filter__button-active-text">@Model.SelectedNationFilterLabel</span>
+                                <span class="close-btn" aria-hidden="true">&times;</span>
                             </button>
                         }
                         @if (!string.IsNullOrEmpty(Model.QualificationStartDateFilter))
                         {
                             <h3 class="govuk-heading-s govuk-!-margin-bottom-2">@Model.QualificationStartDateHeading</h3>
-                            <button class="filter__button-active govuk-body" name="removeFilter" value="start-date-@Model.QualificationStartDateFilter" aria-description="Remove start date @Model.QualificationStartDateFilter filter">
-                                <span class="filter__button-active-text">@(Model.StartDateFilters.OfType<OptionModel>().First(x => x.Value == Model.QualificationStartDateFilter).Label)</span>
-                                <span class="close-btn">&times;</span>
+                            <button class="filter__button-active govuk-body" name="removeFilter" value="start-date-@Model.QualificationStartDateFilter">
+                                <span class="govuk-visually-hidden">Remove start date </span>
+                                <span class="filter__button-active-text">@Model.SelectedStartDateFilterLabel</span>
+                                <span class="close-btn" aria-hidden="true">&times;</span>
                             </button>
                         }
                         @if (!string.IsNullOrEmpty(Model.QualificationLevelFilter))
                         {
                             <h3 class="govuk-heading-s govuk-!-margin-bottom-2">@Model.QualificationLevelHeading</h3>
-                            <button class="filter__button-active govuk-body" name="removeFilter" value="qualification-level-@Model.QualificationLevelFilter" aria-description="Remove Level @Model.QualificationLevelFilter filter">
+                            <button class="filter__button-active govuk-body" name="removeFilter" value="qualification-level-@Model.QualificationLevelFilter">
+                                <span class="govuk-visually-hidden">Remove </span>
                                 <span class="filter__button-active-text">Level @Model.QualificationLevelFilter</span>
-                                <span class="close-btn">&times;</span>
+                                <span class="close-btn" aria-hidden="true">&times;</span>
                             </button>
                         }
                         <p class="govuk-body govuk-!-margin-bottom-0">
@@ -98,7 +102,7 @@
                         <label for="SearchTermFilter" class="govuk-heading-m govuk-!-margin-bottom-2">
                             @Model.KeywordHeading
                         </label>
-                        <input class="govuk-input" asp-for="SearchTermFilter" autocomplete="off" />
+                        <input class="govuk-input" asp-for="SearchTermFilter" autocomplete="off" type="text" />
                     </div>
                     <div class="filter__filter-body__section">
                         <govuk-radios for="NationFilter">
@@ -159,7 +163,7 @@
                             </govuk-radios-fieldset>
                         </govuk-radios>
                     </div>
-                    <govuk-button class="govuk-button govuk-!-margin-bottom-0">@Model.ApplyFiltersButtonContent</govuk-button>
+                    <govuk-button type="submit" class="govuk-button govuk-!-margin-bottom-0">@Model.ApplyFiltersButtonContent</govuk-button>
                 </div>
             }
         </div>
@@ -173,7 +177,7 @@
             foreach (var qualification in Model.Qualifications)
             {
                 <govuk-summary-card>
-                    <govuk-summary-card-title>@qualification.QualificationName</govuk-summary-card-title>
+                    <govuk-summary-card-title heading-level="3">@qualification.QualificationName</govuk-summary-card-title>
                     <govuk-summary-list>
                         <govuk-summary-list-row>
                             <govuk-summary-list-row-key>@Model.QualificationLevelLabel</govuk-summary-list-row-key>

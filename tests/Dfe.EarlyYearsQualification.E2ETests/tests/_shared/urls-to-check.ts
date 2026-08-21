@@ -1,6 +1,5 @@
 export const pages = [
     "/",
-    "/accessibility-statement",
     "/cookies",
     "/questions/are-you-checking-your-own-qualification",
     "/questions/where-was-the-qualification-awarded",
@@ -44,6 +43,7 @@ export const pagesWithForms = [
 export const pagesWithoutFormsOrRedirects = [
     "/",
     "/accessibility-statement",
+    "/early-years-qualification-list/accessibility-statement",
     "/advice/qualification-outside-the-united-kingdom",
     "/advice/qualifications-achieved-in-scotland",
     "/advice/qualifications-achieved-in-wales",

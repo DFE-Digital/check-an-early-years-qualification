@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Filters;
 using Dfe.EarlyYearsQualification.Content.Services;
+using Dfe.EarlyYearsQualification.Content.Services.Entities;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
@@ -170,7 +171,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
-        var result = await service.Get(null, null, null, null, null, null);
+        var result = await service.Get(new QualificationFilterOptions{ IncludeAllQualifications = false });
 
         Logger.VerifyWarning("No ratio requirements returned");
 
@@ -213,7 +214,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, mockQualificationFilterFactory.Object);
 
-        var result = await service.Get(null, null, null, null, null, null);
+        var result = await service.Get(new QualificationFilterOptions{ IncludeAllQualifications = false });
 
         result.Should().HaveCount(1).And.Contain(qualification);
     }
@@ -237,7 +238,7 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
         var service =
             new QualificationsRepository(Logger.Object, ClientMock.Object, new Mock<IQualificationListFilter>().Object);
 
-        var result = await service.Get(null, null, null, null, null, null);
+        var result = await service.Get(new QualificationFilterOptions{ IncludeAllQualifications = false });
 
         result.Should().BeEmpty();
     }
@@ -256,7 +257,13 @@ public class QualificationsRepositoryTests : ContentfulContentServiceTestsBase<Q
             new QualificationsRepository(mockLogger.Object, mockContentfulClient.Object,
                                          new Mock<IQualificationListFilter>().Object);
 
-        var filteredQualifications = await repository.Get(4, 5, 2016, null, null, null);
+        var filteredQualifications = await repository.Get(new QualificationFilterOptions
+                                                          {
+                                                              IncludeAllQualifications = false, 
+                                                              Level = 4, 
+                                                              StartDateMonth = 5, 
+                                                              StartDateYear = 2016
+                                                          });
 
         filteredQualifications.Should().NotBeNull();
         filteredQualifications.Should().BeEmpty();
