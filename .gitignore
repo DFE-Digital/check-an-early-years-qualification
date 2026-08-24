@@ -507,3 +507,5 @@ tests/Dfe.EarlyYearsQualification.E2ETests/playwright-report/
 
 # k6 browser tests screenshots
 screenshots/
+
+.env

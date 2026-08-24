@@ -15,14 +15,4 @@ COPY --from=build /out/publish .
 RUN chown dotnet:dotnet /src .
 USER dotnet
 
-EXPOSE 4318
-ENV OTEL_SERVICE_NAME=early-years-qualification 
-ENV OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318 
-ENV OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf 
-ENV OTEL_TRACES_EXPORTER=otlp
-ENV OTEL_RESOURCE_ATTRIBUTES=deployment.environment=staging,service.version=1.0.0,service.namespace=dfe 
-ENV OTEL_TRACES_SAMPLER=parentbased_always_on 
-ENV OTEL_METRICS_EXPORTER=none 
-ENV OTEL_LOGS_EXPORTER=none 
-ENV DOTNET_EnableDiagnostics=1 
-ENTRYPOINT ["/src/splunk-launch.sh","dotnet", "Dfe.EarlyYearsQualification.Web.dll"]
+ENTRYPOINT ["dotnet", "Dfe.EarlyYearsQualification.Web.dll"]
