@@ -1,4 +1,4 @@
-﻿import {test} from '@playwright/test';
+﻿import {test,expect} from '@playwright/test';
 import {authorise, checkText, isVisible} from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests the footer is showing correctly', {tag: "@e2e"}, () => {
@@ -27,5 +27,6 @@ test.describe('A spec that tests the footer is showing correctly', {tag: "@e2e"}
 
         await checkText(page, ".govuk-footer__inline-list-item", "Privacy notice", 0);
         await checkText(page, ".govuk-footer__inline-list-item", "Accessibility statement", 1);
+        await expect(page.locator("a[href='https://accessibility-statements.education.gov.uk/s/90']")).toHaveCount(1);
     })
 });

@@ -1,17 +1,9 @@
 $(window).on('load', function () {
     let totalQualifications = $('.govuk-summary-card').length;
-    let searchTerm = $('[value^="search-term"] span').first().text();
-    let filterNation = $('[value^="nation"] span').first().text();
-    let filterStartDate = $('[value^="start-date"] span').first().text();
-    let filterLevel = $('[value^="qualification-level"] span').first().text();
-
     window.dataLayer.push({
         'event': "webview-results-returned",
-        'searchTerm': searchTerm,
-        'filterNation': filterNation,
-        'filterStartDate': filterStartDate,
-        'filterLevel': filterLevel,
-        'totalQualifications': totalQualifications
+        'totalQualifications': totalQualifications,
+        ...getCurrentFilters()
     });
 });
 
@@ -21,3 +13,26 @@ $("#remove-filter-form").on("submit", function (event) {
         'answer': event.originalEvent.submitter.value.replace(/search-term-|start-date-|nation-|qualification-level-/g, ""),
     });
 });
+
+$(window).on('afterprint', function () {
+    window.dataLayer.push({
+        'event': "webview-page-printed",
+        ...getCurrentFilters()
+    });
+});
+
+function getCurrentFilters() {
+    const prefixes = ['search-term', 'nation', 'start-date', 'qualification-level'];
+    const filters = {};
+
+    prefixes.forEach(prefix => {
+        // Formats string to camelCase matching your dataLayer keys
+        const key = prefix.replace(/-([a-z])/g, g => g[1].toUpperCase());
+        // Map 'searchTerm' or 'filter' prefix correctly
+        const dataLayerKey = key === 'searchTerm' ? key : 'filter' + key.charAt(0).toUpperCase() + key.slice(1);
+
+        filters[dataLayerKey] = $(`[value^="${prefix}"] span`).first().text();
+    });
+
+    return filters;
+}

@@ -2,6 +2,7 @@ using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -46,17 +47,22 @@ public class LogAntiForgeryFailureAttributeTests
     private static ResultExecutingContext CreateContext(IActionResult actionResult)
     {
         var mockContentService = new Mock<IContentService>();
-        var mockControllerLogger = new Mock<ILogger<AccessibilityStatementController>>();
-        var mockAccessibilityStatementMapper = new Mock<IAccessibilityStatementMapper>();
+        var mockControllerLogger = new Mock<ILogger<AdviceController>>();
+        var mockStaticPageMapper = new Mock<IStaticPageMapper>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
 
         var controller =
-            new AccessibilityStatementController(mockControllerLogger.Object, mockContentService.Object,
-                                                 mockAccessibilityStatementMapper.Object);
-        controller.ControllerContext = new ControllerContext
-                                       {
-                                           HttpContext = new DefaultHttpContext()
-                                       };
-        
+            new AdviceController(mockControllerLogger.Object, mockContentService.Object,
+                                                 mockUserJourneyCookieService.Object,
+                                                 mockStaticPageMapper.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext()
+                }
+            };
+
         return new ResultExecutingContext(new ActionContext(controller.HttpContext, new RouteData(), new ActionDescriptor()), [], actionResult, controller);
     }
 }
