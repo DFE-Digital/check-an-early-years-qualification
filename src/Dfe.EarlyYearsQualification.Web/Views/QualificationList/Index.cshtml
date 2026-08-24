@@ -143,12 +143,14 @@
                     <div class="filter__filter-body__section">
                         <govuk-radios for="QualificationLevelFilter">
                             <govuk-radios-fieldset class="govuk-radios govuk-radios--small">
-                                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m post-legend-content">
+                                <govuk-radios-fieldset-legend is-page-heading="false" class="govuk-fieldset__legend--m">
                                     <div>
                                         @Model.QualificationLevelHeading
                                     </div>
-                                    @Html.Raw(Model.QualificationLevelPostHeaderContent)
                                 </govuk-radios-fieldset-legend>
+                                <govuk-radios-before-inputs>
+                                    @Html.Raw(Model.QualificationLevelPostHeaderContent)
+                                </govuk-radios-before-inputs>
                                 @foreach (var radio in Model.LevelFilters)
                                 {
                                     if (radio is OptionModel optionModel)
