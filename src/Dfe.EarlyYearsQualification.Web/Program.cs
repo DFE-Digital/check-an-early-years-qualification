@@ -70,28 +70,28 @@ namespace Dfe.EarlyYearsQualification.Web
 
             if (!builder.Environment.IsDevelopment())
             {
-                string? serviceName = builder.Configuration.GetValue<string>("Splunk:OTEL_SERVICE_NAME")?? "early-years-qualification";
-                builder.Services.AddOpenTelemetry()
-                .ConfigureResource(resource => ResourceBuilder.CreateDefault()
-                            .AddService(serviceName: serviceName, serviceVersion: "1.0.0"))
-                .WithTracing(tracing => tracing
-                    .AddAspNetCoreInstrumentation(options =>
-                    {
-                        options.Filter = context => !context.Request.Path.Value!.Contains("/health");
-                    })
-                    .AddHttpClientInstrumentation()
-                    .AddOtlpExporter())
-
-                .WithMetrics(metrics => metrics
-                    .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
-                    .AddRuntimeInstrumentation()
-                    .AddOtlpExporter());
-
-                builder.Services.AddOpenTelemetry();
-
                 builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
             }
+
+            string? serviceName = builder.Configuration.GetValue<string>("Splunk:OTEL_SERVICE_NAME") ?? "early-years-qualification";
+            builder.Services.AddOpenTelemetry()
+            .ConfigureResource(resource => ResourceBuilder.CreateDefault()
+                        .AddService(serviceName: serviceName, serviceVersion: "1.0.0"))
+            .WithTracing(tracing => tracing
+                .AddAspNetCoreInstrumentation(options =>
+                {
+                    options.Filter = context => !context.Request.Path.Value!.Contains("/health");
+                })
+                .AddHttpClientInstrumentation()
+                .AddOtlpExporter())
+
+            .WithMetrics(metrics => metrics
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddRuntimeInstrumentation()
+                .AddOtlpExporter());
+
+            builder.Services.AddOpenTelemetry();
 
             bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
 

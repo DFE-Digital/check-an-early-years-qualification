@@ -14,5 +14,4 @@ RUN useradd -m dotnet
 COPY --from=build /out/publish .
 RUN chown dotnet:dotnet /src .
 USER dotnet
-
 ENTRYPOINT ["dotnet", "Dfe.EarlyYearsQualification.Web.dll"]
