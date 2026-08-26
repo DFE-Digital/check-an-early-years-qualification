@@ -1,0 +1,63 @@
+name: Trivy Security Scan
+
+on:
+  workflow_call:
+
+jobs:
+  trivy-scan:
+    name: Trivy Scan
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    env:
+      TRIVY_SKIP_VERSION_CHECK: "true"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+
+      - name: Restore NuGet Packages
+        run: dotnet restore
+
+      # Pass 0: Print a full audit log of all detected licenses for visibility.
+      - name: Print All Detected Licenses (Audit Log)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          scanners: 'license'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+          format: 'table'
+          exit-code: '0'
+
+      # Pass 1: Print table of findings to console and fail the build on HIGH/CRITICAL issues.
+      - name: Run Trivy (Console Table Output & Build Failure)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: 'fs'
+          scanners: 'vuln,secret,license'
+          severity: 'HIGH,CRITICAL'
+          format: 'table'
+          exit-code: '1'
+
+      # Pass 2: Generate the full SARIF report of all findings for GitHub Code Scanning.
+      - name: Run Trivy (SARIF Report)
+        uses: aquasecurity/trivy-action@v0.36.0
+        if: always()
+        with:
+          scan-type: 'fs'
+          scanners: 'vuln,secret'
+          severity: 'HIGH,CRITICAL'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '0'
+
+      - name: Upload Trivy Scan Results to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
