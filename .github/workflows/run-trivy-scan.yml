@@ -23,10 +23,16 @@ jobs:
 
       - name: Restore NuGet Packages
         run: dotnet restore
+        
+      # This allows licenses to be checked
+      - name: NPM install for E2ETests project
+        shell: bash
+        working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
+        run: npm ci --ignore-scripts
 
       # Pass 0: Print a full audit log of all detected licenses for visibility.
       - name: Print All Detected Licenses (Audit Log)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: 'fs'
           scanners: 'license'
@@ -36,7 +42,7 @@ jobs:
 
       # Pass 1: Print table of findings to console and fail the build on HIGH/CRITICAL issues.
       - name: Run Trivy (Console Table Output & Build Failure)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: 'fs'
           scanners: 'vuln,secret,license'
@@ -46,7 +52,7 @@ jobs:
 
       # Pass 2: Generate the full SARIF report of all findings for GitHub Code Scanning.
       - name: Run Trivy (SARIF Report)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         if: always()
         with:
           scan-type: 'fs'
