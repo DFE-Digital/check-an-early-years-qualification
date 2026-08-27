@@ -36,7 +36,7 @@ updates:
         versions: [">=8.0.0"]
 
   - package-ecosystem: npm
-    directory: /src/Dfe.EarlyYearsQualification.Node
+    directory: /tests/Dfe.EarlyYearsQualification.E2ETests
     cooldown:
       default-days: 7
     schedule:
