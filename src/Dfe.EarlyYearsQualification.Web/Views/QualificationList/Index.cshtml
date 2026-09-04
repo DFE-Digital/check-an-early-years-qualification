@@ -27,6 +27,10 @@
                 @Html.Raw(Model.DownloadSectionContent)
             </div>
             @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary", id="download-button", role="button" })
+            @if (!Model.IsProductionEnvironment)
+            {
+                @Html.ActionLink("Download internal csv", "InternalDownload", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary govuk-!-margin-left-2", id="internal-download-button", role="button" })
+            }
         </div>
     </div>
 </div>

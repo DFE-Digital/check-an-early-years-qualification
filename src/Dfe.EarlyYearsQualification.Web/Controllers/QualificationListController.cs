@@ -26,7 +26,7 @@ public class QualificationListController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await webViewService.MapWebViewPageContentToViewModelAsync(content);
+        var model = await webViewService.MapWebViewPageContentToViewModelAsync(content, environmentService.IsProduction());
 
         return View(model);
     }

@@ -6,7 +6,6 @@ using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.Environments;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Dfe.EarlyYearsQualification.Web.Services.WebView;
-using StackExchange.Redis;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 
@@ -54,8 +53,11 @@ public class QualificationListControllerTests
         var webViewPage = new WebViewPage();
         var expectedModel = new EarlyYearsQualificationListModel();
 
+        const bool isProductionEnvironment = true;
+
         mockWebViewService.Setup(x => x.GetWebViewPage()).ReturnsAsync(webViewPage);
-        mockWebViewService.Setup(x => x.MapWebViewPageContentToViewModelAsync(webViewPage)).ReturnsAsync(expectedModel);
+        mockEnvironmentService.Setup(x => x.IsProduction()).Returns(isProductionEnvironment);
+        mockWebViewService.Setup(x => x.MapWebViewPageContentToViewModelAsync(webViewPage, isProductionEnvironment)).ReturnsAsync(expectedModel);
 
         var result = await controller.Index();
 
@@ -69,7 +71,7 @@ public class QualificationListControllerTests
         model.Should().BeSameAs(expectedModel);
 
         mockWebViewService.Verify(x => x.GetWebViewPage(), Times.Once);
-        mockWebViewService.Verify(x => x.MapWebViewPageContentToViewModelAsync(webViewPage), Times.Once);
+        mockWebViewService.Verify(x => x.MapWebViewPageContentToViewModelAsync(webViewPage, isProductionEnvironment), Times.Once);
     }
 
     [TestMethod]

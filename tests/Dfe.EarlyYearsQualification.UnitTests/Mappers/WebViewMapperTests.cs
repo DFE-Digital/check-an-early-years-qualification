@@ -33,9 +33,11 @@ public class WebViewMapperTests
             (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
             (qualification.AdditionalRequirementsRichText, "Rich text additional requirements"));
 
+        const bool isProductionEnvironment = true;
+
         var mapper = new WebViewMapper(mockContentParser.Object);
 
-        var result = await mapper.Map(content, new WebViewFilters(), [qualification]);
+        var result = await mapper.Map(content, new WebViewFilters(), [qualification], isProductionEnvironment);
 
         result.Should().NotBeNull();
         result.Heading.Should().Be(content.Heading);
@@ -82,6 +84,7 @@ public class WebViewMapperTests
         });
         result.HasFilters.Should().BeFalse();
         result.ShowingAllQualificationsLabel.Should().Be(content.ShowingAllQualificationsLabel);
+        result.IsProductionEnvironment.Should().Be(isProductionEnvironment);
 
         result.Qualifications.Should().HaveCount(1);
         var qualificationModel = result.Qualifications[0];
@@ -118,6 +121,8 @@ public class WebViewMapperTests
             (content.NoQualificationsFoundContent, "No qualifications found"),
             (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
             (null, string.Empty));
+        
+        const bool isProductionEnvironment = true;
 
         var mapper = new WebViewMapper(mockContentParser.Object);
 
@@ -129,7 +134,7 @@ public class WebViewMapperTests
                 QualificationStartDate = qualificationStartDate,
                 QualificationLevel = qualificationLevel
             },
-            qualifications);
+            qualifications, isProductionEnvironment);
 
         result.HasFilters.Should().BeTrue();
         result.ShowingAllQualificationsLabel.Should().Be(expectedLabel);
@@ -157,10 +162,12 @@ public class WebViewMapperTests
             (content.NoQualificationsFoundContent, "No qualifications found"),
             (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
             (null, string.Empty));
+        
+        const bool isProductionEnvironment = true;
 
         var mapper = new WebViewMapper(mockContentParser.Object);
 
-        var result = await mapper.Map(content, new WebViewFilters(), [qualification]);
+        var result = await mapper.Map(content, new WebViewFilters(), [qualification], isProductionEnvironment);
 
         result.Qualifications.Should().HaveCount(1);
         var qualificationModel = result.Qualifications[0];
