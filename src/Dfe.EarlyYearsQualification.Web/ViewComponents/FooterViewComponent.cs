@@ -30,7 +30,9 @@ public class FooterViewComponent(
             var footer = await contentService.GetFooter();
             if (footer is not null)
             {
-                footer.NavigationLinks = footer.NavigationLinks.Concat(OptionsLinks()).ToList();
+                footer.NavigationLinks = footer.NavigationLinks.Concat(OptionsLink())
+                                               .Concat(InternalDownloadLink())
+                                               .ToList();
             }
             return footer ?? defaultFooter;
         }
@@ -42,7 +44,7 @@ public class FooterViewComponent(
         }
     }
 
-    private IEnumerable<NavigationLink> OptionsLinks()
+    private IEnumerable<NavigationLink> OptionsLink()
     {
         if (!environmentService.IsProduction())
         {
@@ -51,6 +53,20 @@ public class FooterViewComponent(
                          {
                              DisplayText = "Options",
                              Href = "/options",
+                             OpenInNewTab = false
+                         };
+        }
+    }
+    
+    private IEnumerable<NavigationLink> InternalDownloadLink()
+    {
+        if (!environmentService.IsProduction())
+        {
+            logger.LogInformation("Showing Internal Download link in Footer");
+            yield return new NavigationLink
+                         {
+                             DisplayText = "Internal Download",
+                             Href = "/early-years-qualification-list/download/internal",
                              OpenInNewTab = false
                          };
         }
