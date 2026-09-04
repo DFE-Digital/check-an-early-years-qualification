@@ -176,7 +176,7 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
         await checkTextContains(page, "button[value^='qualification-level']", `5`);
         await checkText(page, "#qualification-webview-results > h2", "1 qualification found");
-        await page.locator(`a[href='/clear-filters']`).click();
+        await page.locator(`a[href='/early-years-qualification-list/clear-filters']`).click();
         await checkText(page, "#qualification-webview-results > h2", "Showing all the qualifications");
         await doesNotExist(page, `button[value^='search-term']`);
         await doesNotExist(page, `button[value^='nation']`);

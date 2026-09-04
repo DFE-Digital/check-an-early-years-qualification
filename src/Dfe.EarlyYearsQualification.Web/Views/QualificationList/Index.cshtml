@@ -27,6 +27,10 @@
                 @Html.Raw(Model.DownloadSectionContent)
             </div>
             @Html.ActionLink(Model.DownloadButtonText, "Download", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary", id="download-button", role="button" })
+            @if (!Model.IsProductionEnvironment)
+            {
+                @Html.ActionLink("Download internal csv", "InternalDownload", "QualificationList", null, new { @class ="govuk-button govuk-button--secondary govuk-!-margin-left-2", id="internal-download-button", role="button" })
+            }
         </div>
     </div>
 </div>
@@ -83,7 +87,7 @@
                             </button>
                         }
                         <p class="govuk-body govuk-!-margin-bottom-0">
-                            <a class='govuk-link' href='/clear-filters'>@Model.ClearFiltersLinkLabel</a>
+                            <a class='govuk-link' href='@Url.Action("ClearFilters")'>@Model.ClearFiltersLinkLabel</a>
                         </p>
                     }
                 }

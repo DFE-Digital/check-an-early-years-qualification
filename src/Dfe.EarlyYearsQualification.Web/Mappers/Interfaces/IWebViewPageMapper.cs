@@ -6,5 +6,5 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
 
 public interface IWebViewPageMapper
 {
-    Task<EarlyYearsQualificationListModel> Map(WebViewPage content, WebViewFilters webViewFilters, List<Qualification> qualifications);
+    Task<EarlyYearsQualificationListModel> Map(WebViewPage content, WebViewFilters webViewFilters, List<Qualification> qualifications, bool isProductionEnvironment);
 }

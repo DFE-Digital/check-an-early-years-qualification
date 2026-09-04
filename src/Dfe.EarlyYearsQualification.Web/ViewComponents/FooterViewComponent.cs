@@ -30,7 +30,7 @@ public class FooterViewComponent(
             var footer = await contentService.GetFooter();
             if (footer is not null)
             {
-                footer.NavigationLinks = footer.NavigationLinks.Concat(OptionsLinks()).ToList();
+                footer.NavigationLinks = footer.NavigationLinks.Concat(OptionsLink()).ToList();
             }
             return footer ?? defaultFooter;
         }
@@ -42,7 +42,7 @@ public class FooterViewComponent(
         }
     }
 
-    private IEnumerable<NavigationLink> OptionsLinks()
+    private IEnumerable<NavigationLink> OptionsLink()
     {
         if (!environmentService.IsProduction())
         {
