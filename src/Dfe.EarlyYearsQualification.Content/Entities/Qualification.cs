@@ -25,6 +25,7 @@ public class Qualification(
     public List<RatioRequirement>? RatioRequirements { get; set; }
     public bool IsAutomaticallyApprovedAtLevel6 { get; init; }
     public bool IsTheQualificationADegree { get; set; }
+    public bool ExcludeFromShowingInMainService { get; init; }
     public Document? AdditionalRequirementsRichText { get; init; }
     public string? AdditionalRequirementsPlainText { get; init; }
     public string? Notes { get; init; }

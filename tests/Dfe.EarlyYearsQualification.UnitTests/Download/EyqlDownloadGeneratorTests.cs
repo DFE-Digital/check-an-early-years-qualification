@@ -308,6 +308,7 @@ public class EyqlDownloadGeneratorTests
                                                ],
                                      IsAutomaticallyApprovedAtLevel6 = true,
                                      IsTheQualificationADegree = true,
+                                     ExcludeFromShowingInMainService = true,
                                      AdditionalRequirementQuestions = [
                                                                         new AdditionalRequirementQuestion { Question = "Question 1"}
                                                                       ],
@@ -321,8 +322,8 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
-                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Excluded from showing in the main service?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
                            """);
     }
 
@@ -348,6 +349,7 @@ public class EyqlDownloadGeneratorTests
                                      ],
                                      IsAutomaticallyApprovedAtLevel6 = true,
                                      IsTheQualificationADegree = true,
+                                     ExcludeFromShowingInMainService = true,
                                      AdditionalRequirementQuestions =
                                      [
                                          new AdditionalRequirementQuestion
@@ -363,8 +365,8 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
-                           Pre-September 2014,"England,Scotland",TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Excluded from showing in the main service?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,"England,Scotland",TST-001,3,True,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
                            """);
     }
     
@@ -388,6 +390,7 @@ public class EyqlDownloadGeneratorTests
                                                ],
                                      IsAutomaticallyApprovedAtLevel6 = true,
                                      IsTheQualificationADegree = true,
+                                     ExcludeFromShowingInMainService = true,
                                      AdditionalRequirementQuestions = [
                                                                         new AdditionalRequirementQuestion { Question = "Question 1"},
                                                                         new AdditionalRequirementQuestion { Question = "Question 2"}
@@ -402,8 +405,8 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
-                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"","Question 1,Question 2",Notes,Internal notes
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Excluded from showing in the main service?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"","Question 1,Question 2",Notes,Internal notes
                            """);
     }
     
@@ -428,6 +431,7 @@ public class EyqlDownloadGeneratorTests
                                                ],
                                      IsAutomaticallyApprovedAtLevel6 = true,
                                      IsTheQualificationADegree = true,
+                                     ExcludeFromShowingInMainService = true,
                                      AdditionalRequirementQuestions = [
                                                                         new AdditionalRequirementQuestion { Question = "Question 1"}
                                                                       ],
@@ -441,9 +445,9 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
-                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
-                           Post-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Excluded from showing in the main service?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Post-September 2014,England,TST-001,3,True,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
                            """);
     }
     [TestMethod]
@@ -466,6 +470,7 @@ public class EyqlDownloadGeneratorTests
                                                ],
                                      IsAutomaticallyApprovedAtLevel6 = true,
                                      IsTheQualificationADegree = true,
+                                     ExcludeFromShowingInMainService = true,
                                      AdditionalRequirementQuestions = [
                                                                         new AdditionalRequirementQuestion { Question = "Question 1"}
                                                                       ],
@@ -487,6 +492,7 @@ public class EyqlDownloadGeneratorTests
                                                ],
                                      IsAutomaticallyApprovedAtLevel6 = true,
                                      IsTheQualificationADegree = true,
+                                     ExcludeFromShowingInMainService = true,
                                      AdditionalRequirementQuestions = [
                                                                           new AdditionalRequirementQuestion { Question = "Question 1"}
                                                                       ],
@@ -500,9 +506,9 @@ public class EyqlDownloadGeneratorTests
         downloadContent.Should().NotBeNullOrEmpty();
         downloadContent.Should()
                        .Be("""
-                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
-                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
-                           Post-September 2024,England,TST-002,4,True,True,3,,="2015",Qualification 2,AO 2,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Excluded from showing in the main service?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Post-September 2024,England,TST-002,4,True,True,True,3,,="2015",Qualification 2,AO 2,ABC-123-DEF,"",Question 1,Notes,Internal notes
                            """);
     }
 }
