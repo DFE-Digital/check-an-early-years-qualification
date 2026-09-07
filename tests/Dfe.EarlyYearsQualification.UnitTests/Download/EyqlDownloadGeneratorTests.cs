@@ -54,7 +54,7 @@ public class EyqlDownloadGeneratorTests
     }
 
     [TestMethod]
-    public void GenerateQualificationListContent_PassInMultipleQualifications_ReturnsTwoInTheList()
+    public void GenerateQualificationListContent_PassInMultipleQualifications_ReturnsAllInTheList()
     {
         var qualifications = new List<Qualification>
                              {
@@ -275,6 +275,234 @@ public class EyqlDownloadGeneratorTests
                        .Be("""
                            Tab,Qualification level,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Notes
                            Pre-September 2014,3,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",""
+                           """);
+    }
+
+    [TestMethod]
+    public void GenerateInternalQualificationListContent_PassInEmptyList_ReturnsEmptyString()
+    {
+        var qualifications = new List<Qualification>();
+        var downloadGenerator = new EyqlDownloadGenerator();
+        
+        var downloadContent = downloadGenerator.GenerateInternalQualificationListContent(qualifications);
+        downloadContent.Should().BeNullOrEmpty();
+    }
+    
+    [TestMethod]
+    public void GenerateInternalQualificationListContent_PassInListWithSingleEntry_ReturnsExpectedString()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF",
+                                     Nations = [
+                                                new Nation {Name = "England"}
+                                               ],
+                                     IsAutomaticallyApprovedAtLevel6 = true,
+                                     IsTheQualificationADegree = true,
+                                     AdditionalRequirementQuestions = [
+                                                                        new AdditionalRequirementQuestion { Question = "Question 1"}
+                                                                      ],
+                                     Notes = "Notes",
+                                     InternalNotes = "Internal notes"
+                                 }
+                             };
+        var downloadGenerator = new EyqlDownloadGenerator();
+        
+        var downloadContent = downloadGenerator.GenerateInternalQualificationListContent(qualifications);
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           """);
+    }
+
+    [TestMethod]
+    public void GenerateInternalQualificationListContent_PassInQualificationWithMultipleNations_ReturnsExpectedString()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF",
+                                     Nations =
+                                     [
+                                         new Nation { Name = "England" },
+                                         new Nation { Name = "Scotland" }
+                                     ],
+                                     IsAutomaticallyApprovedAtLevel6 = true,
+                                     IsTheQualificationADegree = true,
+                                     AdditionalRequirementQuestions =
+                                     [
+                                         new AdditionalRequirementQuestion
+                                         { Question = "Question 1" }
+                                     ],
+                                     Notes = "Notes",
+                                     InternalNotes = "Internal notes"
+                                 }
+                             };
+        var downloadGenerator = new EyqlDownloadGenerator();
+
+        var downloadContent = downloadGenerator.GenerateInternalQualificationListContent(qualifications);
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,"England,Scotland",TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           """);
+    }
+    
+    [TestMethod]
+    public void GenerateInternalQualificationListContent_PassQualificationWithMultipleAdditionalRequirementQuestions_ReturnsExpectedString()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF",
+                                     Nations = [
+                                                new Nation {Name = "England"}
+                                               ],
+                                     IsAutomaticallyApprovedAtLevel6 = true,
+                                     IsTheQualificationADegree = true,
+                                     AdditionalRequirementQuestions = [
+                                                                        new AdditionalRequirementQuestion { Question = "Question 1"},
+                                                                        new AdditionalRequirementQuestion { Question = "Question 2"}
+                                                                      ],
+                                     Notes = "Notes",
+                                     InternalNotes = "Internal notes"
+                                 }
+                             };
+        var downloadGenerator = new EyqlDownloadGenerator();
+        
+        var downloadContent = downloadGenerator.GenerateInternalQualificationListContent(qualifications);
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"","Question 1,Question 2",Notes,Internal notes
+                           """);
+    }
+    
+    [TestMethod]
+    public void GenerateInternalQualificationListContent_PassInQualificationWithMultipleTabs_ReturnsTwoInTheList()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 },
+                                         new Tab { Heading = "Post-September 2014", Order = 2 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF",
+                                     Nations = [
+                                                new Nation {Name = "England"}
+                                               ],
+                                     IsAutomaticallyApprovedAtLevel6 = true,
+                                     IsTheQualificationADegree = true,
+                                     AdditionalRequirementQuestions = [
+                                                                        new AdditionalRequirementQuestion { Question = "Question 1"}
+                                                                      ],
+                                     Notes = "Notes",
+                                     InternalNotes = "Internal notes"
+                                 }
+                             };
+        var downloadGenerator = new EyqlDownloadGenerator();
+        
+        var downloadContent = downloadGenerator.GenerateInternalQualificationListContent(qualifications);
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Post-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           """);
+    }
+    [TestMethod]
+    public void GenerateInternalQualificationListContent_PassInQualifications_ReturnsTwoInTheList()
+    {
+        var qualifications = new List<Qualification>
+                             {
+                                 new Qualification("TST-001", "Qualification 1", "AO 1", 3)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Pre-September 2014", Order = 1 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF",
+                                     Nations = [
+                                                new Nation {Name = "England"}
+                                               ],
+                                     IsAutomaticallyApprovedAtLevel6 = true,
+                                     IsTheQualificationADegree = true,
+                                     AdditionalRequirementQuestions = [
+                                                                        new AdditionalRequirementQuestion { Question = "Question 1"}
+                                                                      ],
+                                     Notes = "Notes",
+                                     InternalNotes = "Internal notes"
+                                 },
+                                 new Qualification("TST-002", "Qualification 2", "AO 2", 4)
+                                 {
+                                     EyqlTabs =
+                                     [
+                                         new Tab { Heading = "Post-September 2024", Order = 3 }
+                                     ],
+                                     StaffChildRatio = 3,
+                                     FromWhichYear = null,
+                                     ToWhichYear = "2015",
+                                     QualificationNumber = "ABC-123-DEF",
+                                     Nations = [
+                                                   new Nation {Name = "England"}
+                                               ],
+                                     IsAutomaticallyApprovedAtLevel6 = true,
+                                     IsTheQualificationADegree = true,
+                                     AdditionalRequirementQuestions = [
+                                                                          new AdditionalRequirementQuestion { Question = "Question 1"}
+                                                                      ],
+                                     Notes = "Notes",
+                                     InternalNotes = "Internal notes"
+                                 }
+                             };
+        var downloadGenerator = new EyqlDownloadGenerator();
+        
+        var downloadContent = downloadGenerator.GenerateInternalQualificationListContent(qualifications);
+        downloadContent.Should().NotBeNullOrEmpty();
+        downloadContent.Should()
+                       .Be("""
+                           Tab,Nations,Qualification Id,Qualification level,Is Automatically Approved at L6?,Is the qualification a degree?,Staff:child ratio the qualification holder can count in,From when,To when,Qualification name,Awarding organisation,Qualification number,Additional requirements,Additional Requirement Questions,Notes,Internal Notes
+                           Pre-September 2014,England,TST-001,3,True,True,3,,="2015",Qualification 1,AO 1,ABC-123-DEF,"",Question 1,Notes,Internal notes
+                           Post-September 2024,England,TST-002,4,True,True,3,,="2015",Qualification 2,AO 2,ABC-123-DEF,"",Question 1,Notes,Internal notes
                            """);
     }
 }
