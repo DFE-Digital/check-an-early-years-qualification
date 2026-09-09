@@ -6,7 +6,7 @@ runs:
   steps:
     - uses: actions/setup-node@v4
       with:
-        node-version: 18.x
+        node-version: 24.x
     - name: Install dependencies
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
@@ -14,4 +14,4 @@ runs:
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npx --ignore-scripts playwright@1.61.1 install chromium firefox webkit --with-deps --no-shell
+      run: npx --ignore-scripts playwright@1.62.1 install chromium firefox webkit --with-deps --no-shell

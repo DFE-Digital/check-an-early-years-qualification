@@ -225,6 +225,8 @@
 
         <hr class='govuk-section-break govuk-section-break--xl govuk-section-break--visible' />
 
-        @Html.Raw(Model.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent)
+        <div id="post-list-content">
+            @Html.Raw(Model.CheckIfAnEarlyYearsQualificationIsFullAndRelevantContent)
+        </div>
     </div>
 </div>

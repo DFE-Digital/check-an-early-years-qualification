@@ -27,6 +27,13 @@ env:
   URL: 'http://127.0.0.1:5000'
   
 jobs:
+  trivy-scan:
+    name: Trivy Security Scan
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    uses: ./.github/workflows/run-trivy-scan.yml
 
   build-app:  
     name: Build, check and run tests
