@@ -227,7 +227,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
                               new StaticPage
                               {
                                   Heading = "Test Heading",
-                                  Body = _testRichText
+                                  Body = _testRichText,
+                                  OpenGraphData = new OpenGraphData { Title = "OG Title" }
                               }
                           ]
                       };
@@ -246,6 +247,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
         result!.Heading.Should().Be("Test Heading");
         result.Body.Should().Be(_testRichText);
         result.Body.Should().NotBeNull();
+        result.OpenGraphData.Should().NotBeNull();
+        result.OpenGraphData!.Title.Should().Be("OG Title");
     }
 
     [TestMethod]
@@ -1581,7 +1584,11 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
     [TestMethod]
     public async Task GetWebViewPage_PageFound_ReturnsExpectedResult()
     {
-        var webViewPage = new WebViewPage { Heading = "Test Heading" };
+        var webViewPage = new WebViewPage
+                          {
+                              Heading = "Test Heading",
+                              OpenGraphData = new OpenGraphData { Title = "OG Title" }
+                          };
 
         var pages = new ContentfulCollection<WebViewPage> { Items = [webViewPage] };
 
@@ -1598,6 +1605,8 @@ public class ContentfulContentServiceTests : ContentfulContentServiceTestsBase<C
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(webViewPage);
+        result!.OpenGraphData.Should().NotBeNull();
+        result.OpenGraphData!.Title.Should().Be("OG Title");
     }
 
     [TestMethod]

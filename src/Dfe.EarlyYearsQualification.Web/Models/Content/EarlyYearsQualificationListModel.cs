@@ -6,6 +6,8 @@ public class EarlyYearsQualificationListModel
 {
     public NavigationLinkModel? BackButton { get; init; }
 
+    public OpenGraphDataModel? OpenGraphData { get; init; }
+
     public string Heading { get; init; } = string.Empty;
     
     public string PostHeadingContent { get; init; } = string.Empty;
