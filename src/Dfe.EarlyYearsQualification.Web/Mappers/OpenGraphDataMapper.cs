@@ -14,7 +14,14 @@ public static class OpenGraphDataMapper
                    Title = openGraphData.Title,
                    Description = openGraphData.Description,
                    Domain = openGraphData.Domain,
-                   ImageUrl = openGraphData.Image?.File.Url
+                   ImageUrl = NormalizeImageUrl(openGraphData.Image?.File.Url)
                };
+    }
+
+    private static string? NormalizeImageUrl(string? url)
+    {
+        return !string.IsNullOrEmpty(url) && url.StartsWith("//")
+            ? $"https:{url}"
+            : url;
     }
 }

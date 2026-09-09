@@ -56,4 +56,50 @@ public class OpenGraphDataMapperTests
         result.Should().NotBeNull();
         result!.ImageUrl.Should().BeNull();
     }
+
+    [TestMethod]
+    public void Map_PassInOpenGraphDataWithProtocolRelativeImageUrl_ReturnsModelWithHttpsPrefix()
+    {
+        var openGraphData = new OpenGraphData
+                            {
+                                Title = "OG Title",
+                                Description = "OG Description",
+                                Domain = "OG Domain",
+                                Image = new Contentful.Core.Models.Asset
+                                        {
+                                            File = new File
+                                                   {
+                                                       Url = "//images.ctfassets.net/foo.png"
+                                                   }
+                                        }
+                            };
+
+        var result = OpenGraphDataMapper.Map(openGraphData);
+
+        result.Should().NotBeNull();
+        result!.ImageUrl.Should().Be("https://images.ctfassets.net/foo.png");
+    }
+
+    [TestMethod]
+    public void Map_PassInOpenGraphDataWithAbsoluteImageUrl_ReturnsModelWithUrlUnchanged()
+    {
+        var openGraphData = new OpenGraphData
+                            {
+                                Title = "OG Title",
+                                Description = "OG Description",
+                                Domain = "OG Domain",
+                                Image = new Contentful.Core.Models.Asset
+                                        {
+                                            File = new File
+                                                   {
+                                                       Url = "https://example.com/foo.png"
+                                                   }
+                                        }
+                            };
+
+        var result = OpenGraphDataMapper.Map(openGraphData);
+
+        result.Should().NotBeNull();
+        result!.ImageUrl.Should().Be("https://example.com/foo.png");
+    }
 }
