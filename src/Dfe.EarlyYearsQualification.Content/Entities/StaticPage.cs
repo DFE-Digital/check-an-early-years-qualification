@@ -9,4 +9,6 @@ public class StaticPage
     public Document? Body { get; init; }
 
     public NavigationLink? BackButton { get; init; }
+
+    public OpenGraphData? OpenGraphData { get; init; }
 }
