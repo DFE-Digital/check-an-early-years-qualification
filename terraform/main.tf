@@ -94,6 +94,7 @@ module "network" {
   govuk_notify_api_key                      = var.govuk_notify_api_key
   log_analytics_workspace_id                = module.monitor.logs_id
   download_endpoint_secret                  = var.download_endpoint_secret
+  splunk_access_token                       = var.splunk_access_token
   depends_on                                = [module.monitor]
 }
 
