@@ -23,19 +23,25 @@ public class ContentfulQualificationDownloadService(
 {
     private const int Version = 1;
     private const string Locale = "en-GB";
+    private const string ProductionFileName = "Early-Years-Qualifications-List.csv";
+    private const string StagingFileName = "Early-Years-Qualifications-List-Staging.csv";
+    private const string DevelopmentFileName = "Early-Years-Qualifications-List-Development.csv";
+    private const string ProductionEnvironment = "production";
+    private const string StagingEnvironment = "staging";
+    private const string DevelopmentEnvironment = "development";
     
     public async Task GenerateEyqlDownloadByEnvironment(string environment)
     {
         switch (environment.ToLower())
         {
-            case "production":
-            await GenerateEyqlDownload(Assets.EarlyYearsQualificationList, "EYQL Download", "Early-Years-Qualifications-List.csv");
+            case ProductionEnvironment:
+            await GenerateEyqlDownload(Assets.EarlyYearsQualificationList, "EYQL Download", ProductionFileName);
             break;
-            case "staging":
-            await GenerateEyqlDownload(Assets.EarlyYearsQualificationListStaging, "EYQL Download Staging", "Early-Years-Qualifications-List-Staging.csv");
+            case StagingEnvironment:
+            await GenerateEyqlDownload(Assets.EarlyYearsQualificationListStaging, "EYQL Download Staging", StagingFileName);
             break;
-            case "development":
-            await GenerateEyqlDownload(Assets.EarlyYearsQualificationListDevelopment, "EYQL Download Development", "Early-Years-Qualifications-List-Development.csv");
+            case DevelopmentEnvironment:
+            await GenerateEyqlDownload(Assets.EarlyYearsQualificationListDevelopment, "EYQL Download Development", DevelopmentFileName);
             break;
             default:
             logger.LogWarning("Unknown environment: {Environment}. No EYQL download generated.", environment);
@@ -47,24 +53,38 @@ public class ContentfulQualificationDownloadService(
     {
         switch (environment.ToLower())
         {
-            case "production":
-            return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationList), "Early-Years-Qualifications-List.csv");
-            case "staging":
-            return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListStaging), "Early-Years-Qualifications-List-Staging.csv");
-            case "development":
-            return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListDevelopment), "Early-Years-Qualifications-List-Development.csv");
+            case ProductionEnvironment:
+            return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationList), ProductionFileName);
+            case StagingEnvironment:
+            return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListStaging), StagingFileName);
+            case DevelopmentEnvironment:
+            return (await GetEyqlDownloadAsByteArray(Assets.EarlyYearsQualificationListDevelopment), DevelopmentFileName);
             default:
             logger.LogWarning("Unknown environment: {Environment}. No EYQL asset found.", environment);
             return (Array.Empty<byte>(), string.Empty);
         }
     }
 
+    public async Task<byte[]?> GetEyqlDataForInternalDownload()
+    {
+        var allQualifications = await GetAllQualifications();
+
+        // generate csv
+        var content = downloadGenerator.GenerateInternalQualificationListContent(allQualifications.ToList());
+        if (string.IsNullOrEmpty(content))
+        {
+            logger.LogWarning("No content found for internal download.");
+            return null;
+        }
+
+        return Encoding.UTF8.GetBytes(content);
+    }
+
     private async Task GenerateEyqlDownload(string assetId, string title, string fileName)
     {
         try
         {
-            var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(1000);
-            var allQualifications = await client.GetEntries(queryBuilder);
+            var allQualifications = await GetAllQualifications();
 
             // generate csv
             var content = downloadGenerator.GenerateQualificationListContent(allQualifications.ToList());
@@ -87,6 +107,13 @@ public class ContentfulQualificationDownloadService(
         {
             logger.LogError(e, "Error generating EYQL download.");
         }
+    }
+
+    private async Task<ContentfulCollection<Qualification>> GetAllQualifications()
+    {
+        var queryBuilder = QueryBuilder<Qualification>.New.ContentTypeIs(ContentTypes.Qualification).Include(2).Limit(1000);
+        var allQualifications = await client.GetEntries(queryBuilder);
+        return allQualifications;
     }
 
     private async Task<byte[]> GetEyqlDownloadAsByteArray(string assetId)

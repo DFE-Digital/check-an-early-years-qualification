@@ -53,8 +53,11 @@ public class QualificationListControllerTests
         var webViewPage = new WebViewPage();
         var expectedModel = new EarlyYearsQualificationListModel();
 
+        const bool isProductionEnvironment = true;
+
         mockWebViewService.Setup(x => x.GetWebViewPage()).ReturnsAsync(webViewPage);
-        mockWebViewService.Setup(x => x.MapWebViewPageContentToViewModelAsync(webViewPage)).ReturnsAsync(expectedModel);
+        mockEnvironmentService.Setup(x => x.IsProduction()).Returns(isProductionEnvironment);
+        mockWebViewService.Setup(x => x.MapWebViewPageContentToViewModelAsync(webViewPage, isProductionEnvironment)).ReturnsAsync(expectedModel);
 
         var result = await controller.Index();
 
@@ -68,7 +71,7 @@ public class QualificationListControllerTests
         model.Should().BeSameAs(expectedModel);
 
         mockWebViewService.Verify(x => x.GetWebViewPage(), Times.Once);
-        mockWebViewService.Verify(x => x.MapWebViewPageContentToViewModelAsync(webViewPage), Times.Once);
+        mockWebViewService.Verify(x => x.MapWebViewPageContentToViewModelAsync(webViewPage, isProductionEnvironment), Times.Once);
     }
 
     [TestMethod]
@@ -203,6 +206,82 @@ public class QualificationListControllerTests
 
         mockLogger.VerifyError("Null or empty EYQL content returned");
         mockQualificationDownloadService.Verify(x => x.GetEyqlDownload("Development"), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task InternalDownload_EnvironmentIsProduction_ReturnsNotFound()
+    {
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
+        
+        mockEnvironmentService.Setup(x => x.IsProduction()).Returns(true);
+
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+        
+        var result = await controller.InternalDownload();
+        result.Should().NotBeNull();
+        result.Should().BeOfType<NotFoundResult>();
+    }
+    
+    [TestMethod]
+    public async Task InternalDownload_EyqlContentIsNull_ReturnsRedirectToError()
+    {
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
+        
+        mockEnvironmentService.Setup(x => x.IsProduction()).Returns(false);
+        mockQualificationDownloadService.Setup(x => x.GetEyqlDataForInternalDownload())
+                                        .ReturnsAsync(Array.Empty<byte>());
+
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+        
+        
+        var result = await controller.InternalDownload();
+        result.Should().NotBeNull();
+        result.Should().BeOfType<RedirectToActionResult>();
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+    }
+    
+    [TestMethod]
+    public async Task InternalDownload_EyqlContentIsNotNull_ReturnsFileResult()
+    {
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
+        
+        var mockContent = Encoding.UTF8.GetBytes("this is a test");
+        mockEnvironmentService.Setup(x => x.IsProduction()).Returns(false);
+        mockQualificationDownloadService.Setup(x => x.GetEyqlDataForInternalDownload())
+                                        .ReturnsAsync(mockContent);
+        
+        var expectedFileName = $"published_qualifications_{DateTime.Now.ToShortDateString()}.csv";
+
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+        
+        
+        
+        var result = await controller.InternalDownload();
+        result.Should().NotBeNull();
+        result.Should().BeOfType<FileContentResult>();
+        var resultType = result as FileContentResult;
+        resultType.Should().NotBeNull();
+        resultType.FileContents.Should().NotBeEmpty();
+        resultType.FileContents.Should().Equal(mockContent);
+        resultType.FileDownloadName.Should().Be(expectedFileName);
     }
 
     private static Mock<IEnvironmentService> CreateEnvironmentService(string environment = "Development")

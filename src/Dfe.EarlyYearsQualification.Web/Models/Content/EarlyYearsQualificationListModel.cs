@@ -94,4 +94,6 @@ public class EarlyYearsQualificationListModel
                    !string.IsNullOrWhiteSpace(NationFilter);
         }
     }
+
+    public bool IsProductionEnvironment { get; init; } = true;
 }
