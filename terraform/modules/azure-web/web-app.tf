@@ -16,6 +16,12 @@ resource "azurerm_service_plan" "asp" {
   }
 }
 
+# Read a specific secret by name
+data "azurerm_key_vault_secret" "splunk_access_token" {
+  name         = "Splunk_Access_Token"
+  key_vault_id = var.kv_id
+}
+
 # Create Web Application
 resource "azurerm_linux_web_app" "webapp" {
   name                      = var.webapp_name
@@ -30,6 +36,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
+    "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
   }, var.webapp_app_settings)
 
   identity {
