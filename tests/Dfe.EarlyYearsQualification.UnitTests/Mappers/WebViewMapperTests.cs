@@ -5,6 +5,7 @@ using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
+using File = Contentful.Core.Models.File;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 
@@ -33,9 +34,11 @@ public class WebViewMapperTests
             (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
             (qualification.AdditionalRequirementsRichText, "Rich text additional requirements"));
 
+        const bool isProductionEnvironment = true;
+
         var mapper = new WebViewMapper(mockContentParser.Object);
 
-        var result = await mapper.Map(content, new WebViewFilters(), [qualification]);
+        var result = await mapper.Map(content, new WebViewFilters(), [qualification], isProductionEnvironment);
 
         result.Should().NotBeNull();
         result.Heading.Should().Be(content.Heading);
@@ -44,6 +47,12 @@ public class WebViewMapperTests
         result.BackButton.DisplayText.Should().BeEquivalentTo(content.BackButton!.DisplayText);
         result.BackButton.Href.Should().BeEquivalentTo(content.BackButton.Href);
         result.BackButton.OpenInNewTab.Should().Be(content.BackButton.OpenInNewTab);
+
+        result.OpenGraphData.Should().NotBeNull();
+        result.OpenGraphData!.Title.Should().Be(content.OpenGraphData!.Title);
+        result.OpenGraphData.Description.Should().Be(content.OpenGraphData.Description);
+        result.OpenGraphData.Domain.Should().Be(content.OpenGraphData.Domain);
+        result.OpenGraphData.ImageUrl.Should().Be(content.OpenGraphData.Image!.File.Url);
 
         result.DownloadHeading.Should().Be(content.DownloadHeading);
         result.DownloadSectionContent.Should().Be("Download section");
@@ -82,6 +91,7 @@ public class WebViewMapperTests
         });
         result.HasFilters.Should().BeFalse();
         result.ShowingAllQualificationsLabel.Should().Be(content.ShowingAllQualificationsLabel);
+        result.IsProductionEnvironment.Should().Be(isProductionEnvironment);
 
         result.Qualifications.Should().HaveCount(1);
         var qualificationModel = result.Qualifications[0];
@@ -118,6 +128,8 @@ public class WebViewMapperTests
             (content.NoQualificationsFoundContent, "No qualifications found"),
             (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
             (null, string.Empty));
+        
+        const bool isProductionEnvironment = true;
 
         var mapper = new WebViewMapper(mockContentParser.Object);
 
@@ -129,7 +141,7 @@ public class WebViewMapperTests
                 QualificationStartDate = qualificationStartDate,
                 QualificationLevel = qualificationLevel
             },
-            qualifications);
+            qualifications, isProductionEnvironment);
 
         result.HasFilters.Should().BeTrue();
         result.ShowingAllQualificationsLabel.Should().Be(expectedLabel);
@@ -157,10 +169,12 @@ public class WebViewMapperTests
             (content.NoQualificationsFoundContent, "No qualifications found"),
             (content.QualificationIsFullAndRelevantContent, "Qualification is full and relevant"),
             (null, string.Empty));
+        
+        const bool isProductionEnvironment = true;
 
         var mapper = new WebViewMapper(mockContentParser.Object);
 
-        var result = await mapper.Map(content, new WebViewFilters(), [qualification]);
+        var result = await mapper.Map(content, new WebViewFilters(), [qualification], isProductionEnvironment);
 
         result.Qualifications.Should().HaveCount(1);
         var qualificationModel = result.Qualifications[0];
@@ -221,7 +235,20 @@ public class WebViewMapperTests
                        }
                    ],
                    MultipleQualificationsFoundText = "qualifications found",
-                   SingleQualificationFoundText = "qualification found"
+                   SingleQualificationFoundText = "qualification found",
+                   OpenGraphData = new OpenGraphData
+                   {
+                       Title = "OG Title",
+                       Description = "OG Description",
+                       Domain = "OG Domain",
+                       Image = new Asset
+                       {
+                           File = new File
+                           {
+                               Url = "test/url/og-image.png"
+                           }
+                       }
+                   }
                };
     }
 

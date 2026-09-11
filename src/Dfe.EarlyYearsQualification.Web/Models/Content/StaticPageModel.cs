@@ -7,4 +7,6 @@ public class StaticPageModel
     public string BodyContent { get; init; } = string.Empty;
 
     public NavigationLinkModel? BackButton { get; init; }
+
+    public OpenGraphDataModel? OpenGraphData { get; init; }
 }
