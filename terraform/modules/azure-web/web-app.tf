@@ -18,7 +18,7 @@ resource "azurerm_service_plan" "asp" {
 
 # Read a specific secret by name
 data "azurerm_key_vault_secret" "splunk_access_token" {
-  name         = "Splunk_Access_Token"
+  name         = "Splunk-Access-Token"
   key_vault_id = var.kv_id
 }
 
