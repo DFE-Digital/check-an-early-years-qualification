@@ -476,8 +476,6 @@ public class MockContentfulService : IContentService
                                          SearchCriteriaHeading = "Your search",
                                          MultipleQualificationsFoundText = "matching qualifications",
                                          SingleQualificationFoundText = "matching qualification",
-                                         PreSearchBoxContent =
-                                             ContentfulContentHelper.Paragraph("Pre search box content"),
                                          PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",

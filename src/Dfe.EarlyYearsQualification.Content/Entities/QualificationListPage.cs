@@ -14,8 +14,6 @@ public class QualificationListPage
 
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
 
-    public Document? PreSearchBoxContent { get; init; }
-
     public string SearchButtonText { get; init; } = string.Empty;
 
     public string PostQualificationListContentHeading { get; init; } = string.Empty;

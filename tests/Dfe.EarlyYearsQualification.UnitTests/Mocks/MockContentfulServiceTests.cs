@@ -499,8 +499,6 @@ public class MockContentfulServiceTests
         result.SearchCriteriaHeading.Should().Be("Your search");
         result.MultipleQualificationsFoundText.Should().Be("matching qualifications");
         result.SingleQualificationFoundText.Should().Be("matching qualification");
-        result.PreSearchBoxContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre search box content");
         result.PostQualificationListContentHeading.Should().Be("Post qualification list header");
         result.PostQualificationListContent!.Content[0].Should().BeAssignableTo<Hyperlink>()
               .Which.Content.Should().Contain(x => ((Text)x).Value == "Link to not on list advice page");

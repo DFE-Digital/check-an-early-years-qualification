@@ -2,6 +2,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
+using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -28,7 +29,8 @@ public class QualificationSearchService(
         if (qualificationListPage is null) return null;
 
         var filteredQualifications = await GetFilteredQualifications();
-        var model = await MapList(qualificationListPage, filteredQualifications);
+        var baselineQualifications = await GetFilteredQualifications(searchCriteriaOverride: string.Empty);
+        var model = await MapList(qualificationListPage, filteredQualifications, baselineQualifications.Count);
         return model;
     }
 
@@ -67,9 +69,46 @@ public class QualificationSearchService(
     }
 
     public async Task<QualificationListModel> MapList(QualificationListPage content,
-                                                      List<Qualification>? qualifications)
+                                                      List<Qualification>? qualifications,
+                                                      int totalNumberOfQualifications)
     {
         var basicQualificationsModels = qualifications == null ? [] : GetBasicQualificationsModels(qualifications);
+        var numberOfMatchingQualifications = qualifications?.Count ?? 0;
+        var searchCriteria = userJourneyCookieService.GetSearchCriteria();
+        var hasSearchCriteria = !string.IsNullOrWhiteSpace(searchCriteria);
+        var isSingleQualification = totalNumberOfQualifications == 1;
+
+        var searchWithinHeading = isSingleQualification
+            ? QualificationSearchHardcodedContent.SearchWithinSingleHeading
+            : string.Format(QualificationSearchHardcodedContent.SearchWithinMultipleHeadingFormat,
+                             totalNumberOfQualifications);
+
+        var enterKeywordsContent = isSingleQualification
+            ? QualificationSearchHardcodedContent.EnterKeywordsSingle
+            : string.Format(QualificationSearchHardcodedContent.EnterKeywordsMultipleFormat,
+                             totalNumberOfQualifications);
+
+        string? searchMatchHeading = null;
+        string? searchNoMatchGuidanceIntro = null;
+        var searchNoMatchTryHeading = string.Empty;
+        List<string> searchNoMatchTryBullets = [];
+
+        if (hasSearchCriteria)
+        {
+            searchMatchHeading = string.Format(QualificationSearchHardcodedContent.SearchMatchHeadingFormat,
+                                                numberOfMatchingQualifications,
+                                                totalNumberOfQualifications,
+                                                searchCriteria);
+
+            if (numberOfMatchingQualifications == 0)
+            {
+                searchNoMatchGuidanceIntro =
+                    string.Format(QualificationSearchHardcodedContent.SearchNoMatchGuidanceIntroFormat,
+                                  totalNumberOfQualifications);
+                searchNoMatchTryHeading = QualificationSearchHardcodedContent.SearchNoMatchTryHeading;
+                searchNoMatchTryBullets = [..QualificationSearchHardcodedContent.SearchNoMatchTryBullets];
+            }
+        }
 
         return new QualificationListModel
                {
@@ -79,16 +118,23 @@ public class QualificationSearchService(
                    QualificationFoundPrefixText = content.QualificationFoundPrefix,
                    SingleQualificationFoundText = content.SingleQualificationFoundText,
                    MultipleQualificationsFoundText = content.MultipleQualificationsFoundText,
-                   PreSearchBoxContent = await contentParser.ToHtml(content.PreSearchBoxContent),
+                   TotalNumberOfQualifications = totalNumberOfQualifications,
+                   SearchWithinHeading = searchWithinHeading,
+                   EnterKeywordsContent = enterKeywordsContent,
                    SearchButtonText = content.SearchButtonText,
                    PostQualificationListContentHeading = content.PostQualificationListContentHeading,
                    PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
-                   SearchCriteria = userJourneyCookieService.GetSearchCriteria(),
+                   SearchCriteria = searchCriteria,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
                    ClearSearchText = content.ClearSearchText,
                    QualificationNumberLabel = content.QualificationNumberLabel,
                    SearchResults = MapQualificationsAndContentToSearchResultContentModel(basicQualificationsModels, content),
+                   HasSearchCriteria = hasSearchCriteria,
+                   SearchMatchHeading = searchMatchHeading,
+                   SearchNoMatchGuidanceIntro = searchNoMatchGuidanceIntro,
+                   SearchNoMatchTryHeading = searchNoMatchTryHeading,
+                   SearchNoMatchTryBullets = searchNoMatchTryBullets,
         };
     }
 

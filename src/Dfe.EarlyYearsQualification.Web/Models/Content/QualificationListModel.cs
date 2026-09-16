@@ -14,12 +14,16 @@ public class QualificationListModel
 
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
 
-    public string PreSearchBoxContent { get; init; } = string.Empty;
+    public int TotalNumberOfQualifications { get; init; }
+
+    public string SearchWithinHeading { get; init; } = string.Empty;
+
+    public string EnterKeywordsContent { get; init; } = string.Empty;
 
     public string SearchButtonText { get; init; } = string.Empty;
-    
+
     public List<SearchResultContentModel> SearchResults { get; init; } = [];
-    
+
     public string PostQualificationListContentHeading { get; init; } = string.Empty;
 
     public string PostQualificationListContent { get; init; } = string.Empty;
@@ -33,4 +37,14 @@ public class QualificationListModel
     public string ClearSearchText { get; init; } = string.Empty;
 
     public string QualificationNumberLabel { get; init; } = string.Empty;
+
+    public bool HasSearchCriteria { get; init; }
+
+    public string? SearchMatchHeading { get; init; }
+
+    public string? SearchNoMatchGuidanceIntro { get; init; }
+
+    public string SearchNoMatchTryHeading { get; init; } = string.Empty;
+
+    public IReadOnlyList<string> SearchNoMatchTryBullets { get; init; } = [];
 }
