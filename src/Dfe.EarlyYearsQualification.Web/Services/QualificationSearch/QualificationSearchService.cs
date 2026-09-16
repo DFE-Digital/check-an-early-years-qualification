@@ -2,7 +2,6 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
-using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
@@ -79,23 +78,20 @@ public class QualificationSearchService(
         var isSingleQualification = totalNumberOfQualifications == 1;
 
         var searchWithinHeading = isSingleQualification
-            ? QualificationSearchHardcodedContent.SearchWithinSingleHeading
-            : string.Format(QualificationSearchHardcodedContent.SearchWithinMultipleHeadingFormat,
-                             totalNumberOfQualifications);
+            ? content.SearchWithinSingleHeading
+            : string.Format(content.SearchWithinMultipleHeadingFormat, totalNumberOfQualifications);
 
         var enterKeywordsContent = isSingleQualification
-            ? QualificationSearchHardcodedContent.EnterKeywordsSingle
-            : string.Format(QualificationSearchHardcodedContent.EnterKeywordsMultipleFormat,
-                             totalNumberOfQualifications);
+            ? content.EnterKeywordsSingleContent
+            : string.Format(content.EnterKeywordsMultipleContentFormat, totalNumberOfQualifications);
 
         string? searchMatchHeading = null;
         string? searchNoMatchGuidanceIntro = null;
-        var searchNoMatchTryHeading = string.Empty;
-        List<string> searchNoMatchTryBullets = [];
+        string? searchNoMatchGuidance = null;
 
         if (hasSearchCriteria)
         {
-            searchMatchHeading = string.Format(QualificationSearchHardcodedContent.SearchMatchHeadingFormat,
+            searchMatchHeading = string.Format(content.SearchMatchHeadingFormat,
                                                 numberOfMatchingQualifications,
                                                 totalNumberOfQualifications,
                                                 searchCriteria);
@@ -103,10 +99,8 @@ public class QualificationSearchService(
             if (numberOfMatchingQualifications == 0)
             {
                 searchNoMatchGuidanceIntro =
-                    string.Format(QualificationSearchHardcodedContent.SearchNoMatchGuidanceIntroFormat,
-                                  totalNumberOfQualifications);
-                searchNoMatchTryHeading = QualificationSearchHardcodedContent.SearchNoMatchTryHeading;
-                searchNoMatchTryBullets = [..QualificationSearchHardcodedContent.SearchNoMatchTryBullets];
+                    string.Format(content.SearchNoMatchGuidanceIntroFormat, totalNumberOfQualifications);
+                searchNoMatchGuidance = await contentParser.ToHtml(content.SearchNoMatchGuidance);
             }
         }
 
@@ -133,8 +127,7 @@ public class QualificationSearchService(
                    HasSearchCriteria = hasSearchCriteria,
                    SearchMatchHeading = searchMatchHeading,
                    SearchNoMatchGuidanceIntro = searchNoMatchGuidanceIntro,
-                   SearchNoMatchTryHeading = searchNoMatchTryHeading,
-                   SearchNoMatchTryBullets = searchNoMatchTryBullets,
+                   SearchNoMatchGuidance = searchNoMatchGuidance,
         };
     }
 

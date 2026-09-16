@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
@@ -25,6 +26,23 @@ public class QualificationSearchServiceTests
                                               _mockContentParser.Object,
                                               _mockUserJourneyCookieService.Object
                                              );
+    }
+
+    private static QualificationListPage GetSearchContentPage()
+    {
+        return new QualificationListPage
+               {
+                   SearchWithinSingleHeading = "Search within this qualification",
+                   SearchWithinMultipleHeadingFormat = "Search within these {0} qualifications",
+                   EnterKeywordsSingleContent =
+                       "Enter keywords from the qualification name to search within this matching qualification",
+                   EnterKeywordsMultipleContentFormat =
+                       "Enter keywords from the qualification name to search within these {0} matching qualifications",
+                   SearchMatchHeadingFormat = "{0} of {1} qualifications matches \"{2}\".",
+                   SearchNoMatchGuidanceIntroFormat =
+                       "Your search only checks the {0} matching qualifications shown on this page.",
+                   SearchNoMatchGuidance = new Document()
+               };
     }
 
     [TestInitialize]
@@ -234,7 +252,7 @@ public class QualificationSearchServiceTests
     public async Task MapList_Maps_SearchWithinHeading_And_EnterKeywordsContent_Plural()
     {
         var sut = GetSut();
-        var result = await sut.MapList(new QualificationListPage(), [], 5);
+        var result = await sut.MapList(GetSearchContentPage(), [], 5);
 
         result.TotalNumberOfQualifications.Should().Be(5);
         result.SearchWithinHeading.Should().Be("Search within these 5 qualifications");
@@ -246,7 +264,7 @@ public class QualificationSearchServiceTests
     public async Task MapList_Maps_SearchWithinHeading_And_EnterKeywordsContent_Singular()
     {
         var sut = GetSut();
-        var result = await sut.MapList(new QualificationListPage(), [], 1);
+        var result = await sut.MapList(GetSearchContentPage(), [], 1);
 
         result.TotalNumberOfQualifications.Should().Be(1);
         result.SearchWithinHeading.Should().Be("Search within this qualification");
@@ -260,12 +278,12 @@ public class QualificationSearchServiceTests
         _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns((string?)null);
 
         var sut = GetSut();
-        var result = await sut.MapList(new QualificationListPage(), [], 5);
+        var result = await sut.MapList(GetSearchContentPage(), [], 5);
 
         result.HasSearchCriteria.Should().BeFalse();
         result.SearchMatchHeading.Should().BeNull();
         result.SearchNoMatchGuidanceIntro.Should().BeNull();
-        result.SearchNoMatchTryBullets.Should().BeEmpty();
+        result.SearchNoMatchGuidance.Should().BeNull();
     }
 
     [TestMethod]
@@ -276,28 +294,29 @@ public class QualificationSearchServiceTests
         var qualifications = new List<Qualification> { new("qual-1", "qual-name-1", "org-1", 1) };
 
         var sut = GetSut();
-        var result = await sut.MapList(new QualificationListPage(), qualifications, 9);
+        var result = await sut.MapList(GetSearchContentPage(), qualifications, 9);
 
         result.HasSearchCriteria.Should().BeTrue();
         result.SearchMatchHeading.Should().Be("1 of 9 qualifications matches \"childhood studies\".");
         result.SearchNoMatchGuidanceIntro.Should().BeNull();
-        result.SearchNoMatchTryBullets.Should().BeEmpty();
+        result.SearchNoMatchGuidance.Should().BeNull();
     }
 
     [TestMethod]
     public async Task MapList_SearchCriteriaWithNoMatches_SetsNoMatchGuidance()
     {
         _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns("childhood studies");
+        _mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>()))
+                           .ReturnsAsync("<p>Try:</p><ul><li>double-check the spelling</li></ul>");
 
         var sut = GetSut();
-        var result = await sut.MapList(new QualificationListPage(), [], 9);
+        var result = await sut.MapList(GetSearchContentPage(), [], 9);
 
         result.HasSearchCriteria.Should().BeTrue();
         result.SearchMatchHeading.Should().Be("0 of 9 qualifications matches \"childhood studies\".");
         result.SearchNoMatchGuidanceIntro.Should()
               .Be("Your search only checks the 9 matching qualifications shown on this page.");
-        result.SearchNoMatchTryHeading.Should().Be("Try:");
-        result.SearchNoMatchTryBullets.Should().HaveCount(3);
+        result.SearchNoMatchGuidance.Should().Be("<p>Try:</p><ul><li>double-check the spelling</li></ul>");
     }
 
     [TestMethod]

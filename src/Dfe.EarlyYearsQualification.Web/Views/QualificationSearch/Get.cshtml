@@ -85,13 +85,9 @@
                     @if (numberOfQualifications == 0)
                     {
                         <p id="search-no-match-guidance-intro" class="govuk-body govuk-!-static-margin-bottom-4">@Model.SearchNoMatchGuidanceIntro</p>
-                        <p id="search-no-match-try-heading" class="govuk-body govuk-!-static-margin-bottom-1">@Model.SearchNoMatchTryHeading</p>
-                        <ul id="search-no-match-try-list" class="govuk-list govuk-list--bullet govuk-!-static-margin-bottom-0">
-                            @foreach (var bullet in Model.SearchNoMatchTryBullets)
-                            {
-                                <li>@bullet</li>
-                            }
-                        </ul>
+                        <div id="search-no-match-guidance">
+                            @Html.Raw(Model.SearchNoMatchGuidance)
+                        </div>
                     }
                 </div>
             </div>

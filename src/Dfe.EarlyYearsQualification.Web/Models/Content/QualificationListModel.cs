@@ -44,7 +44,5 @@ public class QualificationListModel
 
     public string? SearchNoMatchGuidanceIntro { get; init; }
 
-    public string SearchNoMatchTryHeading { get; init; } = string.Empty;
-
-    public IReadOnlyList<string> SearchNoMatchTryBullets { get; init; } = [];
+    public string? SearchNoMatchGuidance { get; init; }
 }
