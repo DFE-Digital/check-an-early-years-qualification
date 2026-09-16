@@ -13,7 +13,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
     private const string MissingValue = "-";
     private const string NoAdditionalRequirements = "None";
 
-    public async Task<EarlyYearsQualificationListModel> Map(WebViewPage content, WebViewFilters webViewFilters, List<Qualification> qualifications)
+    public async Task<EarlyYearsQualificationListModel> Map(WebViewPage content, WebViewFilters webViewFilters, List<Qualification> qualifications, bool isProductionEnvironment)
     {
         var startDateFilters = OptionItemMapper.Map(content.StartDateFilters);
         var nationFilters = OptionItemMapper.Map(content.NationFilters);
@@ -23,6 +23,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             Heading = content.Heading,
             PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
             BackButton = NavigationLinkMapper.Map(content.BackButton),
+            OpenGraphData = OpenGraphDataMapper.Map(content.OpenGraphData),
             Qualifications = await MapToQualificationModels(qualifications),
             DownloadHeading = content.DownloadHeading,
             DownloadSectionContent = await contentParser.ToHtml(content.DownloadSectionContent),
@@ -56,6 +57,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             NationFilters = nationFilters,
             SelectedNationFilterLabel = ExtractFilterLabel(nationFilters, webViewFilters.Nation),
             SelectedStartDateFilterLabel = ExtractFilterLabel(startDateFilters, webViewFilters.QualificationStartDate),
+            IsProductionEnvironment = isProductionEnvironment
         };
         model.ShowingAllQualificationsLabel = GetShowingAllQualificationsLabel(model.HasFilters, qualifications.Count, content);
 

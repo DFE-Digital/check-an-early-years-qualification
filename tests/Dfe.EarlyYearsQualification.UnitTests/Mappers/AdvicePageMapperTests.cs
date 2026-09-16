@@ -4,6 +4,7 @@ using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Mock.Helpers;
 using Dfe.EarlyYearsQualification.Web.Constants;
 using Dfe.EarlyYearsQualification.Web.Mappers;
+using File = Contentful.Core.Models.File;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Mappers;
 
@@ -23,7 +24,20 @@ public class AdvicePageMapperTests
                                               DisplayText = "Back",
                                               OpenInNewTab = true,
                                               Href = "/"
-                                          }
+                                          },
+                             OpenGraphData = new OpenGraphData
+                                             {
+                                                 Title = "OG Title",
+                                                 Description = "OG Description",
+                                                 Domain = "OG Domain",
+                                                 Image = new Asset
+                                                         {
+                                                             File = new File
+                                                                    {
+                                                                        Url = "test/url/og-image.png"
+                                                                    }
+                                                         }
+                                             }
                          };
 
         var mockContentParser = new Mock<IGovUkContentParser>();
@@ -35,6 +49,35 @@ public class AdvicePageMapperTests
         result.Heading.Should().BeSameAs(advicePage.Heading);
         result.BodyContent.Should().BeSameAs(body);
         result.BackButton.Should().BeEquivalentTo(advicePage.BackButton, options => options.Excluding(x => x.Sys));
+        result.OpenGraphData.Should().NotBeNull();
+        result.OpenGraphData!.Title.Should().Be(advicePage.OpenGraphData.Title);
+        result.OpenGraphData.Description.Should().Be(advicePage.OpenGraphData.Description);
+        result.OpenGraphData.Domain.Should().Be(advicePage.OpenGraphData.Domain);
+        result.OpenGraphData.ImageUrl.Should().Be(advicePage.OpenGraphData.Image!.File.Url);
+    }
+
+    [TestMethod]
+    public async Task Map_PassInAdvicePageWithoutOpenGraphData_ReturnsModelWithNullOpenGraphData()
+    {
+        const string body = "This is the body";
+        var advicePage = new StaticPage
+                         {
+                             Heading = "This is the heading",
+                             Body = ContentfulContentHelper.Paragraph(body),
+                             BackButton = new NavigationLink
+                                          {
+                                              DisplayText = "Back",
+                                              OpenInNewTab = true,
+                                              Href = "/"
+                                          }
+                         };
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        mockContentParser.Setup(x => x.ToHtml(It.Is<Document>(d => d == advicePage.Body))).ReturnsAsync(body);
+        var mapper = new StaticPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(advicePage);
+
+        result.OpenGraphData.Should().BeNull();
     }
 
     [TestMethod]
