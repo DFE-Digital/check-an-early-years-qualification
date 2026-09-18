@@ -1,0 +1,35 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. Local OpenTelemetry Collector (Mock Gateway / Terminal Debugger)
+  # ---------------------------------------------------------------------------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: local-otel-collector-eyq
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-local-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - "4318:4318" # OTLP HTTP receiver
+
+  # # ---------------------------------------------------------------------------
+  # 2. Local .NET Application Container
+  # ---------------------------------------------------------------------------
+  early-years-qualification-web:
+    build:
+      context: ../../
+      dockerfile: src/Dfe.EarlyYearsQualification.Web/Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Debug
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=local
+
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_SERVICE_NAME=early-years-qualification
+      - OTEL_RESOURCE_ATTRIBUTES=deployment.environment=local,service.version=1.0.0
+    depends_on:
+      - otel-collector

@@ -188,6 +188,7 @@ variable "govuk_notify_api_key" {
 
 variable "cache_endpoint_secret" {
   description = "Secret value to be supplied when calling cache endpoint"
+  sensitive   = true
   type        = string
 }
 
@@ -240,4 +241,5 @@ variable "cache_type" {
 variable "download_endpoint_secret" {
   description = "Secret value to be supplied when calling download endpoint"
   type        = string
+  sensitive   = true
 }
