@@ -14,8 +14,6 @@ public class QualificationListPage
 
     public string MultipleQualificationsFoundText { get; init; } = string.Empty;
 
-    public Document? PreSearchBoxContent { get; init; }
-
     public string SearchButtonText { get; init; } = string.Empty;
 
     public string PostQualificationListContentHeading { get; init; } = string.Empty;
@@ -45,6 +43,20 @@ public class QualificationListPage
     public string AwardedByPrefixText { get; init; } = string.Empty;
 
     public string QualificationNumberLabel { get; init; } = string.Empty;
-    
+
+    public string SearchWithinSingleHeading { get; init; } = string.Empty;
+
+    public string SearchWithinMultipleHeadingFormat { get; init; } = string.Empty;
+
+    public string EnterKeywordsSingleContent { get; init; } = string.Empty;
+
+    public string EnterKeywordsMultipleContentFormat { get; init; } = string.Empty;
+
+    public string SearchMatchHeadingFormat { get; init; } = string.Empty;
+
+    public string SearchNoMatchGuidanceIntroFormat { get; init; } = string.Empty;
+
+    public Document? SearchNoMatchGuidance { get; init; }
+
     public List<SearchResultContent>? SearchResultsContent { get; init; }
 }

@@ -1,4 +1,9 @@
 $(window).on('load', function() {
+    let searchMatchHeading = document.getElementById('search-match-heading');
+    if (searchMatchHeading) {
+        searchMatchHeading.focus();
+    }
+
     let qualificationCount = $("#hdnQualificationCount").val();
     let filterCountry = $("#filter-country").text();
     let filterStartDate = $("#filter-start-date").text();

@@ -4,6 +4,7 @@
     ViewData["Title"] = "Qualifications";
 
     var numberOfQualifications = Model.SearchResults.Select(x => x.Qualification).Count();
+    var totalNumberOfQualifications = Model.TotalNumberOfQualifications;
 }
 
 @section BeforeMainContent {
@@ -43,13 +44,16 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <h2 id="found-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8">
-                        @(Model.QualificationFoundPrefixText + " " + numberOfQualifications + " " + (numberOfQualifications == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
+                        @(Model.QualificationFoundPrefixText + " " + totalNumberOfQualifications + " " + (totalNumberOfQualifications == 1 ? Model.SingleQualificationFoundText : Model.MultipleQualificationsFoundText))
                 </h2>
+                <h3 id="search-within-heading" class="govuk-heading-s govuk-!-static-margin-bottom-4">
+                        @Model.SearchWithinHeading
+                </h3>
             </div>
         </div>
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <div id="pre-search-content">@Html.Raw(Model.PreSearchBoxContent)</div>
+                <p id="pre-search-content" class="govuk-body">@Model.EnterKeywordsContent</p>
             </div>
         </div>
         <div class="govuk-grid-row">
@@ -73,7 +77,22 @@
             </div>
         </div>
 
-        @if (numberOfQualifications == 0)
+        @if (Model.HasSearchCriteria)
+        {
+            <div class="govuk-grid-row govuk-!-static-margin-top-6">
+                <div class="govuk-grid-column-full">
+                    <h3 id="search-match-heading" class="govuk-heading-s govuk-!-static-margin-bottom-4" tabindex="-1">@Model.SearchMatchHeading</h3>
+                    @if (numberOfQualifications == 0)
+                    {
+                        <p id="search-no-match-guidance-intro" class="govuk-body govuk-!-static-margin-bottom-4">@Model.SearchNoMatchGuidanceIntro</p>
+                        <div id="search-no-match-guidance">
+                            @Html.Raw(Model.SearchNoMatchGuidance)
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else if (numberOfQualifications == 0)
         {
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
@@ -112,9 +131,15 @@
                 </div>
             </div>
         }
+        @{
+            var showedNoMatchGuidance = Model.HasSearchCriteria && numberOfQualifications == 0;
+            var postListTopMarginClass = showedNoMatchGuidance
+                ? "govuk-!-static-margin-top-8"
+                : "govuk-!-static-margin-top-4";
+        }
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <div id="post-list-content" class="govuk-!-static-margin-top-4">
+                <div id="post-list-content" class="@postListTopMarginClass">
                     <h2 id="post-list-heading" class="govuk-heading-m">
                         @Model.PostQualificationListContentHeading
                     </h2>
