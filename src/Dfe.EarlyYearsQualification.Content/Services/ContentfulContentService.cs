@@ -454,7 +454,12 @@ public class ContentfulContentService(
     {
         ContentfulClient.SerializerSettings.Converters.Add(new OptionItemConverter());
 
-        var webViewPage = await GetEntriesByType<WebViewPage>();
+        var webViewPageContentType = ContentTypeLookup[typeof(WebViewPage)];
+        var queryBuilder = new QueryBuilder<WebViewPage>()
+                           .ContentTypeIs(webViewPageContentType)
+                           .Include(2);
+
+        var webViewPage = await GetEntriesByType(queryBuilder);
         if (webViewPage is null || !webViewPage.Any())
         {
             Logger.LogWarning("No web view page entry returned");

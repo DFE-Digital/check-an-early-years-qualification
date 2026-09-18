@@ -21,13 +21,13 @@ public class WebViewService(
         return await contentService.GetWebViewPage();
     }
 
-    public async Task<EarlyYearsQualificationListModel> MapWebViewPageContentToViewModelAsync(WebViewPage content)
+    public async Task<EarlyYearsQualificationListModel> MapWebViewPageContentToViewModelAsync(WebViewPage content, bool isProductionEnvironment)
     {
         var filters = GetWebViewFilters();
 
         var allQualifications = await GetQualifications(filters);
 
-        return await webViewPageMapper.Map(content, filters, allQualifications);
+        return await webViewPageMapper.Map(content, filters, allQualifications, isProductionEnvironment);
     }
 
     public async Task<List<Qualification>> GetQualifications(WebViewFilters filters)

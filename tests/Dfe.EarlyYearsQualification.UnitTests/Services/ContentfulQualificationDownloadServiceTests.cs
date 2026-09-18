@@ -211,6 +211,50 @@ public class ContentfulQualificationDownloadServiceTests
         result.fileName.Should().BeEmpty();
     }
 
+    [TestMethod]
+    public async Task GetEyqlDataForInternalDownload_DownloadGeneratorReturnsNull_ReturnsNull()
+    {
+        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<Qualification>
+                    {
+                        Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
+                    });
+        
+        _downloadGeneratorMock.Setup(x => x.GenerateInternalQualificationListContent(It.IsAny<List<Qualification>>()))
+                              .Returns(string.Empty);
+        
+        var service = CreateService();
+        
+        var result = await service.GetEyqlDataForInternalDownload();
+        
+        result.Should().BeNull();
+        _loggerMock.VerifyWarning("No content found for internal download.");
+    }
+    
+    [TestMethod]
+    public async Task GetEyqlDataForInternalDownload_DownloadGeneratorReturnsString_ReturnsByteArray()
+    {
+        const string contentResult = "This is a test";
+        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
+                                                      It.IsAny<CancellationToken>()))
+                   .ReturnsAsync(new ContentfulCollection<Qualification>
+                                 {
+                                     Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
+                                 });
+        
+        _downloadGeneratorMock.Setup(x => x.GenerateInternalQualificationListContent(It.IsAny<List<Qualification>>()))
+                              .Returns(contentResult);
+        
+        var service = CreateService();
+        var expectedByteArray = Encoding.UTF8.GetBytes(contentResult);
+        
+        var result = await service.GetEyqlDataForInternalDownload();
+        
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(expectedByteArray);
+    }
+
     private ContentfulQualificationDownloadService CreateService()
     {
         return new ContentfulQualificationDownloadService(_clientMock.Object,

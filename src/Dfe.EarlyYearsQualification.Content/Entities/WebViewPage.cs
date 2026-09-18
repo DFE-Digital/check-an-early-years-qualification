@@ -67,4 +67,6 @@ public class WebViewPage
     public string SingleQualificationFoundText { get; init; } = string.Empty;
 
     public Document QualificationLevelPostHeaderContent { get; init; } = new Document();
+
+    public OpenGraphData? OpenGraphData { get; init; }
 }
