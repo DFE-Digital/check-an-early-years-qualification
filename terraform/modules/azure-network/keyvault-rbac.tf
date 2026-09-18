@@ -111,19 +111,19 @@ resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
 
 # Secrets
 
-resource "azurerm_key_vault_secret" "contentful_delivery_api_key" {
+resource "azurerm_key_vault_secret" "contentful_delivery_api_key_rbac" {
   name         = "ContentfulOptions--DeliveryApiKey"
   value        = var.contentful_delivery_api_key
   key_vault_id = azurerm_key_vault.kv.id
 }
 
-resource "azurerm_key_vault_secret" "contentful_preview_api_key" {
+resource "azurerm_key_vault_secret" "contentful_preview_api_key_rbac" {
   name         = "ContentfulOptions--PreviewApiKey"
   value        = var.contentful_preview_api_key
   key_vault_id = azurerm_key_vault.kv.id
 }
 
-resource "azurerm_key_vault_secret" "contentful_management_api_key" {
+resource "azurerm_key_vault_secret" "contentful_management_api_key_rbac" {
   name         = "ContentfulOptions--ManagementApiKey"
   value        = var.contentful_management_api_key
   key_vault_id = azurerm_key_vault.kv.id
