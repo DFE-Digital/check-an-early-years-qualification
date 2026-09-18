@@ -102,9 +102,3 @@ variable "download_endpoint_secret" {
   description = "Secret value to be supplied when calling download endpoint"
   type        = string
 }
-
-variable "splunk_access_token" {
-  description = "Access token for the Splunk integration"
-  type        = string
-  sensitive   = true
-}

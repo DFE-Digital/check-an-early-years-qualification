@@ -55,13 +55,27 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
+      - name: Substitute Placeholders in docker-compose-deploy.yml
+        env:
+          DOCKER_IMAGE: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          SPLUNK_TOKEN: ${{ secrets.SPLUNK_ACCESS_TOKEN }}
+          SPLUNK_REALM: ${{ secrets.SPLUNK_REALM }}
+          SPLUNK_PORT: ${{ vars.SPLUNK_PORT }}
+          OTEL_SERVICE_NAME: ${{ vars.OTEL_SERVICE_NAME }}
+        run: |
+          sed -i "s|__IMAGE_PLACEHOLDER__|$DOCKER_IMAGE|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+          sed -i "s|__SPLUNK_TOKEN_PLACEHOLDER__|$SPLUNK_TOKEN|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+          sed -i "s|__SPLUNK_REALM_PLACEHOLDER__|$SPLUNK_REALM|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+          sed -i "s|__SPLUNK_PORT_PLACEHOLDER__|$SPLUNK_PORT|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+          sed -i "s|__OTEL_SERVICE_NAME_PLACEHOLDER__|$OTEL_SERVICE_NAME|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
 
       # Deploy Web Application
       - name: Deploy to Azure App Services
         uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.0
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
-          images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          configuration-file: './src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml'
 
       # Make a request to the health check endpoint
       - name: Make request to health check endpoint

@@ -212,9 +212,3 @@ resource "azurerm_key_vault_secret" "download_endpoint_secret" {
   value        = var.download_endpoint_secret
   key_vault_id = azurerm_key_vault.kv.id
 }
-
-resource "azurerm_key_vault_secret" "splunk_access_token" {
-  name         = "Splunk-Access-Token"
-  value        = var.splunk_access_token
-  key_vault_id = azurerm_key_vault.kv.id
-}
