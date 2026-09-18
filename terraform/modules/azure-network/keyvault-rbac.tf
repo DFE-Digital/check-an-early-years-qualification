@@ -129,19 +129,19 @@ resource "azurerm_key_vault_secret" "contentful_management_api_key_rbac" {
   key_vault_id = azurerm_key_vault.kv.id
 }
 
-resource "azurerm_key_vault_secret" "contentful_space_id" {
+resource "azurerm_key_vault_secret" "contentful_space_id_rbac" {
   name         = "ContentfulOptions--SpaceId"
   value        = var.contentful_space_id
   key_vault_id = azurerm_key_vault.kv.id
 }
 
-resource "azurerm_key_vault_secret" "govuk_notify_api_key" {
+resource "azurerm_key_vault_secret" "govuk_notify_api_key_rbac" {
   name         = "Notifications--ApiKey"
   value        = var.govuk_notify_api_key
   key_vault_id = azurerm_key_vault.kv.id
 }
 
-resource "azurerm_key_vault_secret" "download_endpoint_secret" {
+resource "azurerm_key_vault_secret" "download_endpoint_secret_rbac" {
   name         = "Download--AuthSecret"
   value        = var.download_endpoint_secret
   key_vault_id = azurerm_key_vault.kv.id
