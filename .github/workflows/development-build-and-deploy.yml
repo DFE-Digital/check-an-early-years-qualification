@@ -1,8 +1,8 @@
-name: Development build & deploy 
+name: Development build & deploy
 
 on:
   workflow_dispatch:
-    
+
 jobs:
   
   set-env:
@@ -55,43 +55,60 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            
-#      - name: Substitute Placeholders in docker-compose-deploy.yml
-#        env:
-#          DOCKER_IMAGE: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
-#          SPLUNK_TOKEN: ${{ secrets.SPLUNK_ACCESS_TOKEN }}
-#          SPLUNK_REALM: ${{ secrets.SPLUNK_REALM }}
-#          SPLUNK_PORT: ${{ vars.SPLUNK_PORT }}
-#          OTEL_SERVICE_NAME: ${{ vars.OTEL_SERVICE_NAME }}
+      
+      #      - name: Substitute Placeholders in docker-compose-deploy.yml
+      #        env:
+      #          DOCKER_IMAGE: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+      #          SPLUNK_TOKEN: ${{ secrets.SPLUNK_ACCESS_TOKEN }}
+      #          SPLUNK_REALM: ${{ secrets.SPLUNK_REALM }}
+      #          SPLUNK_PORT: ${{ vars.SPLUNK_PORT }}
+      #          OTEL_SERVICE_NAME: ${{ vars.OTEL_SERVICE_NAME }}
+      #        run: |
+      #          sed -i "s|__IMAGE_PLACEHOLDER__|$DOCKER_IMAGE|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+      #          sed -i "s|__SPLUNK_TOKEN_PLACEHOLDER__|$SPLUNK_TOKEN|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+      #          sed -i "s|__SPLUNK_REALM_PLACEHOLDER__|$SPLUNK_REALM|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+      #          sed -i "s|__SPLUNK_PORT_PLACEHOLDER__|$SPLUNK_PORT|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+      #          sed -i "s|__OTEL_SERVICE_NAME_PLACEHOLDER__|$OTEL_SERVICE_NAME|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+      
+      #      # Deploy Web Application
+      #      - name: Deploy to Azure App Services
+      #        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.0
+      #        with:
+      #          app-name: ${{ vars.WEBAPP_NAME }}
+      #          configuration-file: './src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml'
+
+#      - name: Configure Main Containers on App Service
 #        run: |
-#          sed -i "s|__IMAGE_PLACEHOLDER__|$DOCKER_IMAGE|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
-#          sed -i "s|__SPLUNK_TOKEN_PLACEHOLDER__|$SPLUNK_TOKEN|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
-#          sed -i "s|__SPLUNK_REALM_PLACEHOLDER__|$SPLUNK_REALM|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
-#          sed -i "s|__SPLUNK_PORT_PLACEHOLDER__|$SPLUNK_PORT|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
-#          sed -i "s|__OTEL_SERVICE_NAME_PLACEHOLDER__|$OTEL_SERVICE_NAME|g" ./src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml
+#          MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+#          
+#          # Deploy/Update Main Container
+#          az resource create \
+#            --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg \
+#            --resource-type "Microsoft.Web/sites/sitecontainers" \
+#            --name ${{ vars.WEBAPP_NAME }}/early-years-qualification \
+#            --api-version "2024-04-01" \
+#            --properties "{
+#              \"image\": \"$MAIN_IMAGE\",
+#              \"isMain\": true,
+#              \"targetPort\": \"8080\"
+#            }"
 
-#      # Deploy Web Application
-#      - name: Deploy to Azure App Services
-#        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.0
-#        with:
-#          app-name: ${{ vars.WEBAPP_NAME }}
-#          configuration-file: './src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml'
-
-      - name: Configure Main Containers on App Service
+      - name: Configure Main Container for App Service
         run: |
-          MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          RESOURCE_GROUP=${{ vars.RESOURCE_NAME_PREFIX }}-rg
+          WEBAPP_NAME=${{ vars.WEBAPP_NAME }}
+          CONTAINER_NAME="early-years-qualification"
+          SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
-          # Deploy/Update Main Container
-          az resource create \
-            --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg \
-            --resource-type "Microsoft.Web/sites/sitecontainers" \
-            --name ${{ vars.WEBAPP_NAME }}/early-years-qualification \
-            --api-version "2024-04-01" \
-            --properties "{
+          az rest --method PUT \
+          --uri "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/sitecontainers/${CONTAINER_NAME}?api-version=2023-12-01" \
+          --body "{
+            \"properties\": {
               \"image\": \"$MAIN_IMAGE\",
               \"isMain\": true,
               \"targetPort\": \"8080\"
-            }"
+            }
+          }"
 
       # Make a request to the health check endpoint
       - name: Make request to health check endpoint
@@ -106,5 +123,5 @@ jobs:
         uses: ./.github/actions/run-playwright-tests
         with:
           webapp_url: "${{ vars.WEBAPP_NAME }}.azurewebsites.net"
-          auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
-          test_type: 'smoke'
+        auth_secret: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
+        test_type: 'smoke'
