@@ -1,3 +1,5 @@
+provider "azapi" {}
+
 provider "azurerm" {
   resource_provider_registrations = "none"
 
