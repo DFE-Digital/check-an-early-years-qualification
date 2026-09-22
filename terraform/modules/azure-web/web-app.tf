@@ -7,8 +7,6 @@ terraform {
   }
 }
 
-provider "azapi" {}
-
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
@@ -479,13 +477,13 @@ resource "azapi_resource" "otel_container" {
   depends_on = [azapi_update_resource.enable_sidecar]
   type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
   parent_id  = azurerm_linux_web_app.webapp.id
-  name       = "otel_container"
+  name       = "otel-container"
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
       image      = "otel/opentelemetry-collector-contrib:latest"
       isMain     = false
-      targetPort = 4318
+      targetPort = "4318"
       #       environmentVariables = [
       #         {
       #           name  = "AN_ENV_VAR"
