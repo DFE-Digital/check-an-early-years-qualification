@@ -457,9 +457,9 @@ resource "azapi_resource" "webapp_container" {
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
-      image          = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
-      isMain         = true
-      targetPort     = "8080"
+      image      = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
+      isMain     = true
+      targetPort = "8080"
     }
   }
 }
@@ -472,15 +472,15 @@ resource "azapi_resource" "otel_container" {
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
-      image          = "otel/opentelemetry-collector-contrib:latest"
-      isMain         = false
-      targetPort     = 4318
-#       environmentVariables = [
-#         {
-#           name  = "AN_ENV_VAR"
-#           value = "A value"
-#         }
-#       ]
+      image      = "otel/opentelemetry-collector-contrib:latest"
+      isMain     = false
+      targetPort = 4318
+      #       environmentVariables = [
+      #         {
+      #           name  = "AN_ENV_VAR"
+      #           value = "A value"
+      #         }
+      #       ]
     }
   }
 }
