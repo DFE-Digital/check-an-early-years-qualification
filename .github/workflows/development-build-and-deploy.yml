@@ -78,20 +78,20 @@ jobs:
 #          configuration-file: './src/Dfe.EarlyYearsQualification.Web/docker-compose-deploy.yml'
 
       - name: Configure Main Containers on App Service
-          run: |
-            MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
-            
-            # Deploy/Update Main Container
-            az resource create \
-              --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg \
-              --provider Microsoft.Web \
-              --resource-type sitecontainers \
-              --name ${{ vars.WEBAPP_NAME }}/early-years-qualification \
-              --properties "{
-                \"image\": \"$MAIN_IMAGE\",
-                \"isMain\": true,
-                \"targetPort\": \"8080\"
-              }"
+        run: |
+          MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          
+          # Deploy/Update Main Container
+          az resource create \
+            --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg \
+            --provider Microsoft.Web \
+            --resource-type sitecontainers \
+            --name ${{ vars.WEBAPP_NAME }}/early-years-qualification \
+            --properties "{
+              \"image\": \"$MAIN_IMAGE\",
+              \"isMain\": true,
+              \"targetPort\": \"8080\"
+            }"
 
       # Make a request to the health check endpoint
       - name: Make request to health check endpoint
