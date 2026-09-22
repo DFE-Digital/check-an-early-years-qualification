@@ -11,6 +11,7 @@ No requirements.
 
 | Name | Version |
 |------|---------|
+| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | n/a |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 
 ## Modules
@@ -21,6 +22,9 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [azapi_resource.otel_container](https://registry.terraform.io/providers/hashicorp/azapi/latest/docs/resources/resource) | resource |
+| [azapi_resource.webapp_container](https://registry.terraform.io/providers/hashicorp/azapi/latest/docs/resources/resource) | resource |
+| [azapi_update_resource.enable_sidecar](https://registry.terraform.io/providers/hashicorp/azapi/latest/docs/resources/update_resource) | resource |
 | [azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate) | resource |
 | [azurerm_app_service_certificate_binding.webapp_service_gov_uk_custom_domain_cert_bind](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate_binding) | resource |
 | [azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
