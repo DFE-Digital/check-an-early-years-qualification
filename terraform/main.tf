@@ -169,7 +169,7 @@ module "webapp" {
   splunk_realm                                          = var.splunk_realm
   splunk_access_token                                   = var.splunk_access_token
   otel_service_name                                     = var.otel_service_name
-  otel_config_path                                      = file("${path.root}/../src/Dfe.EarlyYearsQualification.Web/otel-config.yaml")
+  otel_config_path                                      = "${path.root}/../src/Dfe.EarlyYearsQualification.Web/otel-config.yaml"
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }
