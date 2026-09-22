@@ -1,3 +1,14 @@
+terraform {
+  required_providers {
+    azapi = {
+      source  = "azure/azapi"
+      version = ">= 2.12.0"
+    }
+  }
+}
+
+provider "azapi" {}
+
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
