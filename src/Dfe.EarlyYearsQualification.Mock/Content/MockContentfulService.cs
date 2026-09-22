@@ -489,8 +489,6 @@ public class MockContentfulService : IContentService
                                          SearchCriteriaHeading = "Your search",
                                          MultipleQualificationsFoundText = "matching qualifications",
                                          SingleQualificationFoundText = "matching qualification",
-                                         PreSearchBoxContent =
-                                             ContentfulContentHelper.Paragraph("Pre search box content"),
                                          PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
@@ -506,6 +504,21 @@ public class MockContentfulService : IContentService
                                          LevelPrefixText = "level",
                                          AwardedByPrefixText = "awarded by",
                                          QualificationNumberLabel = "Qualification Number (QN)",
+                                         SearchWithinSingleHeading = "Search within this qualification",
+                                         SearchWithinMultipleHeadingFormat = "Search within these {0} qualifications",
+                                         EnterKeywordsSingleContent =
+                                             "Enter keywords from the qualification name to search within this matching qualification",
+                                         EnterKeywordsMultipleContentFormat =
+                                             "Enter keywords from the qualification name to search within these {0} matching qualifications",
+                                         SearchMatchHeadingFormat = "{0} of {1} qualifications matches \"{2}\".",
+                                         SearchNoMatchGuidanceIntroFormat =
+                                             "Your search only checks the {0} matching qualifications shown on this page.",
+                                         SearchNoMatchGuidance =
+                                             ContentfulContentHelper.ParagraphThenUnorderedList(
+                                              "Try:",
+                                              "double-check the spelling of the qualification name",
+                                              "use fewer words in your search",
+                                              "use words from the qualification name, rather than the level or awarding organisation name"),
                                          SearchResultsContent =
                                          [
                                              new SearchResultContent

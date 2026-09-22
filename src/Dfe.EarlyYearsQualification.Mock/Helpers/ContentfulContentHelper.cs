@@ -28,6 +28,29 @@ public static class ContentfulContentHelper
                };
     }
 
+    public static Document ParagraphThenUnorderedList(string paragraphText, params string[] listItems)
+    {
+        return new Document
+               {
+                   Content =
+                   [
+                       new Paragraph { Content = [new Text { Value = paragraphText }] },
+                       new List
+                       {
+                           NodeType = "unordered-list",
+                           Content = listItems.Select(text => (IContent)new ListItem
+                                                      {
+                                                          Content =
+                                                          [
+                                                              new Paragraph { Content = [new Text { Value = text }] }
+                                                          ]
+                                                      })
+                                              .ToList()
+                       }
+                   ]
+               };
+    }
+
     public static Document Link(string text, string href)
     {
         return new Document
