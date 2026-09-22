@@ -484,12 +484,36 @@ resource "azapi_resource" "otel_container" {
       image      = "otel/opentelemetry-collector-contrib:latest"
       isMain     = false
       targetPort = "4318"
-      #       environmentVariables = [
-      #         {
-      #           name  = "AN_ENV_VAR"
-      #           value = "A value"
-      #         }
-      #       ]
+      # Pass your startUpCommand to point to where the volume is mounted
+      startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
+      environmentVariables = [
+        {
+          name  = "OTEL_SERVICE_NAME"
+          value = "${var.otel_service_name}"
+        },
+        {
+          name  = "SPLUNK_PORT"
+          value = "${var.splunk_port}"
+        },
+        {
+          name  = "SPLUNK_REALM"
+          value = "${var.splunk_realm}"
+        },
+        {
+          name  = "SPLUNK_ACCESS_TOKEN"
+          value = "${var.splunk_access_token}"
+        }
+      ]
+
+      # Mount the YAML content as a virtual volume
+      volumeMounts = [
+        {
+          containerMountPath = "/etc/otelcol-contrib/config.yaml"
+          data               = file(var.otel_config_path)
+          readOnly           = true
+          volumeSubPath      = "otel-config"
+        }
+      ]
     }
   }
 }

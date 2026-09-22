@@ -243,3 +243,24 @@ variable "download_endpoint_secret" {
   type        = string
   sensitive   = true
 }
+
+variable "splunk_access_token" {
+  description = "Secret value to be supplied for the Splunk Access Token"
+  type        = string
+  sensitive   = true
+}
+
+variable "splunk_port" {
+  description = "Port to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "splunk_realm" {
+  description = "Realm to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "otel_service_name" {
+  description = "Realm to be used for the Splunk Integration"
+  type        = string
+}

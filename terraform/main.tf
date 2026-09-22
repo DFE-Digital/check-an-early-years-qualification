@@ -165,6 +165,11 @@ module "webapp" {
   redis_cache_id                                        = module.cache.redis_cache_id
   redis_cache_name                                      = module.cache.redis_cache_name
   cache_endpoint_secret                                 = var.cache_endpoint_secret
+  splunk_port                                           = var.splunk_port
+  splunk_realm                                          = var.splunk_realm
+  splunk_access_token                                   = var.splunk_access_token
+  otel_service_name                                     = var.otel_service_name
+  otel_config_path                                      = file("${path.root}/../src/Dfe.EarlyYearsQualification.Web/otel-config.yaml")
   tags                                                  = local.common_tags
   depends_on                                            = [module.network]
 }
