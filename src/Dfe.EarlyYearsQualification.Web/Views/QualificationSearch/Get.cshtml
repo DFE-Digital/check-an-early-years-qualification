@@ -81,7 +81,7 @@
         {
             <div class="govuk-grid-row govuk-!-static-margin-top-6">
                 <div class="govuk-grid-column-full">
-                    <h3 id="search-match-heading" class="govuk-heading-s govuk-!-static-margin-bottom-4" tabindex="-1">@Model.SearchMatchHeading</h3>
+                    <h3 id="search-match-heading" class="govuk-heading-s govuk-!-static-margin-bottom-6" tabindex="-1">@Model.SearchMatchHeading</h3>
                     @if (numberOfQualifications == 0)
                     {
                         <p id="search-no-match-guidance-intro" class="govuk-body govuk-!-static-margin-bottom-4">@Model.SearchNoMatchGuidanceIntro</p>
@@ -89,17 +89,6 @@
                             @Html.Raw(Model.SearchNoMatchGuidance)
                         </div>
                     }
-                </div>
-            </div>
-        }
-        else if (numberOfQualifications == 0)
-        {
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <div id="no-result-content">
-                        @Html.Raw(Model.NoResultText)
-                        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible"/>
-                    </div>
                 </div>
             </div>
         }

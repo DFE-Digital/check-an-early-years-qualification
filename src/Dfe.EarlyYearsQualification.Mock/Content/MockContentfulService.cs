@@ -516,7 +516,7 @@ public class MockContentfulService : IContentService
                                          SearchNoMatchGuidance =
                                              ContentfulContentHelper.ParagraphThenUnorderedList(
                                               "Try:",
-                                              "double-check the spelling of the qualification name",
+                                              "double-check your spelling",
                                               "use fewer words in your search",
                                               "use words from the qualification name, rather than the level or awarding organisation name"),
                                          SearchResultsContent =
