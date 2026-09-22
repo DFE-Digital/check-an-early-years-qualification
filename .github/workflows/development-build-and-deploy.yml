@@ -84,7 +84,7 @@ jobs:
           # Deploy/Update Main Container
           az resource create \
             --resource-group ${{ vars.RESOURCE_NAME_PREFIX }}-rg \
-            --resource-type "Microsoft.Web/sites/sitecontainers"
+            --resource-type "Microsoft.Web/sites/sitecontainers" \
             --name ${{ vars.WEBAPP_NAME }}/early-years-qualification \
             --api-version "2024-04-01" \
             --properties "{
