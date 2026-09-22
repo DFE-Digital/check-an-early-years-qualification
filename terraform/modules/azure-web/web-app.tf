@@ -432,3 +432,55 @@ resource "azurerm_redis_cache_access_policy_assignment" "web_app_slot_contrib" {
   object_id          = azurerm_linux_web_app_slot.webapp_slot[0].identity[0].principal_id
   object_id_alias    = "SlotServicePrincipal"
 }
+
+# Enable sidecar option for Splunk integration and set initial containers: https://github.com/hashicorp/terraform-provider-azurerm/issues/25167
+resource "azapi_update_resource" "enable_sidecar" {
+  resource_id = azurerm_linux_web_app.webapp.id
+  type        = "Microsoft.Web/sites@2024-04-01"
+  body = {
+    properties = {
+      siteConfig = {
+        linuxFxVersion = "SITECONTAINERS"
+      }
+    }
+  }
+  lifecycle {
+    replace_triggered_by = [azurerm_linux_web_app.webapp]
+  }
+}
+
+resource "azapi_resource" "webapp_container" {
+  depends_on = [azapi_update_resource.enable_sidecar]
+  type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
+  parent_id  = azurerm_linux_web_app.webapp.id
+  name       = "early-years-qualification"
+  # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
+  body = {
+    properties = {
+      image          = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
+      isMain         = true
+      targetPort     = "8080"
+    }
+  }
+}
+
+resource "azapi_resource" "otel_container" {
+  depends_on = [azapi_update_resource.enable_sidecar]
+  type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
+  parent_id  = azurerm_linux_web_app.webapp.id
+  name       = "otel_container"
+  # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
+  body = {
+    properties = {
+      image          = "otel/opentelemetry-collector-contrib:latest"
+      isMain         = false
+      targetPort     = 4318
+#       environmentVariables = [
+#         {
+#           name  = "AN_ENV_VAR"
+#           value = "A value"
+#         }
+#       ]
+    }
+  }
+}
