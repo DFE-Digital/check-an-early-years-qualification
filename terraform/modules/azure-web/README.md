@@ -63,10 +63,15 @@ No modules.
 | <a name="input_kv_service_gov_uk_cert_versionless_secret_id"></a> [kv\_service\_gov\_uk\_cert\_versionless\_secret\_id](#input\_kv\_service\_gov\_uk\_cert\_versionless\_secret\_id) | service.gov.uk SSL certificate versionless Secret ID | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
 | <a name="input_logs_id"></a> [logs\_id](#input\_logs\_id) | Log Analytics workspace ID | `string` | n/a | yes |
+| <a name="input_otel_config_path"></a> [otel\_config\_path](#input\_otel\_config\_path) | Path to the OpenTelemetry config.yaml file | `string` | n/a | yes |
+| <a name="input_otel_service_name"></a> [otel\_service\_name](#input\_otel\_service\_name) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_redis_cache_id"></a> [redis\_cache\_id](#input\_redis\_cache\_id) | ID of the Redis cache | `string` | n/a | yes |
 | <a name="input_redis_cache_name"></a> [redis\_cache\_name](#input\_redis\_cache\_name) | Name of the Redis cache | `string` | n/a | yes |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
+| <a name="input_splunk_access_token"></a> [splunk\_access\_token](#input\_splunk\_access\_token) | Secret value to be supplied for the Splunk Access Token | `string` | n/a | yes |
+| <a name="input_splunk_port"></a> [splunk\_port](#input\_splunk\_port) | Port to be used for the Splunk Integration | `string` | n/a | yes |
+| <a name="input_splunk_realm"></a> [splunk\_realm](#input\_splunk\_realm) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
 | <a name="input_webapp_admin_email_address"></a> [webapp\_admin\_email\_address](#input\_webapp\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_webapp_app_settings"></a> [webapp\_app\_settings](#input\_webapp\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |
