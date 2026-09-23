@@ -45,6 +45,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
     "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
+    "OTELCOL_CONFIG"                             = file(var.otel_config_path)
   }, var.webapp_app_settings)
 
   identity {
@@ -139,6 +140,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
     "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
+    "OTELCOL_CONFIG"                             = file(var.otel_config_path)
   }, var.webapp_slot_app_settings)
 
   site_config {
@@ -488,12 +490,10 @@ resource "azapi_resource" "otel_container" {
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
-      image      = "index.docker.io/otel/opentelemetry-collector-contrib:latest"
+      image      = "docker.io/otel/opentelemetry-collector-contrib:latest"
       isMain     = false
       authType   = "Anonymous"
       targetPort = "4318"
-      # Pass your startUpCommand to point to where the volume is mounted
-      startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
       environmentVariables = [
         {
           name  = "OTEL_SERVICE_NAME"
@@ -512,16 +512,16 @@ resource "azapi_resource" "otel_container" {
           value = "SPLUNK_ACCESS_TOKEN" # Value is a reference, this is the name of the setting from AppSettings
         }
       ]
-
-      # Mount the YAML content as a virtual volume
-      volumeMounts = [
-        {
-          containerMountPath = "/etc/otelcol-contrib/config.yaml"
-          data               = file(var.otel_config_path)
-          readOnly           = true
-          volumeSubPath      = "otel-config"
-        }
-      ]
+# 
+#       # Mount the YAML content as a virtual volume
+#       volumeMounts = [
+#         {
+#           containerMountPath = "/etc/otelcol-contrib/config.yaml"
+#           data               = file(var.otel_config_path)
+#           readOnly           = true
+#           volumeSubPath      = "otel-config"
+#         }
+#       ]
     }
   }
 }
