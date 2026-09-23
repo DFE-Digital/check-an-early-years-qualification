@@ -70,7 +70,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#found-heading", "We found 0 matching qualifications");
         await checkText(page, "#search-within-heading", "Search within these 0 qualifications");
         await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 0 matching qualifications");
-        await checkText(page, "#no-result-content", "Test no qualifications text");
+        await doesNotExist(page, "#no-result-content");
         await doesNotExist(page, "#search-match-heading");
     });
 
