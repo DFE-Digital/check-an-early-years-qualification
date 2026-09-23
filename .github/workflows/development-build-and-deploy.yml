@@ -103,7 +103,7 @@ jobs:
           MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
           
           az rest --method PUT \
-          --uri "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/sitecontainers/${CONTAINER_NAME}?api-version=2023-12-01" \
+          --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/sitecontainers/${CONTAINER_NAME}?api-version=2023-12-01" \
           --body "{
             \"properties\": {
               \"image\": \"$MAIN_IMAGE\",
