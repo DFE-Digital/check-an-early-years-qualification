@@ -512,16 +512,16 @@ resource "azapi_resource" "otel_container" {
           value = "SPLUNK_ACCESS_TOKEN" # Value is a reference, this is the name of the setting from AppSettings
         }
       ]
-# 
-#       # Mount the YAML content as a virtual volume
-#       volumeMounts = [
-#         {
-#           containerMountPath = "/etc/otelcol-contrib/config.yaml"
-#           data               = file(var.otel_config_path)
-#           readOnly           = true
-#           volumeSubPath      = "otel-config"
-#         }
-#       ]
+      # 
+      #       # Mount the YAML content as a virtual volume
+      #       volumeMounts = [
+      #         {
+      #           containerMountPath = "/etc/otelcol-contrib/config.yaml"
+      #           data               = file(var.otel_config_path)
+      #           readOnly           = true
+      #           volumeSubPath      = "otel-config"
+      #         }
+      #       ]
     }
   }
 }
