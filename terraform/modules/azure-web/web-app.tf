@@ -490,7 +490,7 @@ resource "azapi_resource" "otel_container" {
     properties = {
       image      = "index.docker.io/otel/opentelemetry-collector-contrib:latest"
       isMain     = false
-      auth_type  = "Anonymous"
+      authType   = "Anonymous"
       targetPort = "4318"
       # Pass your startUpCommand to point to where the volume is mounted
       startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
