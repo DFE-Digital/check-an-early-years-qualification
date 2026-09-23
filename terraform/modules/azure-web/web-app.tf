@@ -25,6 +25,11 @@ resource "azurerm_service_plan" "asp" {
   }
 }
 
+data "azurerm_key_vault_secret" "splunk_access_token" {
+  name         = "Splunk-Access-Token"
+  key_vault_id = var.kv_id
+}
+
 # Create Web Application
 resource "azurerm_linux_web_app" "webapp" {
   name                      = var.webapp_name
@@ -39,6 +44,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
+    "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
   }, var.webapp_app_settings)
 
   identity {
@@ -132,6 +138,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
+    "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
   }, var.webapp_slot_app_settings)
 
   site_config {
@@ -489,19 +496,19 @@ resource "azapi_resource" "otel_container" {
       environmentVariables = [
         {
           name  = "OTEL_SERVICE_NAME"
-          value = "${var.otel_service_name}"
+          value = "OTEL_SERVICE_NAME" # Value is a reference, this is the name of the setting from AppSettings
         },
         {
           name  = "SPLUNK_PORT"
-          value = "${var.splunk_port}"
+          value = "SPLUNK_PORT" # Value is a reference, this is the name of the setting from AppSettings
         },
         {
           name  = "SPLUNK_REALM"
-          value = "${var.splunk_realm}"
+          value = "SPLUNK_REALM" # Value is a reference, this is the name of the setting from AppSettings
         },
         {
           name  = "SPLUNK_ACCESS_TOKEN"
-          value = "${var.splunk_access_token}"
+          value = "SPLUNK_ACCESS_TOKEN" # Value is a reference, this is the name of the setting from AppSettings
         }
       ]
 

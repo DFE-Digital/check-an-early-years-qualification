@@ -94,11 +94,12 @@ jobs:
 #            }"
 
       - name: Configure Main Container for App Service
+        env:
+          SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
           RESOURCE_GROUP=${{ vars.RESOURCE_NAME_PREFIX }}-rg
           WEBAPP_NAME=${{ vars.WEBAPP_NAME }}
           CONTAINER_NAME="early-years-qualification"
-          SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
           MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
           
           az rest --method PUT \
