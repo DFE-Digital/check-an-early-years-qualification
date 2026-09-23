@@ -95,7 +95,7 @@ jobs:
 
       - name: Configure Main Container for App Service
         env:
-          SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
           RESOURCE_GROUP=${{ vars.RESOURCE_NAME_PREFIX }}-rg
           WEBAPP_NAME=${{ vars.WEBAPP_NAME }}
