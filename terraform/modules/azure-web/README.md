@@ -5,12 +5,15 @@ This module provisions a new Azure App Service & Application Gateway to host a D
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | >= 2.12.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
+| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | >= 2.12.0 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
 
 ## Modules
@@ -21,6 +24,9 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [azapi_resource.otel_container](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) | resource |
+| [azapi_resource.webapp_container](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) | resource |
+| [azapi_update_resource.enable_sidecar](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/update_resource) | resource |
 | [azurerm_app_service_certificate.webapp_service_gov_uk_custom_domain_cert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate) | resource |
 | [azurerm_app_service_certificate_binding.webapp_service_gov_uk_custom_domain_cert_bind](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_certificate_binding) | resource |
 | [azurerm_app_service_custom_hostname_binding.webapp_service_gov_uk_custom_domain](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service_custom_hostname_binding) | resource |
@@ -38,6 +44,7 @@ No modules.
 | [azurerm_service_plan.asp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) | resource |
 | [azurerm_web_application_firewall_policy.agw_wafp](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/web_application_firewall_policy) | resource |
 | [azurerm_client_config.az_config](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
+| [azurerm_key_vault_secret.splunk_access_token](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/key_vault_secret) | data source |
 | [azurerm_linux_web_app.ref](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/linux_web_app) | data source |
 
 ## Inputs
@@ -57,10 +64,15 @@ No modules.
 | <a name="input_kv_service_gov_uk_cert_versionless_secret_id"></a> [kv\_service\_gov\_uk\_cert\_versionless\_secret\_id](#input\_kv\_service\_gov\_uk\_cert\_versionless\_secret\_id) | service.gov.uk SSL certificate versionless Secret ID | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Name of the Azure region to deploy resources | `string` | n/a | yes |
 | <a name="input_logs_id"></a> [logs\_id](#input\_logs\_id) | Log Analytics workspace ID | `string` | n/a | yes |
+| <a name="input_otel_config_path"></a> [otel\_config\_path](#input\_otel\_config\_path) | Path to the OpenTelemetry config.yaml file | `string` | n/a | yes |
+| <a name="input_otel_service_name"></a> [otel\_service\_name](#input\_otel\_service\_name) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_redis_cache_id"></a> [redis\_cache\_id](#input\_redis\_cache\_id) | ID of the Redis cache | `string` | n/a | yes |
 | <a name="input_redis_cache_name"></a> [redis\_cache\_name](#input\_redis\_cache\_name) | Name of the Redis cache | `string` | n/a | yes |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
+| <a name="input_splunk_access_token"></a> [splunk\_access\_token](#input\_splunk\_access\_token) | Secret value to be supplied for the Splunk Access Token | `string` | n/a | yes |
+| <a name="input_splunk_port"></a> [splunk\_port](#input\_splunk\_port) | Port to be used for the Splunk Integration | `string` | n/a | yes |
+| <a name="input_splunk_realm"></a> [splunk\_realm](#input\_splunk\_realm) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
 | <a name="input_webapp_admin_email_address"></a> [webapp\_admin\_email\_address](#input\_webapp\_admin\_email\_address) | Email Address of the Admin | `string` | n/a | yes |
 | <a name="input_webapp_app_settings"></a> [webapp\_app\_settings](#input\_webapp\_app\_settings) | App Settings are exposed as environment variables | `map(string)` | n/a | yes |

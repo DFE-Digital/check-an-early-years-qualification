@@ -1,0 +1,29 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. OpenTelemetry Collector
+  # ---------------------------------------------------------------------------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - "4318:4318" # OTLP HTTP receiver
+    environment:
+      - SPLUNK_ACCESS_TOKEN=__SPLUNK_TOKEN_PLACEHOLDER__
+      - SPLUNK_REALM=__SPLUNK_REALM_PLACEHOLDER__
+      - SPLUNK_PORT=__SPLUNK_PORT_PLACEHOLDER__
+      - OTEL_SERVICE_NAME=__OTEL_SERVICE_NAME_PLACEHOLDER__
+
+  # # ---------------------------------------------------------------------------
+  # 2. .NET Application Container
+  # ---------------------------------------------------------------------------
+  early-years-qualification-web:
+    # Will be replaced with ghcr.io/org/repo/image:sha by sed
+    image: __IMAGE_PLACEHOLDER__
+    container_name: early-years-qualification
+    ports:
+      - "8080:8080"
+    depends_on:
+      - otel-collector

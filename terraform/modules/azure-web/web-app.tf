@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    azapi = {
+      source  = "azure/azapi"
+      version = ">= 2.12.0"
+    }
+  }
+}
+
 # Create App Service Plan
 resource "azurerm_service_plan" "asp" {
   name                = "${var.resource_name_prefix}-asp"
@@ -16,6 +25,11 @@ resource "azurerm_service_plan" "asp" {
   }
 }
 
+data "azurerm_key_vault_secret" "splunk_access_token" {
+  name         = "Splunk-Access-Token"
+  key_vault_id = var.kv_id
+}
+
 # Create Web Application
 resource "azurerm_linux_web_app" "webapp" {
   name                      = var.webapp_name
@@ -30,6 +44,7 @@ resource "azurerm_linux_web_app" "webapp" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
+    "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
   }, var.webapp_app_settings)
 
   identity {
@@ -123,6 +138,7 @@ resource "azurerm_linux_web_app_slot" "webapp_slot" {
     "ApplicationInsightsAgent_EXTENSION_VERSION" = "~3"
     "Cache__Instance"                            = var.redis_cache_name
     "Cache__AuthSecret"                          = var.cache_endpoint_secret
+    "SPLUNK_ACCESS_TOKEN"                        = data.azurerm_key_vault_secret.splunk_access_token.value
   }, var.webapp_slot_app_settings)
 
   site_config {
@@ -431,4 +447,80 @@ resource "azurerm_redis_cache_access_policy_assignment" "web_app_slot_contrib" {
   access_policy_name = "Data Owner"
   object_id          = azurerm_linux_web_app_slot.webapp_slot[0].identity[0].principal_id
   object_id_alias    = "SlotServicePrincipal"
+}
+
+# Enable sidecar option for Splunk integration and set initial containers: https://github.com/hashicorp/terraform-provider-azurerm/issues/25167
+resource "azapi_update_resource" "enable_sidecar" {
+  resource_id = azurerm_linux_web_app.webapp.id
+  type        = "Microsoft.Web/sites@2024-04-01"
+  body = {
+    properties = {
+      siteConfig = {
+        linuxFxVersion = "SITECONTAINERS"
+      }
+    }
+  }
+  lifecycle {
+    replace_triggered_by = [azurerm_linux_web_app.webapp]
+  }
+}
+
+resource "azapi_resource" "webapp_container" {
+  depends_on = [azapi_update_resource.enable_sidecar]
+  type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
+  parent_id  = azurerm_linux_web_app.webapp.id
+  name       = "early-years-qualification"
+  # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
+  body = {
+    properties = {
+      image      = "${var.webapp_docker_image}:${var.webapp_docker_image_tag}"
+      isMain     = true
+      targetPort = "8080"
+    }
+  }
+}
+
+resource "azapi_resource" "otel_container" {
+  depends_on = [azapi_update_resource.enable_sidecar]
+  type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
+  parent_id  = azurerm_linux_web_app.webapp.id
+  name       = "otel-container"
+  # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
+  body = {
+    properties = {
+      image      = "docker.io/otel/opentelemetry-collector-contrib:nightly-amd64"
+      isMain     = false
+      authType   = "Anonymous"
+      targetPort = "4318"
+      # Pass your startUpCommand to point to where the volume is mounted
+      startUpCommand = "/otelcol-contrib --config=/etc/otelcol-contrib/config.yaml"
+      environmentVariables = [
+        {
+          name  = "OTEL_SERVICE_NAME"
+          value = "OTEL_SERVICE_NAME" # Value is a reference, this is the name of the setting from AppSettings
+        },
+        {
+          name  = "SPLUNK_PORT"
+          value = "SPLUNK_PORT" # Value is a reference, this is the name of the setting from AppSettings
+        },
+        {
+          name  = "SPLUNK_REALM"
+          value = "SPLUNK_REALM" # Value is a reference, this is the name of the setting from AppSettings
+        },
+        {
+          name  = "SPLUNK_ACCESS_TOKEN"
+          value = "SPLUNK_ACCESS_TOKEN" # Value is a reference, this is the name of the setting from AppSettings
+        }
+      ]
+      # Mount the YAML content as a virtual volume
+      volumeMounts = [
+        {
+          containerMountPath = "/etc/otelcol-contrib/config.yaml"
+          data               = file(var.otel_config_path)
+          readOnly           = true
+          volumeSubPath      = "" # Must be defined to satisfy the azapi schema
+        }
+      ]
+    }
+  }
 }
