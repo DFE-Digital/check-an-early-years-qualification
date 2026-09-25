@@ -70,7 +70,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#found-heading", "We found 0 matching qualifications");
         await checkText(page, "#search-within-heading", "Search within these 0 qualifications");
         await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 0 matching qualifications");
-        await checkText(page, "#no-result-content", "Test no qualifications text");
+        await doesNotExist(page, "#no-result-content");
         await doesNotExist(page, "#search-match-heading");
     });
 
@@ -119,7 +119,7 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#search-no-match-guidance-intro", "Your search only checks the 8 matching qualifications shown on this page.");
         await checkText(page, "#search-no-match-guidance p", "Try:");
         await hasCount(page, "#search-no-match-guidance li", 3);
-        await checkText(page, "#search-no-match-guidance li", "double-check the spelling of the qualification name", 0);
+        await checkText(page, "#search-no-match-guidance li", "double-check your spelling", 0);
         await checkText(page, "#search-no-match-guidance li", "use fewer words in your search", 1);
         await checkText(page, "#search-no-match-guidance li", "use words from the qualification name, rather than the level or awarding organisation name", 2);
         await doesNotExist(page, "#no-result-content");
