@@ -121,6 +121,7 @@ public class QualificationSearchService(
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = searchCriteria,
                    NoResultText = await contentParser.ToHtml(content.NoResultsText),
+                   NoMatchingQualificationsHeading = content.NoMatchingQualificationsHeading,
                    ClearSearchText = content.ClearSearchText,
                    QualificationNumberLabel = content.QualificationNumberLabel,
                    SearchResults = MapQualificationsAndContentToSearchResultContentModel(basicQualificationsModels, content),

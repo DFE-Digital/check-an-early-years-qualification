@@ -504,8 +504,12 @@ public class MockContentfulServiceTests
               .Which.Content.Should().Contain(x => ((Text)x).Value == "Link to not on list advice page");
         result.AnyLevelHeading.Should().Be("any level");
         result.AnyAwardingOrganisationHeading.Should().Be("various awarding organisations");
+        result.NoResultsText!.Content.Should().HaveCount(4);
         result.NoResultsText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test no qualifications text");
+              .Which.Content.Should().Contain(x => (x as Text) != null && (x as Text)!.Value == " to make sure they are correct.");
+        result.NoResultsText!.Content[3].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().Contain(x => (x as Text) != null && (x as Text)!.Value == "Go to ");
+        result.NoMatchingQualificationsHeading.Should().Be("No matching qualifications were found");
         result.ClearSearchText.Should().Be("Clear search");
         result.AwardedLocationPrefixText.Should().Be("awarded in");
         result.StartDatePrefixText.Should().Be("started in");

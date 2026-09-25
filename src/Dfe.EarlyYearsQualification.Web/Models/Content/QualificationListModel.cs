@@ -34,6 +34,8 @@ public class QualificationListModel
 
     public string NoResultText { get; init; } = string.Empty;
 
+    public string NoMatchingQualificationsHeading { get; init; } = string.Empty;
+
     public string ClearSearchText { get; init; } = string.Empty;
 
     public string QualificationNumberLabel { get; init; } = string.Empty;
