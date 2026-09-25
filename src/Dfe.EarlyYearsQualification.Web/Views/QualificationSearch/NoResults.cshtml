@@ -1,0 +1,57 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationListModel;
+
+@{
+    ViewData["Title"] = "Qualifications";
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+@section Scripts
+{
+    <script>
+        $(window).on('load', function () {
+            let noMatchHeading = document.getElementById('no-matching-qualifications-heading');
+            if (noMatchHeading) {
+                noMatchHeading.focus();
+            }
+        });
+    </script>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <h1 id="heading" class="govuk-heading-xl">@Model.Header</h1>
+            </div>
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <p id="your-search-header" class="govuk-body">
+                    @Model.SearchCriteriaHeading
+                </p>
+                <ul class="govuk-list govuk-list--bullet govuk-!-static-margin-bottom-8">
+                    <li id="filter-country">@Model.Filters.Country</li>
+                    <li id="filter-start-date">@Model.Filters.StartDate</li>
+                    <li id="filter-awarded-date">@Model.Filters.AwardedDate</li>
+                    <li id="filter-level">@Model.Filters.Level</li>
+                    <li id="filter-org">@Model.Filters.AwardingOrganisation</li>
+                </ul>
+            </div>
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <h2 id="no-matching-qualifications-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8" tabindex="-1">
+                    @Model.NoMatchingQualificationsHeading
+                </h2>
+                <div id="no-result-content">
+                    @Html.Raw(Model.NoResultText)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

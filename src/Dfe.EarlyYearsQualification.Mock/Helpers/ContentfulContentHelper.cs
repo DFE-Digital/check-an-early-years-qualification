@@ -63,7 +63,8 @@ public static class ContentfulContentHelper
                };
     }
 
-    public static Paragraph ParagraphWithEmbeddedLink(string text, string linkText, string linkHref)
+    public static Paragraph ParagraphWithEmbeddedLink(string text, string linkText, string linkHref,
+                                                       string textAfterLink = "")
     {
         var navigationLink = new NavigationLink
                              {
@@ -96,13 +97,20 @@ public static class ContentfulContentHelper
                                                 }
                                      };
 
+        List<IContent> content =
+        [
+            new Text { Value = text },
+            externalNavigationLink
+        ];
+
+        if (!string.IsNullOrEmpty(textAfterLink))
+        {
+            content.Add(new Text { Value = textAfterLink });
+        }
+
         return new Paragraph
                {
-                   Content =
-                   [
-                       new Text { Value = text },
-                       externalNavigationLink
-                   ]
+                   Content = content
                };
     }
 }

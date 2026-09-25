@@ -249,6 +249,20 @@ public class QualificationSearchServiceTests
     }
     
     [TestMethod]
+    public async Task MapList_Maps_NoMatchingQualificationsHeading()
+    {
+        var content = new QualificationListPage
+                      {
+                          NoMatchingQualificationsHeading = "No matching qualifications were found"
+                      };
+
+        var sut = GetSut();
+        var result = await sut.MapList(content, [], 0);
+
+        result.NoMatchingQualificationsHeading.Should().Be("No matching qualifications were found");
+    }
+
+    [TestMethod]
     public async Task MapList_Maps_SearchWithinHeading_And_EnterKeywordsContent_Plural()
     {
         var sut = GetSut();
