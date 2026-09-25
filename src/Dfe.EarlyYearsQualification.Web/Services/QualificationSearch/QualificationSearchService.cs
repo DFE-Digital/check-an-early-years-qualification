@@ -29,8 +29,7 @@ public class QualificationSearchService(
 
         var filteredQualifications = await GetFilteredQualifications();
         var baselineQualifications = await GetFilteredQualifications(searchCriteriaOverride: string.Empty);
-        // TODO: revert before committing — hardcoded to 0 to test the no-results state locally
-        var model = await MapList(qualificationListPage, filteredQualifications, 0);
+        var model = await MapList(qualificationListPage, filteredQualifications, baselineQualifications.Count);
         return model;
     }
 
@@ -121,14 +120,8 @@ public class QualificationSearchService(
                    PostQualificationListContent = await contentParser.ToHtml(content.PostQualificationListContent),
                    SearchCriteriaHeading = content.SearchCriteriaHeading,
                    SearchCriteria = searchCriteria,
-                   // TODO: revert to `await contentParser.ToHtml(content.NoResultsText)` once Contentful is updated
-                   NoResultText =
-                       "<p class=\"govuk-body\"><a class=\"govuk-link\" href=\"/questions/check-your-answers\">Check your answers</a> to make sure they are correct.</p>" +
-                       "<p class=\"govuk-body\">If you checked your answers and still cannot find the qualification you are looking for, the qualification may not be recognised as full and relevant.</p>" +
-                       "<p class=\"govuk-body\">If a qualification is not recognised as full and relevant, the qualification holder can still work as an unqualified member of staff in an early years setting.</p>" +
-                       "<p class=\"govuk-body\">Go to <a class=\"govuk-link\" href=\"/advice/qualification-not-on-the-list\">I cannot find the qualification</a> for more detail about what to do next.</p>",
-                   // TODO: revert to `content.NoMatchingQualificationsHeading` once the field is added in Contentful
-                   NoMatchingQualificationsHeading = "No matching qualifications were found",
+                   NoResultText = await contentParser.ToHtml(content.NoResultsText),
+                   NoMatchingQualificationsHeading = content.NoMatchingQualificationsHeading,
                    ClearSearchText = content.ClearSearchText,
                    QualificationNumberLabel = content.QualificationNumberLabel,
                    SearchResults = MapQualificationsAndContentToSearchResultContentModel(basicQualificationsModels, content),
