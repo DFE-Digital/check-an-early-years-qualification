@@ -2,7 +2,7 @@ receivers:
   otlp:
     protocols:
       http:
-        endpoint: "0.0.0.0:$${env:SPLUNK_PORT}"
+        endpoint: "0.0.0.0:4318"
 
 processors:
   memory_limiter:
@@ -19,26 +19,8 @@ processors:
         action: upsert
 
 exporters:
-  debug:
-    verbosity: detailed
-
-  splunk_hec:
-    endpoint: "https://ingest.$${env:SPLUNK_REALM}.observability.splunkcloud.com/v1/log"
-    token: "$${env:SPLUNK_ACCESS_TOKEN}"
-    source: "otel"
-    sourcetype: "otel:logs"
-
-  otlphttp/traces:
-    traces_endpoint: "https://ingest.$${env:SPLUNK_REALM}.observability.splunkcloud.com/v2/trace/otlp"
-    tls:
-      insecure: false
-    headers:
-      "X-SF-Token": "$${env:SPLUNK_ACCESS_TOKEN}"
-
-  otlphttp/metrics:
-    metrics_endpoint: "https://ingest.$${env:SPLUNK_REALM}.observability.splunkcloud.com/v2/datapoint/otlp"
-    tls:
-      insecure: false
+  otlphttp/splunk:
+    endpoint: "https://ingest.$${env:SPLUNK_REALM}.observability.splunkcloud.com"
     headers:
       "X-SF-Token": "$${env:SPLUNK_ACCESS_TOKEN}"
 
@@ -47,12 +29,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, resource, batch]
-      exporters: [otlphttp/traces, debug]
+      exporters: [otlphttp/splunk]
     logs:
       receivers: [otlp]
       processors: [memory_limiter, resource, batch]
-      exporters: [splunk_hec, debug]
+      exporters: [otlphttp/splunk]
     metrics:
       receivers: [otlp]
       processors: [memory_limiter, resource, batch]
-      exporters: [otlphttp/metrics, debug]
+      exporters: [otlphttp/splunk]

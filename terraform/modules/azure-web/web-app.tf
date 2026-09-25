@@ -493,7 +493,7 @@ resource "azapi_resource" "otel_container" {
       authType   = "Anonymous"
       targetPort = "4318"
       # Pass your startUpCommand to point to where the volume is mounted
-      startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
+      startUpCommand = "/otelcol-contrib --config=/etc/otelcol-contrib/config.yaml"
       environmentVariables = [
         {
           name  = "OTEL_SERVICE_NAME"
@@ -518,7 +518,6 @@ resource "azapi_resource" "otel_container" {
           containerMountPath = "/etc/otelcol-contrib/config.yaml"
           data               = file(var.otel_config_path)
           readOnly           = true
-          volumeSubPath      = "otel-config"
         }
       ]
     }
