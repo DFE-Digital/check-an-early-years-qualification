@@ -7,7 +7,8 @@ import {
     doesNotExist,
     exists,
     checkTextContains,
-    hasCount
+    hasCount,
+    refineQualificationSearch
 } from '../../_shared/playwrightWrapper';
 
 test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, () => {
@@ -27,11 +28,13 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await checkText(page, "#filter-org", "awarded by NCFE");
         await checkText(page, "#heading", "Test Header");
         await checkText(page, "#found-heading", "We found 8 matching qualifications");
-        await checkText(page, "#pre-search-content", "Pre search box content");
+        await checkText(page, "#search-within-heading", "Search within these 8 qualifications");
+        await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 8 matching qualifications");
         await checkText(page, "#post-list-heading", "Post qualification list header");
         await checkTextContains(page, "#post-list-content", "Link to not on list advice page");
         await checkText(page, "#clear-search", "Clear search");
         await doesNotExist(page, "#no-result-content");
+        await doesNotExist(page, "#search-match-heading");
         await doesNotExist(page, "#l6-or-not-sure-content");
     });
 
@@ -65,7 +68,78 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await page.goto("/select-a-qualification-to-check");
 
         await checkText(page, "#found-heading", "We found 0 matching qualifications");
-        await checkText(page, "#no-result-content", "Test no qualifications text");
+        await checkText(page, "#search-within-heading", "Search within these 0 qualifications");
+        await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 0 matching qualifications");
+        await doesNotExist(page, "#no-result-content");
+        await doesNotExist(page, "#search-match-heading");
+    });
+
+    test("Found heading and search within heading do not change when a keyword search narrows the results", async ({
+                                                                                                                        page,
+                                                                                                                        context
+                                                                                                                    }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await checkText(page, "#found-heading", "We found 8 matching qualifications");
+        await checkText(page, "#search-within-heading", "Search within these 8 qualifications");
+
+        await refineQualificationSearch(page, "childhood studies");
+
+        await checkText(page, "#found-heading", "We found 8 matching qualifications");
+        await checkText(page, "#search-within-heading", "Search within these 8 qualifications");
+        await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 8 matching qualifications");
+    });
+
+    test("Shows the number of matches and keyword when a keyword search returns some results", async ({
+                                                                                                             page,
+                                                                                                             context
+                                                                                                         }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await refineQualificationSearch(page, "degrees");
+
+        await checkText(page, "#search-match-heading", "2 of 8 qualifications matches \"degrees\".");
+        await doesNotExist(page, "#search-no-match-guidance-intro");
+        await doesNotExist(page, "#no-result-content");
+        await hasCount(page, "#main-content a.govuk-link.govuk-heading-m", 2);
+    });
+
+    test("Shows no-match guidance and 'Try:' suggestions when a keyword search returns no results", async ({
+                                                                                                                 page,
+                                                                                                                 context
+                                                                                                             }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await refineQualificationSearch(page, "childhood studies");
+
+        await checkText(page, "#search-match-heading", "0 of 8 qualifications matches \"childhood studies\".");
+        await checkText(page, "#search-no-match-guidance-intro", "Your search only checks the 8 matching qualifications shown on this page.");
+        await checkText(page, "#search-no-match-guidance p", "Try:");
+        await hasCount(page, "#search-no-match-guidance li", 3);
+        await checkText(page, "#search-no-match-guidance li", "double-check your spelling", 0);
+        await checkText(page, "#search-no-match-guidance li", "use fewer words in your search", 1);
+        await checkText(page, "#search-no-match-guidance li", "use words from the qualification name, rather than the level or awarding organisation name", 2);
+        await doesNotExist(page, "#no-result-content");
+    });
+
+    test("Clearing the search removes the match heading and restores the pre-search content", async ({
+                                                                                                            page,
+                                                                                                            context
+                                                                                                        }) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2015%22%2C%22WhenWasQualificationAwarded%22%3A%2210%2F2015%22%2C%22LevelOfQualification%22%3A%223%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22NCFE%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await refineQualificationSearch(page, "degrees");
+        await checkText(page, "#search-match-heading", "2 of 8 qualifications matches \"degrees\".");
+
+        await page.click("#clear-search");
+        await page.waitForLoadState();
+
+        await doesNotExist(page, "#search-match-heading");
+        await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 8 matching qualifications");
     });
 
     test("Shows additional information content next to qualification link", async ({
