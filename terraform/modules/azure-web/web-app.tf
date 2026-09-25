@@ -518,6 +518,7 @@ resource "azapi_resource" "otel_container" {
           containerMountPath = "/etc/otelcol-contrib/config.yaml"
           data               = file(var.otel_config_path)
           readOnly           = true
+          volumeSubPath      = "" # Must be defined to satisfy the azapi schema
         }
       ]
     }
