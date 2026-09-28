@@ -488,9 +488,9 @@ resource "azapi_resource" "otel_collector" {
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
-      image                                  = "ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
-      isMain                                 = false
-      targetPort                             = "4318"
+      image      = "ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
+      isMain     = false
+      targetPort = "4318"
     }
   }
 }
