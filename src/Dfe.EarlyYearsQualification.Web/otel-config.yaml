@@ -14,15 +14,16 @@ processors:
     timeout: 2s
   resource:
     attributes:
-      - key: service.name
-        value: "$${env:OTEL_SERVICE_NAME}"
-        action: upsert
+      - action: upsert
+        key: service.name
+        value: "${env:OTEL_SERVICE_NAME}"
+        
 
 exporters:
   otlphttp/splunk:
-    endpoint: "https://ingest.$${env:SPLUNK_REALM}.observability.splunkcloud.com"
+    endpoint: "https://ingest.${env:SPLUNK_REALM}.observability.splunkcloud.com"
     headers:
-      "X-SF-Token": "$${env:SPLUNK_ACCESS_TOKEN}"
+      "X-SF-Token": "${env:SPLUNK_ACCESS_TOKEN}"
 
 service:
   pipelines:

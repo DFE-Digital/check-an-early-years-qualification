@@ -488,12 +488,12 @@ resource "azapi_resource" "otel_container" {
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
-      image      = "docker.io/otel/opentelemetry-collector-contrib:nightly-amd64"
+      image      = "docker.io/otel/opentelemetry-collector-contrib:0.161.0"
       isMain     = false
       authType   = "Anonymous"
       targetPort = "4318"
       # Pass your startUpCommand to point to where the volume is mounted
-      startUpCommand = "/otelcol-contrib --config=/etc/otelcol-contrib/config.yaml"
+      startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
       environmentVariables = [
         {
           name  = "OTEL_SERVICE_NAME"
