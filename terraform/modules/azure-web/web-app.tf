@@ -480,7 +480,7 @@ resource "azapi_resource" "webapp_container" {
   }
 }
 
-resource "azapi_resource" "otel_container" {
+resource "azapi_resource" "otel_collector" {
   depends_on = [azapi_update_resource.enable_sidecar]
   type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
   parent_id  = azurerm_linux_web_app.webapp.id
@@ -491,7 +491,6 @@ resource "azapi_resource" "otel_container" {
       image                                  = "ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
       isMain                                 = false
       targetPort                             = "4318"
-      authType                               = Anonymous
       inheritAppSettingsAndConnectionStrings = true
     }
   }
