@@ -484,43 +484,60 @@ resource "azapi_resource" "otel_container" {
   depends_on = [azapi_update_resource.enable_sidecar]
   type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
   parent_id  = azurerm_linux_web_app.webapp.id
-  name       = "otel-container"
+  name       = "otel-collector"
   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
   body = {
     properties = {
-      image      = "docker.io/otel/opentelemetry-collector-contrib:0.161.0"
-      isMain     = false
-      authType   = "Anonymous"
-      targetPort = "4318"
-      # Pass your startUpCommand to point to where the volume is mounted
-      startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
-      environmentVariables = [
-        {
-          name  = "OTEL_SERVICE_NAME"
-          value = "OTEL_SERVICE_NAME" # Value is a reference, this is the name of the setting from AppSettings
-        },
-        {
-          name  = "SPLUNK_PORT"
-          value = "SPLUNK_PORT" # Value is a reference, this is the name of the setting from AppSettings
-        },
-        {
-          name  = "SPLUNK_REALM"
-          value = "SPLUNK_REALM" # Value is a reference, this is the name of the setting from AppSettings
-        },
-        {
-          name  = "SPLUNK_ACCESS_TOKEN"
-          value = "SPLUNK_ACCESS_TOKEN" # Value is a reference, this is the name of the setting from AppSettings
-        }
-      ]
-      # Mount the YAML content as a virtual volume
-      volumeMounts = [
-        {
-          containerMountPath = "/etc/otelcol-contrib/config.yaml"
-          data               = file(var.otel_config_path)
-          readOnly           = true
-          volumeSubPath      = "" # Must be defined to satisfy the azapi schema
-        }
-      ]
+      image                                  = "ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
+      isMain                                 = false
+      targetPort                             = "4318"
+      authType                               = Anonymous
+      inheritAppSettingsAndConnectionStrings = true
     }
   }
 }
+
+# resource "azapi_resource" "otel_container" {
+#   depends_on = [azapi_update_resource.enable_sidecar]
+#   type       = "Microsoft.Web/sites/sitecontainers@2024-04-01"
+#   parent_id  = azurerm_linux_web_app.webapp.id
+#   name       = "otel-container"
+#   # https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/create-or-update-site-container?view=rest-appservice-2024-04-01#request-body
+#   body = {
+#     properties = {
+#       image      = "docker.io/otel/opentelemetry-collector-contrib:0.161.0"
+#       isMain     = false
+#       authType   = "Anonymous"
+#       targetPort = "4318"
+#       # Pass your startUpCommand to point to where the volume is mounted
+#       startUpCommand = "--config=/etc/otelcol-contrib/config.yaml"
+#       environmentVariables = [
+#         {
+#           name  = "OTEL_SERVICE_NAME"
+#           value = "OTEL_SERVICE_NAME" # Value is a reference, this is the name of the setting from AppSettings
+#         },
+#         {
+#           name  = "SPLUNK_PORT"
+#           value = "SPLUNK_PORT" # Value is a reference, this is the name of the setting from AppSettings
+#         },
+#         {
+#           name  = "SPLUNK_REALM"
+#           value = "SPLUNK_REALM" # Value is a reference, this is the name of the setting from AppSettings
+#         },
+#         {
+#           name  = "SPLUNK_ACCESS_TOKEN"
+#           value = "SPLUNK_ACCESS_TOKEN" # Value is a reference, this is the name of the setting from AppSettings
+#         }
+#       ]
+#       # Mount the YAML content as a virtual volume
+#       volumeMounts = [
+#         {
+#           containerMountPath = "/etc/otelcol-contrib/config.yaml"
+#           data               = file(var.otel_config_path)
+#           readOnly           = true
+#           volumeSubPath      = "" # Must be defined to satisfy the azapi schema
+#         }
+#       ]
+#     }
+#   }
+# }
