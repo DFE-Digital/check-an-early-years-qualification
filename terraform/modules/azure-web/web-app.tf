@@ -491,7 +491,6 @@ resource "azapi_resource" "otel_collector" {
       image                                  = "ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
       isMain                                 = false
       targetPort                             = "4318"
-      inheritAppSettingsAndConnectionStrings = true
     }
   }
 }
