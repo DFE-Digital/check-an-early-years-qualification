@@ -1,8 +1,8 @@
-name: Development build & deploy 
+name: Development build & deploy
 
 on:
   workflow_dispatch:
-    
+
 jobs:
   
   set-env:
@@ -56,12 +56,24 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Deploy Web Application
-      - name: Deploy to Azure App Services
-        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.0
-        with:
-          app-name: ${{ vars.WEBAPP_NAME }}
-          images: ${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+      - name: Configure Main Container for App Service
+        env:
+          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: |
+          RESOURCE_GROUP=${{ vars.RESOURCE_NAME_PREFIX }}-rg
+          WEBAPP_NAME=${{ vars.WEBAPP_NAME }}
+          CONTAINER_NAME="early-years-qualification"
+          MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          
+          az rest --method PUT \
+          --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/sitecontainers/${CONTAINER_NAME}?api-version=2023-12-01" \
+          --body "{
+            \"properties\": {
+              \"image\": \"$MAIN_IMAGE\",
+              \"isMain\": true,
+              \"targetPort\": \"8080\"
+            }
+          }"
 
       # Make a request to the health check endpoint
       - name: Make request to health check endpoint

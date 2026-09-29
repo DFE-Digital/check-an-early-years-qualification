@@ -186,3 +186,29 @@ variable "tags" {
   description = "Resource tags"
   type        = map(string)
 }
+
+variable "splunk_access_token" {
+  description = "Secret value to be supplied for the Splunk Access Token"
+  type        = string
+  sensitive   = true
+}
+
+variable "splunk_port" {
+  description = "Port to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "splunk_realm" {
+  description = "Realm to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "otel_service_name" {
+  description = "Realm to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "otel_config_path" {
+  type        = string
+  description = "Path to the OpenTelemetry config.yaml file"
+}

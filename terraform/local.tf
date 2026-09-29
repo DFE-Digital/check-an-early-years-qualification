@@ -38,6 +38,9 @@ locals {
     "Notifications__EmbeddedFeedbackForm__EmailAddress" = var.notifications_embedded_feedback_form_email_address
     "Notifications__IsTestEnvironment"                  = var.notifications_is_test_environment
     "Cache__Type"                                       = var.cache_type
+    "OTEL_SERVICE_NAME"                                 = var.otel_service_name
+    "SPLUNK_PORT"                                       = var.splunk_port
+    "SPLUNK_REALM"                                      = var.splunk_realm
   }
 
   webapp_slot_app_settings = {
@@ -53,5 +56,8 @@ locals {
     "ServiceAccess__Keys__2"              = var.webapp_access_key_1
     "ServiceAccess__Keys__3"              = var.webapp_access_key_2
     "Cache__Type"                         = var.cache_type
+    "OTEL_SERVICE_NAME"                   = var.otel_service_name
+    "SPLUNK_PORT"                         = var.splunk_port
+    "SPLUNK_REALM"                        = var.splunk_realm
   }
 }
