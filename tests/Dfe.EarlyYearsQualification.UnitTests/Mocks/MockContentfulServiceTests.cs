@@ -505,9 +505,9 @@ public class MockContentfulServiceTests
         result.AnyLevelHeading.Should().Be("any level");
         result.AnyAwardingOrganisationHeading.Should().Be("various awarding organisations");
         result.NoResultsText!.Content.Should().HaveCount(4);
-        result.NoResultsText!.Content[0].Should().BeAssignableTo<Paragraph>()
+        result.NoResultsText.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().Contain(x => (x as Text) != null && (x as Text)!.Value == " to make sure they are correct.");
-        result.NoResultsText!.Content[3].Should().BeAssignableTo<Paragraph>()
+        result.NoResultsText.Content[3].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().Contain(x => (x as Text) != null && (x as Text)!.Value == "Go to ");
         result.NoMatchingQualificationsHeading.Should().Be("No matching qualifications were found");
         result.ClearSearchText.Should().Be("Clear search");
