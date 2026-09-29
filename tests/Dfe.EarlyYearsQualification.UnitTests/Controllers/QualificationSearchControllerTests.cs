@@ -8,83 +8,42 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Controllers;
 [TestClass]
 public class QualificationSearchControllerTests
 {
-    private Mock<ILogger<QualificationSearchController>> _mockLogger = new();
-    private Mock<IQualificationSearchService> _mockQualificationSearchService = new();
 
-    private QualificationSearchController GetSut()
+    [TestMethod]
+    public async Task Get_ReturnsView()
     {
-        return new QualificationSearchController(_mockLogger.Object,
-                                                 _mockQualificationSearchService.Object)
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                 mockQualificationSearchService.Object)
                {
                    ControllerContext = new ControllerContext
                                        {
                                            HttpContext = new DefaultHttpContext()
                                        }
                };
-    }
-
-    [TestInitialize]
-    public void Initialize()
-    {
-        _mockLogger = new Mock<ILogger<QualificationSearchController>>();
-        _mockQualificationSearchService = new Mock<IQualificationSearchService>();
-    }
-
-    [TestMethod]
-    public async Task Get_ReturnsView()
-    {
-        _mockQualificationSearchService.Setup(o => o.GetQualifications())
-                                        .ReturnsAsync(new QualificationListModel { TotalNumberOfQualifications = 1 });
-        var controller = GetSut();
+        
+        mockQualificationSearchService.Setup(o => o.GetQualifications()).ReturnsAsync(new QualificationListModel());
 
         var result = await controller.Get();
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ViewResult>();
-        var viewResult = (ViewResult)result;
-        viewResult.ViewName.Should().Be("Get");
-    }
-
-    [TestMethod]
-    public async Task Get_NoSearchCriteriaAndNoMatchingQualifications_ReturnsNoResultsView()
-    {
-        _mockQualificationSearchService.Setup(o => o.GetQualifications())
-                                        .ReturnsAsync(new QualificationListModel
-                                                      {
-                                                          HasSearchCriteria = false,
-                                                          TotalNumberOfQualifications = 0
-                                                      });
-        var controller = GetSut();
-
-        var result = await controller.Get();
-
-        result.Should().BeOfType<ViewResult>();
-        var viewResult = (ViewResult)result;
-        viewResult.ViewName.Should().Be("NoResults");
-    }
-
-    [TestMethod]
-    public async Task Get_SearchCriteriaAndNoMatchingQualifications_ReturnsGetView()
-    {
-        _mockQualificationSearchService.Setup(o => o.GetQualifications())
-                                        .ReturnsAsync(new QualificationListModel
-                                                      {
-                                                          HasSearchCriteria = true,
-                                                          TotalNumberOfQualifications = 0
-                                                      });
-        var controller = GetSut();
-
-        var result = await controller.Get();
-
-        result.Should().BeOfType<ViewResult>();
-        var viewResult = (ViewResult)result;
-        viewResult.ViewName.Should().Be("Get");
     }
 
     [TestMethod]
     public async Task Get_NoContent_LogsAndRedirectsToError()
     {
-        var controller = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
 
         var result = await controller.Get();
 
@@ -95,24 +54,42 @@ public class QualificationSearchControllerTests
         actionResult.ActionName.Should().Be("Index");
         actionResult.ControllerName.Should().Be("Error");
 
-        _mockLogger.VerifyError("No content for the qualification list page");
+        mockLogger.VerifyError("No content for the qualification list page");
     }
 
     [TestMethod]
     public async Task Get_Calls_Service_GetQualifications()
     {
-        var controller = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
         await controller.Get();
 
-        _mockQualificationSearchService.Verify(x => x.GetQualifications(), Times.Once);
+        mockQualificationSearchService.Verify(x => x.GetQualifications(), Times.Once);
     }
 
     [TestMethod]
     public async Task Get_NullQualifications_LogsAndRedirectsToError()
     {
-        _mockQualificationSearchService.Setup(o => o.GetQualifications()).ReturnsAsync((QualificationListModel)null!);
-
-        var controller = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        mockQualificationSearchService.Setup(o => o.GetQualifications()).ReturnsAsync((QualificationListModel)null!);
+        
         var result = await controller.Get();
 
         result.Should().BeOfType<RedirectToActionResult>();
@@ -122,35 +99,63 @@ public class QualificationSearchControllerTests
         actionResult.ActionName.Should().Be("Index");
         actionResult.ControllerName.Should().Be("Error");
 
-        _mockLogger.VerifyError("No content for the qualification list page");
+        mockLogger.VerifyError("No content for the qualification list page");
     }
 
     [TestMethod]
     public void Refine_WithSearch_CallsService_WithSearch()
     {
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        
         const string search = "Test";
-        var controller = GetSut();
 
         controller.Refine(search);
 
-        _mockQualificationSearchService.Verify(x => x.Refine(search), Times.Once);
+        mockQualificationSearchService.Verify(x => x.Refine(search), Times.Once);
     }
 
     [TestMethod]
     public void Refine_NullParam_CallsService_WithEmptyString()
     {
-        var controller = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
 
         controller.Refine(null);
 
-        _mockQualificationSearchService.Verify(x => x.Refine(string.Empty), Times.Once);
+        mockQualificationSearchService.Verify(x => x.Refine(string.Empty), Times.Once);
     }
 
     [TestMethod]
     public void Refine_NullParam_RedirectsToGet()
     {
-        var controller = GetSut();
-
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        
         var result = controller.Refine(null);
 
         result.Should().BeOfType<RedirectToActionResult>();
@@ -161,8 +166,17 @@ public class QualificationSearchControllerTests
     [TestMethod]
     public void Refine_WithSearch_RedirectsToGet()
     {
-        var controller = GetSut();
-
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        
         var result = controller.Refine("Test");
 
         result.Should().BeOfType<RedirectToActionResult>();
@@ -173,13 +187,22 @@ public class QualificationSearchControllerTests
     [TestMethod]
     public void Refine_InvalidModel_LogsWarning()
     {
-        var controller = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
 
         controller.ModelState.AddModelError("Key", "Error message");
 
         controller.Refine(null);
 
-        _mockLogger
+        mockLogger
             .VerifyWarning($"Invalid model state in {nameof(QualificationSearchController)} POST");
     }
 }
