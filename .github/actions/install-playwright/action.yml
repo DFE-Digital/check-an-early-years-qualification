@@ -14,4 +14,4 @@ runs:
     - name: Install Playwright Browsers
       shell: bash
       working-directory: ./tests/Dfe.EarlyYearsQualification.E2ETests
-      run: npx --ignore-scripts playwright@1.62.1 install chromium firefox webkit --with-deps --no-shell
+      run: npx --ignore-scripts playwright@1.63.0 install chromium firefox webkit --with-deps --no-shell

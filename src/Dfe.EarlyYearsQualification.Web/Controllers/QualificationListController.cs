@@ -26,12 +26,12 @@ public class QualificationListController(
             return RedirectToAction("Index", "Error");
         }
 
-        var model = await webViewService.MapWebViewPageContentToViewModelAsync(content);
+        var model = await webViewService.MapWebViewPageContentToViewModelAsync(content, environmentService.IsProduction());
 
         return View(model);
     }
 
-    [HttpGet("/download")]
+    [HttpGet("download")]
     public async Task<IActionResult> Download()
     {
         var environment = environmentService.GetEnvironment();
@@ -43,8 +43,24 @@ public class QualificationListController(
         logger.LogError("Null or empty EYQL content returned");
         return RedirectToAction("Index", "Error");
     }
+    
+    [HttpGet("download/internal")]
+    public async Task<IActionResult> InternalDownload()
+    {
+        if (environmentService.IsProduction())
+        {
+            return NotFound();
+        }
 
-    [HttpGet("/clear-filters")]
+        var fileContents = await qualificationDownloadService.GetEyqlDataForInternalDownload();
+        if (fileContents is not null && fileContents.Length != 0) 
+            return File(fileContents, "text/csv", $"published_qualifications_{DateTime.Now.ToShortDateString()}.csv");
+        
+        logger.LogError("Null or empty EYQL content returned");
+        return RedirectToAction("Index", "Error");
+    }
+
+    [HttpGet("clear-filters")]
     public IActionResult ClearFilters()
     {
         webViewService.SetWebViewFilters(new WebViewFilters());

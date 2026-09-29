@@ -8,7 +8,7 @@ public interface IWebViewService
 {
     public Task<WebViewPage?> GetWebViewPage();
 
-    public Task<EarlyYearsQualificationListModel> MapWebViewPageContentToViewModelAsync(WebViewPage content);
+    public Task<EarlyYearsQualificationListModel> MapWebViewPageContentToViewModelAsync(WebViewPage content, bool isProductionEnvironment);
 
     public Task<List<Qualification>> GetQualifications(WebViewFilters filters);
 

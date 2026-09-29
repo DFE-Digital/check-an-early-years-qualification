@@ -96,7 +96,10 @@ public class WebViewServiceTests
         mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                              q => q.IncludeAllQualifications == true && q.Level == 3 && q.QualificationName == "Qualification")))
                                     .ReturnsAsync(qualifications);
-        mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
+
+        const bool isProductionEnvironment = true;
+        
+        mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>(), isProductionEnvironment))
             .ReturnsAsync(expectedModel);
 
         var service = new WebViewService(
@@ -106,14 +109,14 @@ public class WebViewServiceTests
             mockQualificationsRepository.Object);
 
         // Act
-        var result = await service.MapWebViewPageContentToViewModelAsync(content);
+        var result = await service.MapWebViewPageContentToViewModelAsync(content, isProductionEnvironment);
 
         // Assert
         result.Should().Be(expectedModel);
         mockUserJourneyCookieService.Verify(x => x.GetWebViewFilters(), Times.Once);
         mockQualificationsRepository.Verify(x => x.Get(It.Is<QualificationFilterOptions>(
                                                         q => q.IncludeAllQualifications == true && q.Level == 3 && q.QualificationName == "Qualification")), Times.Once);
-        mockWebViewPageMapper.Verify(x => x.Map(content, filters, It.IsAny<List<Qualification>>()), Times.Once);
+        mockWebViewPageMapper.Verify(x => x.Map(content, filters, It.IsAny<List<Qualification>>(), isProductionEnvironment), Times.Once);
     }
 
     [TestMethod]
@@ -882,7 +885,10 @@ public class WebViewServiceTests
         mockQualificationsRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                        q => q.IncludeAllQualifications == true)))
                                     .ReturnsAsync(qualifications);
-        mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>()))
+        
+        const bool isProductionEnvironment = true;
+        
+        mockWebViewPageMapper.Setup(x => x.Map(content, filters, It.IsAny<List<Qualification>>(), isProductionEnvironment))
             .ReturnsAsync(expectedModel);
 
         var service = new WebViewService(
@@ -892,7 +898,7 @@ public class WebViewServiceTests
             mockQualificationsRepository.Object);
 
         // Act
-        var result = await service.MapWebViewPageContentToViewModelAsync(content);
+        var result = await service.MapWebViewPageContentToViewModelAsync(content, isProductionEnvironment);
 
         // Assert
         result.Should().Be(expectedModel);

@@ -39,7 +39,20 @@ public class MockContentfulService : IContentService
 
                    StaticPages.QualificationsAchievedInScotland =>
                        await Task.FromResult(CreateStaticPage("Qualifications achieved in Scotland",
-                                                              body, WhereWasTheQualificationAwardedPath)),
+                                                              body, WhereWasTheQualificationAwardedPath,
+                                                              new OpenGraphData
+                                                              {
+                                                                  Title = "OG Title (page override)",
+                                                                  Description = "OG Description (page override)",
+                                                                  Domain = "OG Domain",
+                                                                  Image = new Asset
+                                                                          {
+                                                                              File = new File
+                                                                                     {
+                                                                                         Url = "test/url/og-image-override.png"
+                                                                                     }
+                                                                          }
+                                                              })),
 
                    StaticPages.QualificationsAchievedInWales =>
                        await Task.FromResult(CreateStaticPage("Qualifications achieved in Wales",
@@ -1321,6 +1334,19 @@ public class MockContentfulService : IContentService
                     Href = "/",
                     OpenInNewTab = false
                 },
+                OpenGraphData = new OpenGraphData
+                {
+                    Title = "EYQL OG Title (page override)",
+                    Description = "EYQL OG Description (page override)",
+                    Domain = "OG Domain",
+                    Image = new Asset
+                    {
+                        File = new File
+                        {
+                            Url = "test/url/eyql-og-image-override.png"
+                        }
+                    }
+                },
                 StartDateFilters =
                 [
                     new Option
@@ -1588,7 +1614,8 @@ public class MockContentfulService : IContentService
                };
     }
 
-    private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl)
+    private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl,
+                                               OpenGraphData? openGraphData = null)
     {
         return new StaticPage
                {
@@ -1599,7 +1626,8 @@ public class MockContentfulService : IContentService
                                     DisplayText = "TEST",
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
-                                }
+                                },
+                   OpenGraphData = openGraphData
                };
     }
 }

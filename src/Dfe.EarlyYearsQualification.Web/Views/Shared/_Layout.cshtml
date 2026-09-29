@@ -1,4 +1,6 @@
 ﻿@using Dfe.EarlyYearsQualification.Web.Helpers
+@using Dfe.EarlyYearsQualification.Web.Mappers
+@using Dfe.EarlyYearsQualification.Web.Models.Content
 @using Dfe.EarlyYearsQualification.Web.Services.Environments
 @inject TrackingConfiguration TrackingConfiguration
 @inject OpenGraphDataHelper OpenGraphDataHelper
@@ -16,14 +18,18 @@
     var domain = string.Empty;
     var url = string.Empty;
     var imageUrl = string.Empty;
-    var openGraphData = await OpenGraphDataHelper.GetOpenGraphData();
+    var openGraphData = ViewData["OpenGraph"] as OpenGraphDataModel;
+    if (openGraphData is null)
+    {
+        openGraphData = OpenGraphDataMapper.Map(await OpenGraphDataHelper.GetOpenGraphData());
+    }
     if (openGraphData != null)
     {
         title = openGraphData.Title;
         description = openGraphData.Description;
         domain = openGraphData.Domain;
         url = $"https://{domain}";
-        imageUrl = openGraphData.Image?.File.Url;
+        imageUrl = openGraphData.ImageUrl;
     }
 }
 
@@ -31,6 +37,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="robots" content="noindex, nofollow"/>
+    <meta name="description" content="@description"/>
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:url" content="@url">
