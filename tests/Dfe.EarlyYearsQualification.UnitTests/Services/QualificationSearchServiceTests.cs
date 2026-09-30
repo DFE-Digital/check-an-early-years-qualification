@@ -166,6 +166,33 @@ public class QualificationSearchServiceTests
     }
 
     [TestMethod]
+    public async Task GetQualifications_NoQualificationsMatchTheAnswers_TotalNumberOfQualifications_IsZero()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(string.Empty);
+        mockRepository.Setup(x => x.Get(It.IsAny<QualificationFilterOptions>()))
+                       .ReturnsAsync(new List<Qualification>());
+
+        var sut = new QualificationSearchService(
+                                              mockRepository.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              mockUserJourneyCookieService.Object
+                                             );
+        var result = await sut.GetQualifications();
+
+        result.Should().NotBeNull();
+        result!.TotalNumberOfQualifications.Should().Be(0);
+        result.HasSearchCriteria.Should().BeFalse();
+        result.SearchResults.Should().BeEmpty();
+    }
+
+    [TestMethod]
     public async Task GetFilteredQualifications_GetsDetails_From_CookieService()
     {
         var mockContentParser = new Mock<IGovUkContentParser>();
@@ -322,6 +349,30 @@ public class QualificationSearchServiceTests
         }
     }
     
+    [TestMethod]
+    public async Task MapList_Maps_NoMatchingQualificationsHeading()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var content = new QualificationListPage
+                      {
+                          NoMatchingQualificationsHeading = "No matching qualifications were found"
+                      };
+
+        var sut = new QualificationSearchService(
+                                              mockRepository.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              mockUserJourneyCookieService.Object
+                                             );
+        var result = await sut.MapList(content, [], 0);
+
+        result.NoMatchingQualificationsHeading.Should().Be("No matching qualifications were found");
+    }
+
     [TestMethod]
     public async Task MapList_Maps_SearchWithinHeading_And_EnterKeywordsContent_Plural()
     {

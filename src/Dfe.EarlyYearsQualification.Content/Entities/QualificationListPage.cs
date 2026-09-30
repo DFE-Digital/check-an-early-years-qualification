@@ -28,6 +28,8 @@ public class QualificationListPage
 
     public Document? NoResultsText { get; init; }
 
+    public string NoMatchingQualificationsHeading { get; init; } = string.Empty;
+
     public string ClearSearchText { get; init; } = string.Empty;
 
     public string AwardedLocationPrefixText { get; init; } = string.Empty;

@@ -8,6 +8,7 @@ import {
     exists,
     checkTextContains,
     hasCount,
+    checkUrl,
     refineQualificationSearch
 } from '../../_shared/playwrightWrapper';
 
@@ -60,18 +61,39 @@ test.describe('A spec used to test the qualification list page', {tag: "@e2e"}, 
         await doesNotExist(page, "#ao-text-EYQ-103");
     });
 
-    test("Shows the correct no results content when there are no results in the search", async ({
-                                                                                                    page,
-                                                                                                    context
-                                                                                                }) => {
+    test("Shows only the no matching qualifications content when no qualifications match the answers", async ({page, context}) => {
         await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
         await page.goto("/select-a-qualification-to-check");
 
-        await checkText(page, "#found-heading", "We found 0 matching qualifications");
-        await checkText(page, "#search-within-heading", "Search within these 0 qualifications");
-        await checkText(page, "#pre-search-content", "Enter keywords from the qualification name to search within these 0 matching qualifications");
-        await doesNotExist(page, "#no-result-content");
+        await checkText(page, "#heading", "Test Header");
+        await checkText(page, "#no-matching-qualifications-heading", "No matching qualifications were found");
+        await checkTextContains(page, "#no-result-content", "to make sure they are correct.");
+        await checkTextContains(page, "#no-result-content", "may not be recognised as full and relevant");
+        await checkTextContains(page, "#no-result-content", "for more detail about what to do next.");
+        await doesNotExist(page, "#found-heading");
+        await doesNotExist(page, "#search-within-heading");
+        await doesNotExist(page, "#pre-search-content");
+        await doesNotExist(page, "#refine-search-form");
+        await doesNotExist(page, "#post-list-content");
         await doesNotExist(page, "#search-match-heading");
+    });
+
+    test("No matching qualifications page links to Check your answers", async ({page, context}) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await page.locator("#no-result-content").getByRole("link", {name: "Check your answers"}).click();
+
+        await checkUrl(page, "/questions/check-your-answers");
+    });
+
+    test("No matching qualifications page links to the I cannot find the qualification page", async ({page, context}) => {
+        await setCookie(context, '%7B%22WhereWasQualificationAwarded%22%3A%22england%22%2C%22WhenWasQualificationStarted%22%3A%226%2F2022%22%2C%22LevelOfQualification%22%3A%220%22%2C%22WhatIsTheAwardingOrganisation%22%3A%22%22%7D', journeyCookieName);
+        await page.goto("/select-a-qualification-to-check");
+
+        await page.locator("#no-result-content").getByRole("link", {name: "I cannot find the qualification"}).click();
+
+        await checkUrl(page, "/advice/qualification-not-on-the-list");
     });
 
     test("Found heading and search within heading do not change when a keyword search narrows the results", async ({

@@ -495,8 +495,29 @@ public class MockContentfulService : IContentService
                                                                           "/advice/qualification-not-on-the-list"),
                                          AnyLevelHeading = "any level",
                                          AnyAwardingOrganisationHeading = "various awarding organisations",
-                                         NoResultsText =
-                                             ContentfulContentHelper.Paragraph("Test no qualifications text"),
+                                         NoResultsText = new Document
+                                                          {
+                                                              Content =
+                                                              [
+                                                                  ContentfulContentHelper.ParagraphWithEmbeddedLink(
+                                                                   "",
+                                                                   "Check your answers",
+                                                                   "/questions/check-your-answers",
+                                                                   " to make sure they are correct."),
+                                                                  ContentfulContentHelper.Paragraph(
+                                                                   "If you checked your answers and still cannot find the qualification you are looking for, the qualification may not be recognised as full and relevant.")
+                                                                   .Content[0],
+                                                                  ContentfulContentHelper.Paragraph(
+                                                                   "If a qualification is not recognised as full and relevant, the qualification holder can still work as an unqualified member of staff in an early years setting.")
+                                                                   .Content[0],
+                                                                  ContentfulContentHelper.ParagraphWithEmbeddedLink(
+                                                                   "Go to ",
+                                                                   "I cannot find the qualification",
+                                                                   "/advice/qualification-not-on-the-list",
+                                                                   " for more detail about what to do next.")
+                                                              ]
+                                                          },
+                                         NoMatchingQualificationsHeading = "No matching qualifications were found",
                                          ClearSearchText = "Clear search",
                                          AwardedLocationPrefixText = "awarded in",
                                          StartDatePrefixText = "started in",

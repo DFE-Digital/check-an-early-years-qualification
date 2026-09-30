@@ -1,4 +1,4 @@
-using Dfe.EarlyYearsQualification.Web.Controllers;
+﻿using Dfe.EarlyYearsQualification.Web.Controllers;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
 using Microsoft.AspNetCore.Http;
@@ -15,20 +15,65 @@ public class QualificationSearchControllerTests
         var mockLogger = new Mock<ILogger<QualificationSearchController>>();
         var mockQualificationSearchService = new Mock<IQualificationSearchService>();
         var controller = new QualificationSearchController(mockLogger.Object,
-                                                 mockQualificationSearchService.Object)
-               {
-                   ControllerContext = new ControllerContext
-                                       {
-                                           HttpContext = new DefaultHttpContext()
-                                       }
-               };
-        
-        mockQualificationSearchService.Setup(o => o.GetQualifications()).ReturnsAsync(new QualificationListModel());
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        mockQualificationSearchService.Setup(o => o.GetQualifications())
+                                      .ReturnsAsync(new QualificationListModel { TotalNumberOfQualifications = 1 });
 
         var result = await controller.Get();
 
         result.Should().NotBeNull();
         result.Should().BeOfType<ViewResult>();
+        ((ViewResult)result).ViewName.Should().Be("Get");
+    }
+
+    [TestMethod]
+    public async Task Get_NoSearchCriteriaAndNoMatchingQualifications_ReturnsNoResultsView()
+    {
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        mockQualificationSearchService.Setup(o => o.GetQualifications())
+                                      .ReturnsAsync(new QualificationListModel { HasSearchCriteria = false, TotalNumberOfQualifications = 0 });
+
+        var result = await controller.Get();
+
+        result.Should().BeOfType<ViewResult>();
+        ((ViewResult)result).ViewName.Should().Be("NoResults");
+    }
+
+    [TestMethod]
+    public async Task Get_SearchCriteriaAndNoMatchingQualifications_ReturnsGetView()
+    {
+        var mockLogger = new Mock<ILogger<QualificationSearchController>>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        var controller = new QualificationSearchController(mockLogger.Object,
+                                                           mockQualificationSearchService.Object)
+                         {
+                             ControllerContext = new ControllerContext
+                                                 {
+                                                     HttpContext = new DefaultHttpContext()
+                                                 }
+                         };
+        mockQualificationSearchService.Setup(o => o.GetQualifications())
+                                      .ReturnsAsync(new QualificationListModel { HasSearchCriteria = true, TotalNumberOfQualifications = 0 });
+
+        var result = await controller.Get();
+
+        result.Should().BeOfType<ViewResult>();
+        ((ViewResult)result).ViewName.Should().Be("Get");
     }
 
     [TestMethod]
