@@ -489,16 +489,35 @@ public class MockContentfulService : IContentService
                                          SearchCriteriaHeading = "Your search",
                                          MultipleQualificationsFoundText = "matching qualifications",
                                          SingleQualificationFoundText = "matching qualification",
-                                         PreSearchBoxContent =
-                                             ContentfulContentHelper.Paragraph("Pre search box content"),
                                          PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),
                                          AnyLevelHeading = "any level",
                                          AnyAwardingOrganisationHeading = "various awarding organisations",
-                                         NoResultsText =
-                                             ContentfulContentHelper.Paragraph("Test no qualifications text"),
+                                         NoResultsText = new Document
+                                                          {
+                                                              Content =
+                                                              [
+                                                                  ContentfulContentHelper.ParagraphWithEmbeddedLink(
+                                                                   "",
+                                                                   "Check your answers",
+                                                                   "/questions/check-your-answers",
+                                                                   " to make sure they are correct."),
+                                                                  ContentfulContentHelper.Paragraph(
+                                                                   "If you checked your answers and still cannot find the qualification you are looking for, the qualification may not be recognised as full and relevant.")
+                                                                   .Content[0],
+                                                                  ContentfulContentHelper.Paragraph(
+                                                                   "If a qualification is not recognised as full and relevant, the qualification holder can still work as an unqualified member of staff in an early years setting.")
+                                                                   .Content[0],
+                                                                  ContentfulContentHelper.ParagraphWithEmbeddedLink(
+                                                                   "Go to ",
+                                                                   "I cannot find the qualification",
+                                                                   "/advice/qualification-not-on-the-list",
+                                                                   " for more detail about what to do next.")
+                                                              ]
+                                                          },
+                                         NoMatchingQualificationsHeading = "No matching qualifications were found",
                                          ClearSearchText = "Clear search",
                                          AwardedLocationPrefixText = "awarded in",
                                          StartDatePrefixText = "started in",
@@ -506,6 +525,21 @@ public class MockContentfulService : IContentService
                                          LevelPrefixText = "level",
                                          AwardedByPrefixText = "awarded by",
                                          QualificationNumberLabel = "Qualification Number (QN)",
+                                         SearchWithinSingleHeading = "Search within this qualification",
+                                         SearchWithinMultipleHeadingFormat = "Search within these {0} qualifications",
+                                         EnterKeywordsSingleContent =
+                                             "Enter keywords from the qualification name to search within this matching qualification",
+                                         EnterKeywordsMultipleContentFormat =
+                                             "Enter keywords from the qualification name to search within these {0} matching qualifications",
+                                         SearchMatchHeadingFormat = "{0} of {1} qualifications matches \"{2}\".",
+                                         SearchNoMatchGuidanceIntroFormat =
+                                             "Your search only checks the {0} matching qualifications shown on this page.",
+                                         SearchNoMatchGuidance =
+                                             ContentfulContentHelper.ParagraphThenUnorderedList(
+                                              "Try:",
+                                              "double-check your spelling",
+                                              "use fewer words in your search",
+                                              "use words from the qualification name, rather than the level or awarding organisation name"),
                                          SearchResultsContent =
                                          [
                                              new SearchResultContent

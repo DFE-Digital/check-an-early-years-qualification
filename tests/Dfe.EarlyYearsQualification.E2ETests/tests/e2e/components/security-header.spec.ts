@@ -9,7 +9,7 @@ import {
     checkHeaderExists
 } from '../../_shared/playwrightWrapper';
 
-const expectedContentSecurityPolicyHeader = "script-src 'self' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-gRhA/MUlDBqc23Q1P/MS1NmGrI+aA9NqloW+bxt4Yi8=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://*.clarity.ms https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect 'self';block-all-mixed-content;upgrade-insecure-requests;"
+const expectedContentSecurityPolicyHeader = "script-src 'self' 'unsafe-hashes' 'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw=' 'sha256-8TUTG9XQMYt4tQklNxFay1mCWVr2cC8uJhOlEJkWfro=' https://www.googletagmanager.com/gtm.js https://www.googletagmanager.com/gtag/js https://*.clarity.ms https://c.bing.com;object-src 'self';frame-ancestors https://app.contentful.com;connect-src *.google-analytics.com https://*.clarity.ms/collect 'self';block-all-mixed-content;upgrade-insecure-requests;"
 test.describe('A spec that checks for security headers in the response', { tag: "@e2e" }, () => {
 
     test.beforeEach(async ({ context, browserName }) => {
