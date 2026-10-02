@@ -33,8 +33,9 @@ public class HelpProvideDetailsPageMapperTests
                           ErrorBannerHeading = "There is a problem"
                       };
 
+        const int maxCharacterLimit = 100;
         var result =
-            new HelpProvideDetailsPageMapper().MapProvideDetailsPageContentToViewModel(content, reasonForEnquiring);
+            new HelpProvideDetailsPageMapper().MapProvideDetailsPageContentToViewModel(content, reasonForEnquiring, maxCharacterLimit);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<ProvideDetailsPageViewModel>();
@@ -61,5 +62,6 @@ public class HelpProvideDetailsPageMapperTests
         result.PostHeadingContent.Should().Be(content.PostHeadingContent);
         result.HasAdditionalInformationError.Should().BeFalse();
         result.HasValidationErrors.Should().BeFalse();
+        result.MaxCharacterLimit.Should().Be(maxCharacterLimit);
     }
 }

@@ -4,6 +4,11 @@
     ViewData["Title"] = Model.Heading;
 }
 
+@section Scripts
+{
+    <script src="~/js/pages/provide-details-page.js" asp-append-version="true"></script>
+}
+
 @section BeforeMainContent {
     @{
         await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
@@ -36,7 +41,16 @@
                     <govuk-error-message id="additional-information-error" visually-hidden-text="Error">@Model.AdditionalInformationErrorMessage</govuk-error-message>
                 }
 
+                @Html.HiddenFor(x => x.MaxCharacterLimit, new { id = "hdn-max-character-limit" })
                 @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, Model.GetAdditionalInformationInputAttributes())
+                <noscript>
+                    <div id="no-js-character-limit-hint" class="govuk-hint">
+                        @Model.StaticCharactersRemainingMessage
+                    </div>
+                </noscript>
+                <div id="character-limit-hint" class="govuk-hint" type="hidden">
+                    @Model.DynamicCharactersRemainingMessage
+                </div>
             </div>
 
             <div class="govuk-form-group">

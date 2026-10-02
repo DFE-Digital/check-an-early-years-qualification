@@ -15,23 +15,25 @@ using Dfe.EarlyYearsQualification.Web.Services.Help;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Configuration;
 
 namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 
 [TestClass]
 public class HelpServiceTests
 {
-    private Mock<IContentService> _mockContentService = new();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new();
-    private Mock<INotificationService> _mockNotificationService = new();
-    private Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new();
-    private Mock<IRadioQuestionHelpPageMapper> _mockHelpRadioQuestionHelpPageMapper = new();
-    private Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper = new();
-    private Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper = new();
-    private Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new();
-    private Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new();
-    private Mock<IStaticPageMapper> _mockStaticPageMapper = new();
-    private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new();
+    private readonly Mock<IContentService> _mockContentService = new Mock<IContentService>();
+    private readonly Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+    private readonly Mock<INotificationService> _mockNotificationService = new Mock<INotificationService>();
+    private readonly Mock<IDateQuestionModelValidator> _mockDateQuestionModelValidator = new Mock<IDateQuestionModelValidator>();
+    private readonly Mock<IRadioQuestionHelpPageMapper> _mockHelpRadioQuestionHelpPageMapper = new Mock<IRadioQuestionHelpPageMapper>();
+    private readonly Mock<IHelpQualificationDetailsPageMapper> _mockHelpQualificationDetailsPageMapper = new Mock<IHelpQualificationDetailsPageMapper>();
+    private readonly Mock<IHelpProvideDetailsPageMapper> _mockHelpProvideDetailsPageMapper = new Mock<IHelpProvideDetailsPageMapper>();
+    private readonly Mock<IHelpEmailAddressPageMapper> _mockHelpEmailAddressPageMapper = new Mock<IHelpEmailAddressPageMapper>();
+    private readonly Mock<IHelpConfirmationPageMapper> _mockHelpConfirmationPageMapper = new Mock<IHelpConfirmationPageMapper>();
+    private readonly Mock<IStaticPageMapper> _mockStaticPageMapper = new Mock<IStaticPageMapper>();
+    private readonly Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+    private readonly Mock<IConfiguration> _mockConfiguration = new Mock<IConfiguration>();
 
     [TestMethod]
     public async Task GetRadioQuestionHelpPageAsync_Calls_ContentService_GetRadioQuestionHelpPage()
@@ -239,8 +241,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -284,8 +286,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new() }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion() }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -341,8 +343,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -385,8 +387,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -429,8 +431,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -473,8 +475,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -497,8 +499,8 @@ public class HelpServiceTests
         };
 
         _mockUserJourneyCookieService.Setup(o => o.GetHelpFormEnquiry()).Returns(enquiry);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns(((int?)null, (int?)null));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns(((int?)null, (int?)null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
+        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
 
         // Act
         GetSut().SetAnyPreviouslyEnteredQualificationDetailsFromCookie(viewModel, content);
@@ -516,8 +518,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -558,8 +560,8 @@ public class HelpServiceTests
         // Arrange
         var content = new HelpQualificationDetailsPage
         {
-            BeforeSeptember2014Option = new() { Value = "Before1September2014" },
-            AfterSeptember2014Option = new() { StartedQuestion = new(), Value = "OnOrAfter1September2014" }
+            BeforeSeptember2014Option = new Option { Value = "Before1September2014" },
+            AfterSeptember2014Option = new RadioButtonAndDateInput { StartedQuestion = new DateQuestion(), Value = "OnOrAfter1September2014" }
         };
 
         var viewModel = new QualificationDetailsPageViewModel
@@ -804,12 +806,12 @@ public class HelpServiceTests
 
         // Act
         GetSut()
-            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.GetHelp.IssueWithTheService);
+            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.GetHelp.IssueWithTheService, 1000);
 
         // Assert
         _mockHelpProvideDetailsPageMapper.Verify(o =>
                                                      o.MapProvideDetailsPageContentToViewModel(content,
-                                                      HelpFormEnquiryReasons.GetHelp.IssueWithTheService), Times.Once);
+                                                      HelpFormEnquiryReasons.GetHelp.IssueWithTheService, 1000), Times.Once);
     }
 
     [TestMethod]
@@ -1511,6 +1513,67 @@ public class HelpServiceTests
         model.Errors.Should().Contain(e => e.ElementLinkId == "Before1September2014");
     }
 
+    [TestMethod]
+    public void GetMaxCharacterLimit_ConfigurationIsNull_ThrowsException()
+    {
+        var service = new HelpService(
+                                      _mockContentService.Object,
+                                      _mockUserJourneyCookieService.Object,
+                                      _mockNotificationService.Object,
+                                      _mockDateQuestionModelValidator.Object,
+                                      _mockHelpRadioQuestionHelpPageMapper.Object,
+                                      _mockHelpQualificationDetailsPageMapper.Object,
+                                      _mockHelpProvideDetailsPageMapper.Object,
+                                      _mockHelpEmailAddressPageMapper.Object,
+                                      _mockHelpConfirmationPageMapper.Object,
+                                      _mockStaticPageMapper.Object,
+                                      _mockPlaceholderUpdater.Object,
+                                      null!
+                                     );
+
+        Assert.Throws<InvalidOperationException>(() => service.GetMaxCharacterLimit(), "IConfiguration service could not be resolved.");
+    }
+    
+    [TestMethod]
+    public void GetMaxCharacterLimit_ConfigurationValueIsNotSet_ThrowsException()
+    {
+        var service = new HelpService(
+                                      _mockContentService.Object,
+                                      _mockUserJourneyCookieService.Object,
+                                      _mockNotificationService.Object,
+                                      _mockDateQuestionModelValidator.Object,
+                                      _mockHelpRadioQuestionHelpPageMapper.Object,
+                                      _mockHelpQualificationDetailsPageMapper.Object,
+                                      _mockHelpProvideDetailsPageMapper.Object,
+                                      _mockHelpEmailAddressPageMapper.Object,
+                                      _mockHelpConfirmationPageMapper.Object,
+                                      _mockStaticPageMapper.Object,
+                                      _mockPlaceholderUpdater.Object,
+                                      null!
+                                     );
+
+        Assert.Throws<InvalidOperationException>(() => service.GetMaxCharacterLimit(), $"Configuration key 'Help:MaxCharacterLimit' is missing or not a valid integer.");
+    }
+    
+    [TestMethod]
+    public void GetMaxCharacterLimit_ConfigurationValueIsNotValid_ThrowsException()
+    {
+        _mockConfiguration.Setup(x => x["Help:MaxCharacterLimit"]).Returns("abc");
+        var service = GetSut();
+
+        Assert.Throws<InvalidOperationException>(() => service.GetMaxCharacterLimit(), $"Configuration key 'Help:MaxCharacterLimit' is missing or not a valid integer.");
+    }
+    
+    [TestMethod]
+    public void GetMaxCharacterLimit_ConfigurationValueIsValid_ReturnsInt()
+    {
+        _mockConfiguration.Setup(x => x["Help:MaxCharacterLimit"]).Returns("10");
+        var service = GetSut();
+
+        var maxCharacterLimit = service.GetMaxCharacterLimit();
+        maxCharacterLimit.Should().Be(10);
+    }
+
     private HelpService GetSut()
     {
         return new HelpService(
@@ -1524,7 +1587,8 @@ public class HelpServiceTests
                                _mockHelpEmailAddressPageMapper.Object,
                                _mockHelpConfirmationPageMapper.Object,
                                _mockStaticPageMapper.Object,
-                               _mockPlaceholderUpdater.Object
+                               _mockPlaceholderUpdater.Object,
+                               _mockConfiguration.Object
                               );
     }
 }

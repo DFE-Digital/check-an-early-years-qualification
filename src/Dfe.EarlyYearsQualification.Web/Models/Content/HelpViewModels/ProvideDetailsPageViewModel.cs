@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
@@ -17,6 +18,7 @@ public class ProvideDetailsPageViewModel
 
     // text area input
     [Required]
+    [AppSettingsMaxLength("Help:MessageCharacterLimit")]
     public string ProvideAdditionalInformation { get; set; } = string.Empty;
 
     // validation handling
@@ -72,4 +74,18 @@ public class ProvideDetailsPageViewModel
         ErrorBannerHeading = ErrorBannerHeading,
         ErrorSummaryLinks = Errors
     };
+    
+    public string StaticCharactersRemainingMessage { get; init; } = string.Empty;
+
+    public string DynamicCharactersRemainingMessage { get; init; } = string.Empty;
+
+    public string SingularCharacterRemainingMessage { get; init; } = string.Empty;
+
+    public string DynamicTooManyCharactersEnteredMessage { get; init; } = string.Empty;
+
+    public string SingularTooManyCharactersEnteredMessage { get; init; } = string.Empty;
+
+    public string TooManyCharactersEnteredErrorMessage { get; init; } = string.Empty;
+
+    public int MaxCharacterLimit { get; init; }
 }

@@ -24,7 +24,8 @@ public partial class HelpController
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
+        var maxCharacterLimit = helpService.GetMaxCharacterLimit();
+        var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, maxCharacterLimit);
 
         viewModel.ProvideAdditionalInformation = enquiry.AdditionalInformation;
 
@@ -52,7 +53,8 @@ public partial class HelpController
                 return RedirectToAction("Index", "Error");
             }
 
-            viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
+            var maxCharacterLimit = helpService.GetMaxCharacterLimit();
+            viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, maxCharacterLimit);
 
             viewModel.HasAdditionalInformationError = ModelState.Keys.Any(_ => ModelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
 

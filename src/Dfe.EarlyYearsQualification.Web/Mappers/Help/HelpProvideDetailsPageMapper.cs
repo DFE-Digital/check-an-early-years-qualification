@@ -8,7 +8,7 @@ namespace Dfe.EarlyYearsQualification.Web.Mappers.Help;
 public class HelpProvideDetailsPageMapper : IHelpProvideDetailsPageMapper
 {
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
-        HelpProvideDetailsPage content, string reasonForEnquiring)
+        HelpProvideDetailsPage content, string reasonForEnquiring, int maxCharacterLimit)
     {
         var viewModel = new ProvideDetailsPageViewModel
                         {
@@ -23,6 +23,13 @@ public class HelpProvideDetailsPageMapper : IHelpProvideDetailsPageMapper
                             AdditionalInformationWarningText = content.AdditionalInformationWarningText,
                             AdditionalInformationErrorMessage = content.AdditionalInformationErrorMessage,
                             ErrorBannerHeading = content.ErrorBannerHeading,
+                            StaticCharactersRemainingMessage = content.StaticCharactersRemainingMessage,
+                            DynamicCharactersRemainingMessage = content.DynamicCharactersRemainingMessage,
+                            SingularCharacterRemainingMessage = content.SingularCharacterRemainingMessage,
+                            SingularTooManyCharactersEnteredMessage = content.SingularTooManyCharactersEnteredMessage,
+                            DynamicTooManyCharactersEnteredMessage = content.DynamicTooManyCharactersEnteredMessage,
+                            TooManyCharactersEnteredErrorMessage = content.TooManyCharactersEnteredErrorMessage,
+                            MaxCharacterLimit = maxCharacterLimit
                         };
 
         return viewModel;

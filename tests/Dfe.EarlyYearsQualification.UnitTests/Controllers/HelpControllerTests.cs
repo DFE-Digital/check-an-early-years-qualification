@@ -1023,6 +1023,7 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
                   };
 
     _mockHelpService.Setup(x => x.GetHelpFormEnquiry()).Returns(enquiry);
+    _mockHelpService.Setup(x => x.GetMaxCharacterLimit()).Returns(100);
 
     var viewModel = new ProvideDetailsPageViewModel
                     {
@@ -1034,7 +1035,7 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
                                      }
                     };
 
-    _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring))
+    _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, 100))
                     .Returns(viewModel);
 
     // Act
@@ -1178,7 +1179,8 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
                             ErrorBannerHeading = content.ErrorBannerHeading,
                         };
 
-        _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring))
+        _mockHelpService.Setup(x => x.GetMaxCharacterLimit()).Returns(100);
+        _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, 100))
                         .Returns(viewModel);
 
         var controller = GetSut();
