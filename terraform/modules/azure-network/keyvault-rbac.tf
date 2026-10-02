@@ -1,21 +1,5 @@
 # Create Key Vault with rbac
 
-#resource "azurerm_key_vault" "rbackv" {
-# count = var.enable_rbac_key_vault ? 1 : 0
-
-#name                          = "${var.resource_name_prefix}-kvrbac"
-#location                      = var.location
-#resource_group_name           = var.resource_group
-#tenant_id                     = data.azurerm_client_config.az_config.tenant_id
-#sku_name                      = "standard"
-#rbac_authorization_enabled    = true
-#soft_delete_retention_days    = 90
-#purge_protection_enabled      = true
-#public_network_access_enabled = false
-
-##tags = var.tags
-#}
-
 resource "azurerm_key_vault" "rbackv" {
   location            = var.location
   name                = "${var.resource_name_prefix}-kvrbac"
@@ -27,12 +11,13 @@ resource "azurerm_key_vault" "rbackv" {
 
   rbac_authorization_enabled = true
 
+  public_network_access_enabled = false
+
   network_acls {
     default_action = "Allow"
     bypass         = "AzureServices"
   }
 
-  #tags = local.common_tags
   tags = {
     "Environment"      = var.environment
     "Parent Business"  = "Children's Care"
@@ -98,7 +83,7 @@ resource "azurerm_user_assigned_identity" "cl-identity-reader" {
   location            = var.location
   resource_group_name = var.resource_group
 
-  #tags = local.common_tags
+  tags = local.common_tags
 }
 
 resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
