@@ -83,7 +83,7 @@ resource "azurerm_user_assigned_identity" "cl-identity-reader" {
   location            = var.location
   resource_group_name = var.resource_group
 
-  tags = local.common_tags
+  #tags = local.common_tags
 }
 
 resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
