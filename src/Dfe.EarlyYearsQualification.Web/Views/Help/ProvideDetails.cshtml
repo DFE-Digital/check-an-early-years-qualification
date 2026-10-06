@@ -24,7 +24,7 @@
 
         @using (Html.BeginForm("ProvideDetails", "Help", FormMethod.Post, new { id = "provide-additional-details-form" }))
         {
-            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasAdditionalInformationError ? "govuk-form-group--error" : "")">
+            <div class="govuk-form-group govuk-!-margin-bottom-6 @(Model.HasValidationErrors ? "govuk-form-group--error" : "")">
                 <h1 class="govuk-heading-xl govuk-label-wrapper govuk-!-margin-bottom-3" id="additional-information-heading">
                     <label for="ProvideAdditionalInformation">
                         @Model.Heading
@@ -40,16 +40,25 @@
                 {
                     <govuk-error-message id="additional-information-error" visually-hidden-text="Error">@Model.AdditionalInformationErrorMessage</govuk-error-message>
                 }
+                @if (Model.HasMaxCharacterLimitError)
+                {
+                    <govuk-error-message id="too-many-characters-error" visually-hidden-text="Error">@Model.TooManyCharactersEnteredErrorMessage</govuk-error-message>
+                }
 
                 @Html.HiddenFor(x => x.MaxCharacterLimit, new { id = "hdn-max-character-limit" })
+                @Html.HiddenFor(x => x.DynamicCharactersRemainingMessage, new { id = "hdn-dynamic-characters-remaining-message" })
+                @Html.HiddenFor(x => x.SingularCharacterRemainingMessage, new { id = "hdn-singular-character-remaining-message" })
+                @Html.HiddenFor(x => x.SingularTooManyCharactersEnteredMessage, new { id = "hdn-singular-too-many-characters-entered-message" })
+                @Html.HiddenFor(x => x.DynamicTooManyCharactersEnteredMessage, new { id = "hdn-dynamic-too-many-characters-entered-message" })
+                
                 @Html.TextAreaFor(x => x.ProvideAdditionalInformation, 5, 1, Model.GetAdditionalInformationInputAttributes())
                 <noscript>
                     <div id="no-js-character-limit-hint" class="govuk-hint">
                         @Model.StaticCharactersRemainingMessage
                     </div>
                 </noscript>
-                <div id="character-limit-hint" class="govuk-hint" type="hidden">
-                    @Model.DynamicCharactersRemainingMessage
+                <div id="character-limit-hint-container" class="govuk-hint" type="hidden">
+                    <p id="character-limit-hint"></p>
                 </div>
             </div>
 

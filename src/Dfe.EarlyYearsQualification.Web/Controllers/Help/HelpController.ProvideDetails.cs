@@ -56,7 +56,11 @@ public partial class HelpController
             var maxCharacterLimit = helpService.GetMaxCharacterLimit();
             viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, maxCharacterLimit);
 
-            viewModel.HasAdditionalInformationError = ModelState.Keys.Any(_ => ModelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
+            bool hasMaxCharacterLimitError = ModelState["ProvideAdditionalInformation"]?.Errors
+                                                    .Any(e => e.ErrorMessage.Contains("string with a maximum length", StringComparison.OrdinalIgnoreCase)) ?? false;
+
+            viewModel.HasAdditionalInformationError = !hasMaxCharacterLimitError;
+            viewModel.HasMaxCharacterLimitError = hasMaxCharacterLimitError;
 
             return View("ProvideDetails", viewModel);
         }

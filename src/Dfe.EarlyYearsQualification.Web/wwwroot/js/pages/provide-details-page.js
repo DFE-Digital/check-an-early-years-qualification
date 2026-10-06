@@ -3,28 +3,55 @@ $(document).ready(function () {
     const characterLimitElementId = "#character-limit-hint";
     const provideAdditionalInformationElementId = "#ProvideAdditionalInformation";
     const maxCharacterLimitPlaceHolder = "$[characters]$";
+    const dynamicCharactersRemainingMessageElementId = "#hdn-dynamic-characters-remaining-message";
+    const singleCharacterRemainingLimitMessageElementId = "#hdn-singular-character-remaining-message";
+    const dynamicTooManyCharactersMessageElementId = "#hdn-dynamic-too-many-characters-entered-message";
+    const singleCharacterTooManyMessageElementId = "#hdn-singular-too-many-characters-entered-message";
+
+    setMessage();
     
-    // Save the hint text including the placeholder
-    const defaultHintText = $(characterLimitElementId).text();
-    
-    // Set the hint text on page load
-    let hintText = defaultHintText;
-    hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, maxCharacterLimit);
-    $(characterLimitElementId).text(hintText);
     // It's type=hidden by default. As JS is enabled, we want to show it
-    $(characterLimitElementId).removeAttr("type"); 
+    $("#character-limit-hint-container").removeAttr("type"); 
     
     $(provideAdditionalInformationElementId).on("keyup", function () {
+        setMessage();
+    })
+    
+    function setMessage() {
         let enteredText = $(provideAdditionalInformationElementId).val()
         let textLength = enteredText.length;
+        let hintText = "";
         if (textLength > maxCharacterLimit) {
-            // TODO: change message   
+            let charactersOverLimit = textLength - maxCharacterLimit;
+            if (charactersOverLimit === 1) {
+                hintText = $(singleCharacterTooManyMessageElementId).val();
+            }
+            else{
+                hintText = $(dynamicTooManyCharactersMessageElementId).val();
+            }
+            // If the message contains the placeholder, replace the value
+            hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersOverLimit);
+            if(!$(provideAdditionalInformationElementId).hasClass("govuk-input--error")) {
+                $(provideAdditionalInformationElementId).addClass("govuk-input--error");
+                $(characterLimitElementId).addClass("govuk-error-message");
+            }
         }
         else {
             let charactersRemaining = maxCharacterLimit - textLength;
-            let hintText = defaultHintText;
+            if (charactersRemaining === 1) {
+                hintText = $(singleCharacterRemainingLimitMessageElementId).val();
+            }
+            else{
+                hintText = $(dynamicCharactersRemainingMessageElementId).val();
+            }
+            // If the message contains the placeholder, replace the value
             hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersRemaining);
-            $(characterLimitElementId).text(hintText);
+            if($(provideAdditionalInformationElementId).hasClass("govuk-input--error")) {
+                $(provideAdditionalInformationElementId).removeClass("govuk-input--error");
+                $(characterLimitElementId).removeClass("govuk-error-message");
+            }
         }
-    })
+        
+        $(characterLimitElementId).text(hintText);
+    }
 })

@@ -9,6 +9,7 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
     private const string ActualYearPlaceholder = "$[actual-year]$";
     private const string LevelForSept14ToAug19Placeholder = "$[level-for-Sept14-to-Aug19]$";
     private const string StartDatePlaceholder = "$[start-date]$";
+    private const string MaxCharacterLimitPlaceholder = "$[characters]$";
 
     public string Replace(string text)
     {
