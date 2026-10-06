@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Contentful.Core.Models;
 using Dfe.EarlyYearsQualification.Content.Constants;
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
@@ -12,56 +13,80 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationSearchServiceTests
 {
-    private Mock<IGovUkContentParser> _mockContentParser = new Mock<IGovUkContentParser>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
-    private Mock<IQualificationsRepository> _mockRepository = new Mock<IQualificationsRepository>();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-
-    private QualificationSearchService GetSut()
+    private static QualificationListPage GetSearchContentPage()
     {
-        return new QualificationSearchService(
-                                              _mockRepository.Object,
-                                              _mockContentService.Object,
-                                              _mockContentParser.Object,
-                                              _mockUserJourneyCookieService.Object
-                                             );
-    }
-
-    [TestInitialize]
-    public void Initialize()
-    {
-        _mockRepository = new Mock<IQualificationsRepository>();
-        _mockContentService = new Mock<IContentService>();
-        _mockContentParser = new Mock<IGovUkContentParser>();
-        _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        return new QualificationListPage
+               {
+                   SearchWithinSingleHeading = "Search within this qualification",
+                   SearchWithinMultipleHeadingFormat = "Search within these {0} qualifications",
+                   EnterKeywordsSingleContent =
+                       "Enter keywords from the qualification name to search within this matching qualification",
+                   EnterKeywordsMultipleContentFormat =
+                       "Enter keywords from the qualification name to search within these {0} matching qualifications",
+                   SearchMatchHeadingFormat = "{0} of {1} qualifications matches \"{2}\".",
+                   SearchNoMatchGuidanceIntroFormat =
+                       "Your search only checks the {0} matching qualifications shown on this page.",
+                   SearchNoMatchGuidance = new Document()
+               };
     }
 
     [TestMethod]
     public void Refine_Calls_CookieService_With_RefineSearch()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                              mockRepository.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              mockUserJourneyCookieService.Object
+                                             );
+        
         const string refineSearch = "Test";
-        var sut = GetSut();
 
         sut.Refine(refineSearch);
 
-        _mockUserJourneyCookieService.Verify(o => o.SetQualificationNameSearchCriteria(refineSearch));
+        mockUserJourneyCookieService.Verify(o => o.SetQualificationNameSearchCriteria(refineSearch));
     }
 
     [TestMethod]
     public async Task Get_Calls_ContentService_GetQualificationListPage()
     {
-        var sut = GetSut();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
 
         await sut.GetQualifications();
 
-        _mockContentService.Verify(o => o.GetQualificationListPage(), Times.Once);
+        mockContentService.Verify(o => o.GetQualificationListPage(), Times.Once);
     }
 
     [TestMethod]
     public async Task Get_NullListPage_Returns_Null()
     {
-        _mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync((QualificationListPage)null!);
-        var sut = GetSut();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync((QualificationListPage)null!);
 
         var result = await sut.GetQualifications();
 
@@ -71,38 +96,145 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetQualifications_GotList_Calls_Repository_Get()
     {
-        _mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync([]);
-        var sut = GetSut();
+
         await sut.GetQualifications();
 
-        _mockRepository.Verify(o => o.Get(
+        mockRepository.Verify(o => o.Get(
                                           It.Is<QualificationFilterOptions>(
                                                                             q => q.IncludeAllQualifications == false)
-                                         ), Times.Once);
+                                         ), Times.Exactly(2));
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_TotalNumberOfQualifications_IsBaselineCount_IndependentOfKeyword()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        const string searchCriteria = "childhood studies";
+        var baselineQualifications = new List<Qualification>
+                                     {
+                                         new("qual-1", "Early years qualification", AwardingOrganisations.Various, 3),
+                                         new("qual-2", "Childhood studies degree", AwardingOrganisations.Various, 6)
+                                     };
+        var keywordFilteredQualifications = new List<Qualification>
+                                            {
+                                                new("qual-2", "Childhood studies degree", AwardingOrganisations.Various, 6)
+                                            };
+
+        mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(searchCriteria);
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                                           q => q.IncludeAllQualifications == false
+                                                                               && q.QualificationName == searchCriteria)))
+                       .ReturnsAsync(keywordFilteredQualifications);
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+                                                                           q => q.IncludeAllQualifications == false
+                                                                               && q.QualificationName == string.Empty)))
+                       .ReturnsAsync(baselineQualifications);
+        
+        var result = await sut.GetQualifications();
+
+        result.Should().NotBeNull();
+        result.TotalNumberOfQualifications.Should().Be(2);
+        result.SearchResults.Count.Should().Be(1);
+    }
+
+    [TestMethod]
+    public async Task GetQualifications_NoQualificationsMatchTheAnswers_TotalNumberOfQualifications_IsZero()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        mockContentService.Setup(o => o.GetQualificationListPage()).ReturnsAsync(new QualificationListPage());
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(string.Empty);
+        mockRepository.Setup(x => x.Get(It.IsAny<QualificationFilterOptions>()))
+                       .ReturnsAsync(new List<Qualification>());
+
+        var sut = new QualificationSearchService(
+                                              mockRepository.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              mockUserJourneyCookieService.Object
+                                             );
+        var result = await sut.GetQualifications();
+
+        result.Should().NotBeNull();
+        result!.TotalNumberOfQualifications.Should().Be(0);
+        result.HasSearchCriteria.Should().BeFalse();
+        result.SearchResults.Should().BeEmpty();
     }
 
     [TestMethod]
     public async Task GetFilteredQualifications_GetsDetails_From_CookieService()
     {
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync([]);
-        var sut = GetSut();
+
         await sut.GetFilteredQualifications();
 
-        _mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetAwardingOrganisation(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetWhereWasQualificationAwarded(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetAwardingOrganisation(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetWhereWasQualificationAwarded(), Times.Once);
     }
 
     [TestMethod]
     public async Task GetFilteredQualifications_Calls_Repository_Get_WithCorrectParams()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const int levelOfQualification = 123;
         const int startDateMonth = 3;
         const int startDateYear = 2016;
@@ -110,17 +242,16 @@ public class QualificationSearchServiceTests
         const string qualificationName = "qualification name";
         const string nationAwardedIn = "england";
 
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+        mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
                                      .Returns((startDateMonth, startDateYear));
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
-        _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(nationAwardedIn);
-
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
+        mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(nationAwardedIn);
+        
         await sut.GetFilteredQualifications();
 
-        _mockRepository.Verify(o => o.Get(
+        mockRepository.Verify(o => o.Get(
                                           It.Is<QualificationFilterOptions>(
                                                                             q => q.IncludeAllQualifications == false
                                                                             && q.Level == levelOfQualification
@@ -134,18 +265,30 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_NullAwardingOrganisation_ReturnsCorrectQualifications()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const int levelOfQualification = 123;
         const int startDateMonth = 3;
         const int startDateYear = 2016;
         const string qualificationName = "qualification name";
 
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+        mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(levelOfQualification);
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
                                      .Returns((startDateMonth, startDateYear));
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(qualificationName);
         
-        _mockRepository.Setup(x => x.Get(
+        mockRepository.Setup(x => x.Get(
                                          It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false
                                                                                && q.Level == levelOfQualification
@@ -156,8 +299,7 @@ public class QualificationSearchServiceTests
                                                                                && q.Nation == null))).ReturnsAsync([new Qualification("123", qualificationName, "Wrong awarding organisation", 3),
                                                             new Qualification("456", qualificationName, AwardingOrganisations.Various, 3),
                                                             new Qualification("789", qualificationName, AwardingOrganisations.AllHigherEducation, 3)]);
-
-        var sut = GetSut();
+        
         var results = await sut.GetFilteredQualifications();
 
         results.Should().NotBeNull();
@@ -171,6 +313,18 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task MapList_Qualifications_Returns_Correct_List()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualifications = new List<Qualification>
                              {
                                  new("qual-1", "qual-name-1", "org-1", 1),
@@ -178,9 +332,7 @@ public class QualificationSearchServiceTests
                                  new("qual-3", "qual-name-3", "org-2", 3)
                              };
 
-        var sut = GetSut();
-
-        var result = await sut.MapList(new QualificationListPage(), qualifications);
+        var result = await sut.MapList(new QualificationListPage(), qualifications, qualifications.Count);
 
         var resultQualifications = result.SearchResults.Select(x => x.Qualification).ToList();
         resultQualifications.Count.Should().Be(qualifications.Count);
@@ -198,8 +350,170 @@ public class QualificationSearchServiceTests
     }
     
     [TestMethod]
+    public async Task MapList_Maps_NoMatchingQualificationsHeading()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var content = new QualificationListPage
+                      {
+                          NoMatchingQualificationsHeading = "No matching qualifications were found"
+                      };
+
+        var sut = new QualificationSearchService(
+                                              mockRepository.Object,
+                                              mockContentService.Object,
+                                              mockContentParser.Object,
+                                              mockUserJourneyCookieService.Object
+                                             );
+        var result = await sut.MapList(content, [], 0);
+
+        result.NoMatchingQualificationsHeading.Should().Be("No matching qualifications were found");
+    }
+
+    [TestMethod]
+    public async Task MapList_Maps_SearchWithinHeading_And_EnterKeywordsContent_Plural()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        var result = await sut.MapList(GetSearchContentPage(), [], 5);
+
+        result.TotalNumberOfQualifications.Should().Be(5);
+        result.SearchWithinHeading.Should().Be("Search within these 5 qualifications");
+        result.EnterKeywordsContent.Should()
+              .Be("Enter keywords from the qualification name to search within these 5 matching qualifications");
+    }
+
+    [TestMethod]
+    public async Task MapList_Maps_SearchWithinHeading_And_EnterKeywordsContent_Singular()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        var result = await sut.MapList(GetSearchContentPage(), [], 1);
+
+        result.TotalNumberOfQualifications.Should().Be(1);
+        result.SearchWithinHeading.Should().Be("Search within this qualification");
+        result.EnterKeywordsContent.Should()
+              .Be("Enter keywords from the qualification name to search within this matching qualification");
+    }
+
+    [TestMethod]
+    public async Task MapList_NoSearchCriteria_DoesNotSetSearchMatchHeading()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns((string?)null);
+        
+        var result = await sut.MapList(GetSearchContentPage(), [], 5);
+
+        result.HasSearchCriteria.Should().BeFalse();
+        result.SearchMatchHeading.Should().BeNull();
+        result.SearchNoMatchGuidanceIntro.Should().BeNull();
+        result.SearchNoMatchGuidance.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task MapList_SearchCriteriaWithMatches_SetsSearchMatchHeading()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns("childhood studies");
+
+        var qualifications = new List<Qualification> { new("qual-1", "qual-name-1", "org-1", 1) };
+
+        var result = await sut.MapList(GetSearchContentPage(), qualifications, 9);
+
+        result.HasSearchCriteria.Should().BeTrue();
+        result.SearchMatchHeading.Should().Be("1 of 9 qualifications matches \"childhood studies\".");
+        result.SearchNoMatchGuidanceIntro.Should().BeNull();
+        result.SearchNoMatchGuidance.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task MapList_SearchCriteriaWithNoMatches_SetsNoMatchGuidance()
+    {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns("childhood studies");
+        mockContentParser.Setup(o => o.ToHtml(It.IsAny<Document>()))
+                           .ReturnsAsync("<p>Try:</p><ul><li>double-check the spelling</li></ul>");
+
+        var result = await sut.MapList(GetSearchContentPage(), [], 9);
+
+        result.HasSearchCriteria.Should().BeTrue();
+        result.SearchMatchHeading.Should().Be("0 of 9 qualifications matches \"childhood studies\".");
+        result.SearchNoMatchGuidanceIntro.Should()
+              .Be("Your search only checks the 9 matching qualifications shown on this page.");
+        result.SearchNoMatchGuidance.Should().Be("<p>Try:</p><ul><li>double-check the spelling</li></ul>");
+    }
+
+    [TestMethod]
     public async Task MapList_Qualifications_Has_AdditionalInformation_Returns_Correct_List()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualifications = new List<Qualification>
                              {
                                  new("qual-1", "qual-name-1", "org-1", 1),
@@ -217,7 +531,7 @@ public class QualificationSearchServiceTests
                           ]
                       };
      
-        var result = await GetSut().MapList(content, qualifications);
+        var result = await sut.MapList(content, qualifications, qualifications.Count);
 
         var searchResult = result.SearchResults.First();
         searchResult.SearchResultContents.Should().Be(content.SearchResultsContent.First().AdditionalInformation);
@@ -226,26 +540,49 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_Calls_CookieService()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualificationListPage = new QualificationListPage();
-        var sut = GetSut();
         sut.GetFilterModel(qualificationListPage);
 
-        _mockUserJourneyCookieService.Verify(o => o.GetWhereWasQualificationAwarded(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetAwardingOrganisation(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetWhereWasQualificationAwarded(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetAwardingOrganisation(), Times.Once);
     }
 
     [TestMethod]
     public void GetFilterModel_BasicModel_IsCorrect()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const string awardedIn = "awarded in";
         const string awardedBy = "awarded by";
         const string country = "England";
         const string anyLevelHeading = "any level";
         const string anyAwardingOrganisation = "various awarding organisations";
 
-        _mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(country);
+        mockUserJourneyCookieService.Setup(o => o.GetWhereWasQualificationAwarded()).Returns(country);
 
         var qualificationListPage = new QualificationListPage
                                     {
@@ -254,7 +591,7 @@ public class QualificationSearchServiceTests
                                         AnyLevelHeading = anyLevelHeading,
                                         AnyAwardingOrganisationHeading = anyAwardingOrganisation
                                     };
-        var sut = GetSut();
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         const string expectedCountryResult = $"{awardedIn} {country}";
@@ -268,15 +605,27 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_GotStartDates_Sets_StartDate()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const int startDateMonth = 3;
         const int startDateYear = 2016;
         var qualificationListPage = new QualificationListPage
                                     {
                                         StartDatePrefixText = "started"
                                     };
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
                                      .Returns((startDateMonth, startDateYear));
-        var sut = GetSut();
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         var expectedDt = new DateOnly(startDateYear, startDateMonth, 1);
@@ -289,6 +638,17 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_StartDateBeforeSeptember2014_UsesBeforeText()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
         const int startDateMonth = 8;
         const int startDateYear = 2014;
         var qualificationListPage = new QualificationListPage
@@ -296,11 +656,9 @@ public class QualificationSearchServiceTests
                                         StartDatePrefixText = "started",
                                         StartDateBeforeSept2014PrefixText = "Before 1 September 2014"
                                     };
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted())
                                      .Returns((startDateMonth, startDateYear));
-
-        var sut = GetSut();
-
+        
         var result = sut.GetFilterModel(qualificationListPage);
 
         result.StartDate.Should().Be(qualificationListPage.StartDateBeforeSept2014PrefixText);
@@ -309,15 +667,27 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_GotAwardedDates_Sets_AwardedDate()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const int awardedDateMonth = 3;
         const int awardedDateYear = 2016;
         var qualificationListPage = new QualificationListPage
                                     {
                                         AwardedDatePrefixText = "awarded"
                                     };
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded())
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded())
                                      .Returns((awardedDateMonth, awardedDateYear));
-        var sut = GetSut();
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         var expectedDt = new DateOnly(awardedDateYear, awardedDateMonth, 1);
@@ -330,10 +700,22 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_NotGotStartDates_Ignores_StartDate()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualificationListPage = new QualificationListPage();
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         result.StartDate.Should().Be(string.Empty);
@@ -343,10 +725,22 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_GotLevel_Sets_Level()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const int level = 3;
         var qualificationListPage = new QualificationListPage { LevelPrefixText = "level" };
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(level);
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns(level);
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         var expectedLevel = $"level {level}";
@@ -357,9 +751,20 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_NotGotLevel_Ignores_Level()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualificationListPage = new QualificationListPage();
-        _mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns((int?)null);
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetLevelOfQualification()).Returns((int?)null);
         var result = sut.GetFilterModel(qualificationListPage);
 
         result.Level.Should().Be(string.Empty);
@@ -368,11 +773,23 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_GotAwardingOrganisation_Sets_AwardingOrganisation()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const string awardedBy = "awarded by";
         const string awardingOrganisation = "awarding organisation";
         var qualificationListPage = new QualificationListPage { AwardedByPrefixText = awardedBy };
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns(awardingOrganisation);
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         const string expectedResult = $"{awardedBy} {awardingOrganisation}";
@@ -383,6 +800,18 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public void GetFilterModel_NotGotAwardingOrganisation_Ignores_AwardingOrganisation()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const string awardedBy = "awarded by";
         const string awardingOrganisation = "various awarding organisations";
         var qualificationListPage = new QualificationListPage
@@ -390,8 +819,8 @@ public class QualificationSearchServiceTests
                                         AwardedByPrefixText = "awarded by",
                                         AnyAwardingOrganisationHeading = awardingOrganisation
                                     };
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+
         var result = sut.GetFilterModel(qualificationListPage);
 
         const string expectedResult = $"{awardedBy} {awardingOrganisation}";
@@ -402,6 +831,18 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_AwardingOrganisationIsNull_FiltersToVariousOnly()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualifications = new List<Qualification>
                              {
                                  new("qual-1", "Qualification A", AwardingOrganisations.Various, 3),
@@ -409,12 +850,11 @@ public class QualificationSearchServiceTests
                                  new("qual-3", "Qualification C", AwardingOrganisations.Various, 3)
                              };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync(qualifications);
 
-        var sut = GetSut();
         var result = await sut.GetFilteredQualifications();
 
         result.Should().HaveCount(2);
@@ -424,6 +864,18 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_AwardingOrganisationIsNull_CaseInsensitiveMatch()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualifications = new List<Qualification>
                              {
                                  new("qual-1", "Qualification A", "various awarding organisations", 3),
@@ -431,12 +883,11 @@ public class QualificationSearchServiceTests
                                  new("qual-3", "Qualification C", "Pearson Education Ltd", 3)
                              };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync(qualifications);
 
-        var sut = GetSut();
         var result = await sut.GetFilteredQualifications();
 
         result.Should().HaveCount(2);
@@ -446,6 +897,18 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_AwardingOrganisationIsNotNull_ReturnsAllQualifications()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualifications = new List<Qualification>
                              {
                                  new("qual-1", "Qualification A", "Pearson Education Ltd", 3),
@@ -453,12 +916,11 @@ public class QualificationSearchServiceTests
                                  new("qual-3", "Qualification C", AwardingOrganisations.Various, 3)
                              };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("Pearson Education Ltd");
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("Pearson Education Ltd");
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync(qualifications);
-
-        var sut = GetSut();
+        
         var result = await sut.GetFilteredQualifications();
 
         result.Should().HaveCount(3);
@@ -468,18 +930,29 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_AwardingOrganisationIsNull_NoVariousQualifications_ReturnsEmpty()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         var qualifications = new List<Qualification>
                              {
                                  new("qual-1", "Qualification A", "Pearson Education Ltd", 3),
                                  new("qual-2", "Qualification B", "NCFE", 3)
                              };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns((string?)null);
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync(qualifications);
 
-        var sut = GetSut();
         var result = await sut.GetFilteredQualifications();
 
         result.Should().BeEmpty();
@@ -488,38 +961,60 @@ public class QualificationSearchServiceTests
     [TestMethod]
     public async Task GetFilteredQualifications_SearchCriteriaOverride_UsesOverrideInsteadOfCookie()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const string overrideSearch = "override search";
         var qualifications = new List<Qualification>();
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync(qualifications);
-
-        var sut = GetSut();
+        
         await sut.GetFilteredQualifications(overrideSearch);
 
-        _mockRepository.Verify(o => o.Get(It.Is<QualificationFilterOptions>(
+        mockRepository.Verify(o => o.Get(It.Is<QualificationFilterOptions>(
                                                                             q => q.IncludeAllQualifications == false)), Times.Once);
-        _mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Never);
+        mockUserJourneyCookieService.Verify(o => o.GetSearchCriteria(), Times.Never);
     }
 
     [TestMethod]
     public async Task GetFilteredQualifications_SearchCriteriaOverrideIsNull_UsesCookieSearchCriteria()
     {
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        
+        var sut = new QualificationSearchService(
+                                                 mockRepository.Object,
+                                                 mockContentService.Object,
+                                                 mockContentParser.Object,
+                                                 mockUserJourneyCookieService.Object
+                                                );
+        
         const string cookieSearch = "cookie search";
         var qualifications = new List<Qualification>();
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
-        _mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(cookieSearch);
-        _mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
+        mockUserJourneyCookieService.Setup(o => o.GetAwardingOrganisation()).Returns("some org");
+        mockUserJourneyCookieService.Setup(o => o.GetSearchCriteria()).Returns(cookieSearch);
+        mockRepository.Setup(x => x.Get(It.Is<QualificationFilterOptions>(
                                                                            q => q.IncludeAllQualifications == false)))
                        .ReturnsAsync(qualifications);
 
-        var sut = GetSut();
         await sut.GetFilteredQualifications();
 
-        _mockRepository.Verify(o => o.Get(It.Is<QualificationFilterOptions>(
+        mockRepository.Verify(o => o.Get(It.Is<QualificationFilterOptions>(
                                                                             q => q.IncludeAllQualifications == false)), Times.Once);
     }
 }
