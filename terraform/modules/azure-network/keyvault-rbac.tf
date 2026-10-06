@@ -1,5 +1,3 @@
-data "azurerm_client_config" "az_config" {}
-
 # Create Key Vault with rbac
 resource "azurerm_key_vault" "rbackv" {
   location            = var.location
