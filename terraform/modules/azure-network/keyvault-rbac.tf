@@ -1,5 +1,6 @@
-# Create Key Vault with rbac
+data "azurerm_client_config" "az_config" {}
 
+# Create Key Vault with rbac
 resource "azurerm_key_vault" "rbackv" {
   location            = var.location
   name                = "${var.resource_name_prefix}-kvrbac"
@@ -38,16 +39,42 @@ data "azurerm_role_definition" "kv_secrets_officer" {
   scope = azurerm_key_vault.rbackv.id
 }
 
-
 data "azurerm_role_definition" "kv_admin" {
   name  = "Key Vault Administrator"
   scope = azurerm_key_vault.rbackv.id
 }
 
+# Grant the Service Principal the "Key Vault Secrets Officer" role
+resource "azurerm_role_assignment" "sp_kv_secrets_officer" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azurerm_client_config.az_config.object_id
+}
 
+# Add a wait timer for RBAC replication (prevents race conditions)
+resource "time_sleep" "wait_for_rbac" {
+  depends_on      = [azurerm_role_assignment.sp_kv_secrets_officer]
+  create_duration = "60s"
+}
+
+#Identities
+resource "azurerm_user_assigned_identity" "cl-identity-reader" {
+  name                = "${var.resource_name_prefix}mid-uks-cl-r"
+  location            = var.location
+  resource_group_name = var.resource_group
+
+  #tags = local.common_tags
+}
+
+resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
+  name                = "${var.resource_name_prefix}mid-uks-cl-a"
+  location            = var.location
+  resource_group_name = var.resource_group
+
+  # tags = local.common_tags
+}
 
 # Role assignments
-
 resource "azurerm_role_assignment" "kv_user" {
   scope              = azurerm_key_vault.rbackv.id
   role_definition_id = data.azurerm_role_definition.kv_secrets_user.role_definition_id
@@ -76,58 +103,57 @@ resource "azurerm_role_assignment" "kv_admin_sp" {
   principal_type     = "ServicePrincipal"
 }
 
-
-#Identities
-resource "azurerm_user_assigned_identity" "cl-identity-reader" {
-  name                = "${var.resource_name_prefix}mid-uks-cl-r"
-  location            = var.location
-  resource_group_name = var.resource_group
-
-  #tags = local.common_tags
-}
-
-resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
-  name                = "${var.resource_name_prefix}mid-uks-cl-a"
-  location            = var.location
-  resource_group_name = var.resource_group
-
-  # tags = local.common_tags
-}
-
 # Secrets
-
 resource "azurerm_key_vault_secret" "contentful_delivery_api_key_rbac" {
   name         = "ContentfulOptions--DeliveryApiKey"
   value        = var.contentful_delivery_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
+  depends_on = [
+    time_sleep.wait_for_rbac
+  ]
 }
 
 resource "azurerm_key_vault_secret" "contentful_preview_api_key_rbac" {
   name         = "ContentfulOptions--PreviewApiKey"
   value        = var.contentful_preview_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
+  depends_on = [
+    time_sleep.wait_for_rbac
+  ]
 }
 
 resource "azurerm_key_vault_secret" "contentful_management_api_key_rbac" {
   name         = "ContentfulOptions--ManagementApiKey"
   value        = var.contentful_management_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
+  depends_on = [
+    time_sleep.wait_for_rbac
+  ]
 }
 
 resource "azurerm_key_vault_secret" "contentful_space_id_rbac" {
   name         = "ContentfulOptions--SpaceId"
   value        = var.contentful_space_id
   key_vault_id = azurerm_key_vault.rbackv.id
+  depends_on = [
+    time_sleep.wait_for_rbac
+  ]
 }
 
 resource "azurerm_key_vault_secret" "govuk_notify_api_key_rbac" {
   name         = "Notifications--ApiKey"
   value        = var.govuk_notify_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
+  depends_on = [
+    time_sleep.wait_for_rbac
+  ]
 }
 
 resource "azurerm_key_vault_secret" "download_endpoint_secret_rbac" {
   name         = "Download--AuthSecret"
   value        = var.download_endpoint_secret
   key_vault_id = azurerm_key_vault.kv.id
+  depends_on = [
+    time_sleep.wait_for_rbac
+  ]
 }
