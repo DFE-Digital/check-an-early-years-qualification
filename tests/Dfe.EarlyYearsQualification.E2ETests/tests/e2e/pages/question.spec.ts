@@ -626,8 +626,8 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 1);
     });
 
-    test("Checks the content on are-you-checking-your-own-qualification page", async ({page}) => {
-        await page.goto("/questions/are-you-checking-your-own-qualification");
+    test("Checks the content on what-qualification-are-you-checking page", async ({page}) => {
+        await page.goto("/questions/what-qualification-are-you-checking");
 
         await checkText(page, "#question", "Are you checking your qualification or someone else's?");
         await exists(page, "#yes");
