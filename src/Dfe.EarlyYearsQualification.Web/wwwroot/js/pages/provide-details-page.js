@@ -31,10 +31,8 @@ $(document).ready(function () {
             }
             // If the message contains the placeholder, replace the value
             hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersOverLimit);
-            if(!$(provideAdditionalInformationElementId).hasClass("govuk-input--error")) {
-                $(provideAdditionalInformationElementId).addClass("govuk-input--error");
-                $(characterLimitElementId).addClass("govuk-error-message");
-            }
+            $(provideAdditionalInformationElementId).addClass("govuk-input--error");
+            $(characterLimitElementId).addClass("govuk-error-message");
         }
         else {
             let charactersRemaining = maxCharacterLimit - textLength;
@@ -46,10 +44,8 @@ $(document).ready(function () {
             }
             // If the message contains the placeholder, replace the value
             hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersRemaining);
-            if($(provideAdditionalInformationElementId).hasClass("govuk-input--error")) {
-                $(provideAdditionalInformationElementId).removeClass("govuk-input--error");
-                $(characterLimitElementId).removeClass("govuk-error-message");
-            }
+            $(provideAdditionalInformationElementId).removeClass("govuk-input--error");
+            $(characterLimitElementId).removeClass("govuk-error-message");
         }
         
         $(characterLimitElementId).text(hintText);

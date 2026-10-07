@@ -98,7 +98,7 @@ public class ProvideDetailsPageViewModel
 
     public string SingularTooManyCharactersEnteredMessage { get; init; } = string.Empty;
 
-    public string TooManyCharactersEnteredErrorMessage { get; init; } = string.Empty;
+    public string TooManyCharactersEnteredErrorMessage { get; set; } = string.Empty;
 
     public int MaxCharacterLimit { get; init; }
 }

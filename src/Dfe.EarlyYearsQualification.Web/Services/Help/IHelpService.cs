@@ -36,7 +36,7 @@ public interface IHelpService
 
     public Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage();
 
-    public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage content, string reasonForEnquiring, int maxCharacterLimit);
+    public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage content);
 
     public Task<HelpEmailAddressPage?> GetHelpEmailAddressPage();
 

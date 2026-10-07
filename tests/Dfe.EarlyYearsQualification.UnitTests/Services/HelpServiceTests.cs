@@ -803,15 +803,15 @@ public class HelpServiceTests
     {
         // Arrange
         var content = new HelpProvideDetailsPage();
+        _mockConfiguration.Setup(x => x["Help:MessageCharacterLimit"]).Returns("1000");
 
         // Act
         GetSut()
-            .MapProvideDetailsPageContentToViewModel(content, HelpFormEnquiryReasons.GetHelp.IssueWithTheService, 1000);
+            .MapProvideDetailsPageContentToViewModel(content);
 
         // Assert
         _mockHelpProvideDetailsPageMapper.Verify(o =>
-                                                     o.MapProvideDetailsPageContentToViewModel(content,
-                                                      HelpFormEnquiryReasons.GetHelp.IssueWithTheService, 1000), Times.Once);
+                                                     o.MapProvideDetailsPageContentToViewModel(content, 1000, _mockPlaceholderUpdater.Object), Times.Once);
     }
 
     [TestMethod]
@@ -1567,7 +1567,7 @@ public class HelpServiceTests
     [TestMethod]
     public void GetMaxCharacterLimit_ConfigurationValueIsValid_ReturnsInt()
     {
-        _mockConfiguration.Setup(x => x["Help:MaxCharacterLimit"]).Returns("10");
+        _mockConfiguration.Setup(x => x["Help:MessageCharacterLimit"]).Returns("10");
         var service = GetSut();
 
         var maxCharacterLimit = service.GetMaxCharacterLimit();

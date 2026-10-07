@@ -24,8 +24,7 @@ public partial class HelpController
             return RedirectToAction("Index", "Error");
         }
 
-        var maxCharacterLimit = helpService.GetMaxCharacterLimit();
-        var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, maxCharacterLimit);
+        var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content);
 
         viewModel.ProvideAdditionalInformation = enquiry.AdditionalInformation;
 
@@ -52,9 +51,8 @@ public partial class HelpController
                 logger.LogError("'Help provide details page' content could not be found");
                 return RedirectToAction("Index", "Error");
             }
-
-            var maxCharacterLimit = helpService.GetMaxCharacterLimit();
-            viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring, maxCharacterLimit);
+            
+            viewModel = helpService.MapProvideDetailsPageContentToViewModel(content);
 
             bool hasMaxCharacterLimitError = ModelState["ProvideAdditionalInformation"]?.Errors
                                                     .Any(e => e.ErrorMessage.Contains("string with a maximum length", StringComparison.OrdinalIgnoreCase)) ?? false;

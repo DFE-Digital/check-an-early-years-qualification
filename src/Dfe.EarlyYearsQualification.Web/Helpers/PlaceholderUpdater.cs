@@ -42,4 +42,17 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
 
         return result;
     }
+    
+    public string Replace(string text, string replacement)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+        var result = text;
+
+        if (text.Contains(MaxCharacterLimitPlaceholder))
+        {
+            result = result.Replace(MaxCharacterLimitPlaceholder, replacement);
+        }
+
+        return result;
+    }
 }

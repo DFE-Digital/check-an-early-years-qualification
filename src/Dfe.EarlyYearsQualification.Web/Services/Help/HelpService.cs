@@ -203,9 +203,11 @@ public class HelpService(
     }
 
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
-        HelpProvideDetailsPage content, string reasonForEnquiring, int maxCharacterLimit)
+        HelpProvideDetailsPage content)
     {
-        return helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, reasonForEnquiring, maxCharacterLimit);
+        var maxCharacterLimit = GetMaxCharacterLimit();
+        var model = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, maxCharacterLimit, placeholderUpdater);
+        return model;
     }
 
     public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
