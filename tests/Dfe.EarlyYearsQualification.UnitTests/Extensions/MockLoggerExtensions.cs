@@ -33,7 +33,7 @@ public static class MockLoggerExtensions
                                          expectedLevel,
                                          It.IsAny<EventId>(),
                                          It.Is<It.IsAnyType>((@object, _) =>
-                                                                 @object.ToString() == expectedMessage),
+                                                                 @object != null && @object.ToString() == expectedMessage),
                                          It.IsAny<Exception>(),
                                          It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                     expectedTimes);
@@ -51,7 +51,7 @@ public static class MockLoggerExtensions
                                          expectedLevel,
                                          It.IsAny<EventId>(),
                                          It.Is<It.IsAnyType>((@object, _) =>
-                                                                 @object.ToString() == expectedMessage),
+                                                                 @object != null && @object.ToString() == expectedMessage),
                                          It.Is<Exception>((@object, _) =>
                                                                  @object == expectedException),
                                          It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
