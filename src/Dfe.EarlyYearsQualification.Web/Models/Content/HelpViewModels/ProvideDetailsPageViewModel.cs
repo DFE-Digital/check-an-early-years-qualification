@@ -36,7 +36,7 @@ public class ProvideDetailsPageViewModel
     {
         var attributes = new Dictionary<string, object>
                          {
-                             { "class", "govuk-textarea" },
+                             { "class", "govuk-textarea govuk-!-margin-bottom-2" },
                              { "autocomplete", "off" },
                              { "aria-describedby", "additional-information-hint warning-text-container" },
                          };
