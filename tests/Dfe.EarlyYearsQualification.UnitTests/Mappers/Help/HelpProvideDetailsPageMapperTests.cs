@@ -1,6 +1,7 @@
 using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Web.Constants;
+using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Help;
 using Dfe.EarlyYearsQualification.Web.Models.Content;
 using Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
@@ -33,8 +34,13 @@ public class HelpProvideDetailsPageMapperTests
                           ErrorBannerHeading = "There is a problem"
                       };
 
+        const int maxCharacterLimit = 100;
+        const string placeholderResponseText = "This is the replacement text";
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        mockPlaceholderUpdater.Setup(x => x.Replace(It.IsAny<string>(), It.IsAny<string>()))
+                              .Returns(placeholderResponseText);
         var result =
-            new HelpProvideDetailsPageMapper().MapProvideDetailsPageContentToViewModel(content, reasonForEnquiring);
+            new HelpProvideDetailsPageMapper().MapProvideDetailsPageContentToViewModel(content, maxCharacterLimit, mockPlaceholderUpdater.Object);
 
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<ProvideDetailsPageViewModel>();
@@ -61,5 +67,7 @@ public class HelpProvideDetailsPageMapperTests
         result.PostHeadingContent.Should().Be(content.PostHeadingContent);
         result.HasAdditionalInformationError.Should().BeFalse();
         result.HasValidationErrors.Should().BeFalse();
+        result.TooManyCharactersEnteredErrorMessage.Should().Be(placeholderResponseText);
+        result.MaxCharacterLimit.Should().Be(maxCharacterLimit);
     }
 }

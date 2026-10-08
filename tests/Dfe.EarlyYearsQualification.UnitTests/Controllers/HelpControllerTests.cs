@@ -1034,7 +1034,7 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
                                      }
                     };
 
-    _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring))
+    _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content))
                     .Returns(viewModel);
 
     // Act
@@ -1177,8 +1177,8 @@ public async Task ProvideDetails_ContentServiceReturnsHelpProvideDetailsPage_Ret
                             AdditionalInformationErrorMessage = content.AdditionalInformationErrorMessage,
                             ErrorBannerHeading = content.ErrorBannerHeading,
                         };
-
-        _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring))
+        
+        _mockHelpService.Setup(x => x.MapProvideDetailsPageContentToViewModel(content))
                         .Returns(viewModel);
 
         var controller = GetSut();
