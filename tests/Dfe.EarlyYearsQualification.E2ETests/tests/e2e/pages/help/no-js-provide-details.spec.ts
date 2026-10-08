@@ -22,13 +22,13 @@ test.describe("A spec that tests the provide details page when JS is disabled", 
         await checkUrl(page, "/help/provide-details");
         await isVisible(page, "#no-js-character-limit-hint");
         await isNotVisible(page, "#character-limit-hint");
-        await checkTextContains(page, "#no-js-character-limit-hint", "You can enter up to 1000 characters");
+        await checkTextContains(page, "#no-js-character-limit-hint", "You can enter up to 1,000 characters");
 
         // 5 characters
         let message = "12345";
         // pressSequentially triggers the key-up event that is used by JQuery to change the hint text
         await page.locator("#ProvideAdditionalInformation").pressSequentially(message);
 
-        await checkTextContains(page, "#no-js-character-limit-hint", "You can enter up to 1000 characters");
+        await checkTextContains(page, "#no-js-character-limit-hint", "You can enter up to 1,000 characters");
     });
 });

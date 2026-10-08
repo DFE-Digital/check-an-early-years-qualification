@@ -24,12 +24,12 @@ public class HelpProvideDetailsPageMapper : IHelpProvideDetailsPageMapper
                             AdditionalInformationWarningText = content.AdditionalInformationWarningText,
                             AdditionalInformationErrorMessage = content.AdditionalInformationErrorMessage,
                             ErrorBannerHeading = content.ErrorBannerHeading,
-                            StaticCharactersRemainingMessage = placeholderUpdater.Replace(content.StaticCharactersRemainingMessage, maxCharacterLimit.ToString()),
+                            StaticCharactersRemainingMessage = placeholderUpdater.Replace(content.StaticCharactersRemainingMessage, maxCharacterLimit.ToString("N0")),
                             DynamicCharactersRemainingMessage = content.DynamicCharactersRemainingMessage,
                             SingularCharacterRemainingMessage = content.SingularCharacterRemainingMessage,
                             SingularTooManyCharactersEnteredMessage = content.SingularTooManyCharactersEnteredMessage,
                             DynamicTooManyCharactersEnteredMessage = content.DynamicTooManyCharactersEnteredMessage,
-                            TooManyCharactersEnteredErrorMessage = placeholderUpdater.Replace(content.TooManyCharactersEnteredErrorMessage, maxCharacterLimit.ToString()),
+                            TooManyCharactersEnteredErrorMessage = placeholderUpdater.Replace(content.TooManyCharactersEnteredErrorMessage, maxCharacterLimit.ToString("N0")),
                             MaxCharacterLimit = maxCharacterLimit
                         };
 

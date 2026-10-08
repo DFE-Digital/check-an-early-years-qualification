@@ -30,7 +30,7 @@ $(document).ready(function () {
                 hintText = $(dynamicTooManyCharactersMessageElementId).val();
             }
             // If the message contains the placeholder, replace the value
-            hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersOverLimit);
+            hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersOverLimit.toLocaleString('en-UK'));
             $(provideAdditionalInformationElementId).addClass("govuk-input--error");
             $(characterLimitElementId).addClass("govuk-error-message");
         }
@@ -43,7 +43,7 @@ $(document).ready(function () {
                 hintText = $(dynamicCharactersRemainingMessageElementId).val();
             }
             // If the message contains the placeholder, replace the value
-            hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersRemaining);
+            hintText = hintText.replaceAll(maxCharacterLimitPlaceHolder, charactersRemaining.toLocaleString('en-UK'));
             $(provideAdditionalInformationElementId).removeClass("govuk-input--error");
             $(characterLimitElementId).removeClass("govuk-error-message");
         }

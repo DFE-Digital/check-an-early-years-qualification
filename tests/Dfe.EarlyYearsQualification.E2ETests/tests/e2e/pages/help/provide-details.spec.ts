@@ -114,9 +114,9 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await checkUrl(page, "/help/provide-details");
         await isVisible(page, ".govuk-error-summary");
         await checkText(page, ".govuk-error-summary__title", "There is a problem");
-        await checkText(page, ".govuk-error-summary__list > li", "Enter 1000 characters or less");
+        await checkText(page, ".govuk-error-summary__list > li", "Enter 1,000 characters or less");
         await isNotVisible(page, "#additional-information-error");
-        await checkTextContains(page, "#too-many-characters-error", "Enter 1000 characters or less");
+        await checkTextContains(page, "#too-many-characters-error", "Enter 1,000 characters or less");
     });
 
     test("Continues to the next page if the number of entered characters is equal to the limit", async ({ page }) => {
@@ -139,7 +139,7 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await page.click("#IssueWithTheService");
         await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
-        await checkTextContains(page, "#character-limit-hint", "You have 1000 characters remaining");
+        await checkTextContains(page, "#character-limit-hint", "You have 1,000 characters remaining");
 
         // 5 characters
         let message = "12345";
@@ -154,7 +154,7 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await page.click("#IssueWithTheService");
         await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
-        await checkTextContains(page, "#character-limit-hint", "You have 1000 characters remaining");
+        await checkTextContains(page, "#character-limit-hint", "You have 1,000 characters remaining");
 
         // 999 characters
         let message = "ugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll1oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol2lll33oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol3lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol8lll99oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll22oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol6lll77oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol5lll66oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol4lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol3lll11oewrftoergopkmomegiomeiogmioergmiomimiomiimmiim";
@@ -169,7 +169,7 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await page.click("#IssueWithTheService");
         await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
-        await checkTextContains(page, "#character-limit-hint", "You have 1000 characters remaining");
+        await checkTextContains(page, "#character-limit-hint", "You have 1,000 characters remaining");
 
         // 1001 characters
         let message = "ugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll1oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol2lll33oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol3lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol8lll99oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll22oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol6lll77oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol5lll66oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol4lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol3lll11oewrftoergopkmomegiomeiogmioergmiomimiomiimmiim12";
@@ -185,7 +185,7 @@ test.describe('A spec that tests the get help page', { tag: "@e2e" }, () => {
         await page.click("#IssueWithTheService");
         await page.click("#form-submit");
         await checkUrl(page, "/help/provide-details");
-        await checkTextContains(page, "#character-limit-hint", "You have 1000 characters remaining");
+        await checkTextContains(page, "#character-limit-hint", "You have 1,000 characters remaining");
 
         // 1002 characters
         let message = "ugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll1oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol2lll33oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol3lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol8lll99oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll22oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol6lll77oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol5lll66oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol4lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol1lll44oewrftoergopkmomegiomeiogmioergmiomimiomiimmiimugurthnurthnurthurthjrtijrtjirtjgijrthiojikjkol3lll11oewrftoergopkmomegiomeiogmioergmiomimiomiimmiim123";

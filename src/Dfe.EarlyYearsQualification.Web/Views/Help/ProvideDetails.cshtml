@@ -33,6 +33,9 @@
                 <div id="additional-information-hint" class="govuk-hint">
                     @Model.PostHeadingContent
                 </div>
+                @{
+                    await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true });
+                }
                 @if (Model.HasAdditionalInformationError)
                 {
                     <govuk-error-message id="additional-information-error" visually-hidden-text="Error">@Model.AdditionalInformationErrorMessage</govuk-error-message>
@@ -40,9 +43,6 @@
                 @if (Model.HasMaxCharacterLimitError)
                 {
                     <govuk-error-message id="too-many-characters-error" visually-hidden-text="Error">@Model.TooManyCharactersEnteredErrorMessage</govuk-error-message>
-                }
-                @{
-                    await Html.RenderPartialAsync("Partials/WarningText", new WarningTextModel { WarningText = Model.AdditionalInformationWarningText, ReduceMargin = true });
                 }
                 @Html.HiddenFor(x => x.MaxCharacterLimit, new { id = "hdn-max-character-limit" })
                 @Html.HiddenFor(x => x.DynamicCharactersRemainingMessage, new { id = "hdn-dynamic-characters-remaining-message" })
