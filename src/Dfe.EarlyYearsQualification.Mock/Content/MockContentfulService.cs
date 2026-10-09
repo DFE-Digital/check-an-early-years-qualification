@@ -1646,6 +1646,8 @@ public class MockContentfulService : IContentService
                    DefaultText = "Test Default Dropdown Text",
                    DropdownHeading = "Test Dropdown Heading",
                    NotInListText = "Test Not In The List",
+                   NotInListHintText = "Test Not In The List Hint Text",
+                   PageParagraph = "Test Page Paragraph",
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",

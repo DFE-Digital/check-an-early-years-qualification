@@ -25,6 +25,8 @@ public class DropdownQuestionMapperTests
                            Question = "Question",
                            DropdownHeading = "Dropdown heading",
                            NotInListText = "Not in the list text",
+                           NotInListHintText = "Not in the list hint text",
+                           PageParagraph = "Page paragraph",
                            BackButton = new NavigationLink
                                         {
                                             DisplayText = "Back",
@@ -56,6 +58,8 @@ public class DropdownQuestionMapperTests
         result.Question.Should().BeSameAs(question.Question);
         result.DropdownHeading.Should().BeSameAs(question.DropdownHeading);
         result.NotInListText.Should().BeSameAs(question.NotInListText);
+        result.NotInListHintText.Should().BeSameAs(question.NotInListHintText);
+        result.PageParagraph.Should().BeSameAs(question.PageParagraph);
         result.BackButton.Should().BeEquivalentTo(question.BackButton, options => options.Excluding(x => x.Sys));
         result.Values.Should().NotBeNull();
         result.Values.Count.Should().Be(3);
