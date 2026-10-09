@@ -38,7 +38,7 @@ export async function precheckPage(page: Page, option: string) {
 }
 
 export async function checkingOwnQualificationOrSomeoneElsesPage(page: Page, option: string) {
-    await page.waitForURL("/questions/are-you-checking-your-own-qualification");
+    await page.waitForURL("/questions/what-qualification-are-you-checking");
     await page.locator(option).click();
     await page.locator("#question-submit").click();
 }

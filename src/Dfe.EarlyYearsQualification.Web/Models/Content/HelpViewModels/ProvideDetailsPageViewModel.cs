@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Dfe.EarlyYearsQualification.Web.Attributes;
 
 namespace Dfe.EarlyYearsQualification.Web.Models.Content.HelpViewModels;
 
@@ -8,15 +9,16 @@ public class ProvideDetailsPageViewModel
     public NavigationLinkModel? BackButton { get; init; } = new();
 
     public string Heading { get; init; } = string.Empty;
-    
+
     public string PostHeadingContent { get; init; } = string.Empty;
-    
+
     public string CtaButtonText { get; init; } = string.Empty;
 
     public string AdditionalInformationWarningText { get; init; } = string.Empty;
 
     // text area input
     [Required]
+    [AppSettingsMaxLength("Help:MessageCharacterLimit")]
     public string ProvideAdditionalInformation { get; set; } = string.Empty;
 
     // validation handling
@@ -28,16 +30,18 @@ public class ProvideDetailsPageViewModel
 
     public bool HasAdditionalInformationError { get; set; }
 
+    public bool HasMaxCharacterLimitError { get; set; }
+
     public Dictionary<string, object> GetAdditionalInformationInputAttributes()
     {
         var attributes = new Dictionary<string, object>
-                        {
-                            { "class", "govuk-textarea" },
-                            { "autocomplete", "off" },
-                            { "aria-describedby", "additional-information-hint warning-text-container" },
-                        };
+                         {
+                             { "class", "govuk-textarea govuk-!-margin-bottom-2" },
+                             { "autocomplete", "off" },
+                             { "aria-describedby", "additional-information-hint warning-text-container" },
+                         };
 
-        if (HasAdditionalInformationError)
+        if (HasAdditionalInformationError || HasMaxCharacterLimitError)
         {
             attributes["aria-describedby"] += " additional-information-error";
             attributes["class"] += " govuk-input--error";
@@ -55,12 +59,23 @@ public class ProvideDetailsPageViewModel
             if (HasAdditionalInformationError)
             {
                 errors.Add(
-                    new ErrorSummaryLink
-                    {
-                        ErrorBannerLinkText = AdditionalInformationErrorMessage,
-                        ElementLinkId = "ProvideAdditionalInformation"
-                    }
-                );
+                           new ErrorSummaryLink
+                           {
+                               ErrorBannerLinkText = AdditionalInformationErrorMessage,
+                               ElementLinkId = "ProvideAdditionalInformation"
+                           }
+                          );
+            }
+
+            if (HasMaxCharacterLimitError)
+            {
+                errors.Add(
+                           new ErrorSummaryLink
+                           {
+                               ErrorBannerLinkText = TooManyCharactersEnteredErrorMessage,
+                               ElementLinkId = "ProvideAdditionalInformation"
+                           }
+                          );
             }
 
             return errors;
@@ -68,8 +83,22 @@ public class ProvideDetailsPageViewModel
     }
 
     public ErrorSummaryModel ErrorSummaryModel => new ErrorSummaryModel
-    {
-        ErrorBannerHeading = ErrorBannerHeading,
-        ErrorSummaryLinks = Errors
-    };
+                                                  {
+                                                      ErrorBannerHeading = ErrorBannerHeading,
+                                                      ErrorSummaryLinks = Errors
+                                                  };
+
+    public string StaticCharactersRemainingMessage { get; init; } = string.Empty;
+
+    public string DynamicCharactersRemainingMessage { get; init; } = string.Empty;
+
+    public string SingularCharacterRemainingMessage { get; init; } = string.Empty;
+
+    public string DynamicTooManyCharactersEnteredMessage { get; init; } = string.Empty;
+
+    public string SingularTooManyCharactersEnteredMessage { get; init; } = string.Empty;
+
+    public string TooManyCharactersEnteredErrorMessage { get; set; } = string.Empty;
+
+    public int MaxCharacterLimit { get; init; }
 }

@@ -9,6 +9,7 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
     private const string ActualYearPlaceholder = "$[actual-year]$";
     private const string LevelForSept14ToAug19Placeholder = "$[level-for-Sept14-to-Aug19]$";
     private const string StartDatePlaceholder = "$[start-date]$";
+    private const string MaxCharacterLimitPlaceholder = "$[characters]$";
 
     public string Replace(string text)
     {
@@ -37,6 +38,19 @@ public class PlaceholderUpdater(IDateTimeAdapter dateTimeAdapter, IUserJourneyCo
             {
                 result = result.Replace(StartDatePlaceholder, new DateOnly(startedYear.Value, startedMonth.Value, 1).ToString("MMMM yyyy", CultureInfo.InvariantCulture));
             }
+        }
+
+        return result;
+    }
+    
+    public string Replace(string text, string replacement)
+    {
+        if (string.IsNullOrEmpty(text)) return text;
+        var result = text;
+
+        if (text.Contains(MaxCharacterLimitPlaceholder))
+        {
+            result = result.Replace(MaxCharacterLimitPlaceholder, replacement);
         }
 
         return result;
