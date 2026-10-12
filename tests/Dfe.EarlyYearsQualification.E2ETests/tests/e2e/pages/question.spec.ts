@@ -566,6 +566,15 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await exists(page, '#question-submit');
     });
 
+    test("Checks the page paragraph and not in the list hint on the what-is-the-awarding-organisation page", async ({page, context}) => {
+        await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
+        await page.goto("/questions/what-is-the-awarding-organisation");
+
+        await checkText(page, "#page-paragraph", "Test Page Paragraph");
+        await checkText(page, "#awarding-organisation-not-in-list-hint", "Test Not In The List Hint Text");
+        await hasAttribute(page, "#awarding-organisation-not-in-list", "aria-describedby", "awarding-organisation-not-in-list-hint");
+    });
+
     test("Checks additional information on the what-is-the-awarding-organisation page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
         await page.goto("/questions/what-is-the-awarding-organisation");
