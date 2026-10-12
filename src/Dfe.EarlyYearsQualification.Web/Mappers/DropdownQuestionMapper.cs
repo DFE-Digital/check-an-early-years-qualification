@@ -25,6 +25,8 @@ public class DropdownQuestionMapper(IGovUkContentParser contentParser) : IDropdo
         model.Question = question.Question;
         model.DropdownHeading = question.DropdownHeading;
         model.NotInListText = question.NotInListText;
+        model.NotInListHintText = question.NotInListHintText;
+        model.PageParagraph = question.PageParagraph;
         model.BackButton = NavigationLinkMapper.Map(question.BackButton);
 
         model.Values.Add(new SelectListItem

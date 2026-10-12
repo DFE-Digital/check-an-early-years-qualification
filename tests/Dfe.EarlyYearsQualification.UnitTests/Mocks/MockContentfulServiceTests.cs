@@ -466,6 +466,8 @@ public class MockContentfulServiceTests
         result.DefaultText.Should().Be("Test Default Dropdown Text");
         result.DropdownHeading.Should().Be("Test Dropdown Heading");
         result.NotInListText.Should().Be("Test Not In The List");
+        result.NotInListHintText.Should().Be("Test Not In The List Hint Text");
+        result.PageParagraph.Should().Be("Test Page Paragraph");
     }
 
     [TestMethod]
