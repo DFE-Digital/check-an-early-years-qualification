@@ -1368,7 +1368,7 @@ public class MockContentfulService : IContentService
                     Href = "/",
                     OpenInNewTab = false
                 },
-                OpenGraphData = new OpenGraphData
+                OpenGraph = new OpenGraphData
                 {
                     Title = "EYQL OG Title (page override)",
                     Description = "EYQL OG Description (page override)",
@@ -1661,7 +1661,7 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   OpenGraphData = openGraphData
+                   OpenGraph = openGraphData
                };
     }
 }

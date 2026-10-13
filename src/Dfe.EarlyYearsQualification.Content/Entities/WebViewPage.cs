@@ -68,5 +68,5 @@ public class WebViewPage
 
     public Document QualificationLevelPostHeaderContent { get; init; } = new Document();
 
-    public OpenGraphData? OpenGraphData { get; init; }
+    public OpenGraphData? OpenGraph { get; init; }
 }
