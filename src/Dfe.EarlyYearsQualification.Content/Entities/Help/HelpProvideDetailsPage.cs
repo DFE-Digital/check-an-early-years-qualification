@@ -15,4 +15,16 @@ public class HelpProvideDetailsPage
     public string AdditionalInformationErrorMessage { get; init; } = string.Empty;
 
     public string ErrorBannerHeading { get; init; } = string.Empty;
+
+    public string StaticCharactersRemainingMessage { get; init; } = string.Empty;
+
+    public string DynamicCharactersRemainingMessage { get; init; } = string.Empty;
+
+    public string SingularCharacterRemainingMessage { get; init; } = string.Empty;
+
+    public string DynamicTooManyCharactersEnteredMessage { get; init; } = string.Empty;
+
+    public string SingularTooManyCharactersEnteredMessage { get; init; } = string.Empty;
+
+    public string TooManyCharactersEnteredErrorMessage { get; init; } = string.Empty;
 }

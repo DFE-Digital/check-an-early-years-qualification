@@ -1236,7 +1236,13 @@ public class MockContentfulService : IContentService
                     },
                     AdditionalInformationWarningText = "Do not include any personal information",
                     AdditionalInformationErrorMessage = "Provide information about how we can help you",
-                    ErrorBannerHeading = ThereIsAProblem
+                    ErrorBannerHeading = ThereIsAProblem,
+                    StaticCharactersRemainingMessage = "You can enter up to $[characters]$ characters",
+                    DynamicCharactersRemainingMessage = "You have $[characters]$ characters remaining",
+                    SingularCharacterRemainingMessage = "You have 1 character remaining",
+                    DynamicTooManyCharactersEnteredMessage = "You have entered $[characters]$ characters too many",
+                    SingularTooManyCharactersEnteredMessage = "You have entered 1 character too many",
+                    TooManyCharactersEnteredErrorMessage = "Enter $[characters]$ characters or less"
                 }
             ),
             HelpPages.TechnicalIssueProvideDetails => await Task.FromResult(
@@ -1253,7 +1259,13 @@ public class MockContentfulService : IContentService
                     },
                     AdditionalInformationWarningText = "Do not include any personal information",
                     AdditionalInformationErrorMessage = "Provide information about how we can help you",
-                    ErrorBannerHeading = ThereIsAProblem
+                    ErrorBannerHeading = ThereIsAProblem,
+                    StaticCharactersRemainingMessage = "You can enter up to $[characters]$ characters",
+                    DynamicCharactersRemainingMessage = "You have $[characters]$ characters remaining",
+                    SingularCharacterRemainingMessage = "You have 1 character remaining",
+                    DynamicTooManyCharactersEnteredMessage = "You have entered $[characters]$ characters too many",
+                    SingularTooManyCharactersEnteredMessage = "You have entered 1 character too many",
+                    TooManyCharactersEnteredErrorMessage = "Enter $[characters]$ characters or less"
                 }
             ),
             _ => null
@@ -1634,6 +1646,8 @@ public class MockContentfulService : IContentService
                    DefaultText = "Test Default Dropdown Text",
                    DropdownHeading = "Test Dropdown Heading",
                    NotInListText = "Test Not In The List",
+                   NotInListHintText = "Test Not In The List Hint Text",
+                   PageParagraph = "Test Page Paragraph",
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
