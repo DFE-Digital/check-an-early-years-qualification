@@ -15,7 +15,7 @@
         </PackageReference>
         <PackageReference Include="FluentAssertions" Version="[7.2.2,8)" />
         <PackageReference Include="Moq" Version="4.21.0" />
-        <PackageReference Include="MSTest" Version="4.4.1" />
+        <PackageReference Include="MSTest" Version="4.5.1" />
     </ItemGroup>
 
     <ItemGroup>
