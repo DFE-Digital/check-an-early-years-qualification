@@ -1333,7 +1333,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public async Task GetOpenGraphData_ReturnsData()
+    public async Task GetOpenGraphData_ReturnsDataLinkedFromStartPage()
     {
         var logger = new Mock<ILogger<ContentfulContentService>>();
         var clientMock = GetClientMock();
@@ -1342,34 +1342,58 @@ public class ContentfulContentServiceTests
 
         clientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                It.IsAny<QueryBuilder<StartPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<OpenGraphData> { Items = [data] });
+                  .ReturnsAsync(new ContentfulCollection<StartPage> { Items = [new StartPage { OpenGraph = data }] });
 
         var service = new ContentfulContentService(logger.Object, clientMock.Object, new Mock<IDateValidator>().Object);
 
         var result = await service.GetOpenGraphData();
 
         result.Should().Be(data);
+        clientMock.Verify(c => c.GetEntriesByType(It.IsAny<string>(),
+                                                  It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                  It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [TestMethod]
-    public async Task GetOpenGraphData_ContentfulHasNoData_ReturnsNull()
+    public async Task GetOpenGraphData_StartPageHasNoOpenGraphData_ReturnsNull()
     {
         var logger = new Mock<ILogger<ContentfulContentService>>();
         var clientMock = GetClientMock();
         
         clientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                It.IsAny<QueryBuilder<StartPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<OpenGraphData> { Items = [] });
+                  .ReturnsAsync(new ContentfulCollection<StartPage> { Items = [new StartPage()] });
 
         var service = new ContentfulContentService(logger.Object, clientMock.Object, new Mock<IDateValidator>().Object);
 
         var result = await service.GetOpenGraphData();
 
         result.Should().BeNull();
+        logger.VerifyWarning("No open graph data linked from the start page");
+    }
+
+    [TestMethod]
+    public async Task GetOpenGraphData_ContentfulHasNoStartPage_ReturnsNull()
+    {
+        var logger = new Mock<ILogger<ContentfulContentService>>();
+        var clientMock = GetClientMock();
+        
+        clientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<StartPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<StartPage> { Items = [] });
+
+        var service = new ContentfulContentService(logger.Object, clientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetOpenGraphData();
+
+        result.Should().BeNull();
+        logger.VerifyWarning("No open graph data linked from the start page");
     }
 
     [TestMethod]

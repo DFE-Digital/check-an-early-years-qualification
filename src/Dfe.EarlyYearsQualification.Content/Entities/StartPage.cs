@@ -15,4 +15,6 @@ public class StartPage
     public string RightHandSideContentHeader { get; init; } = string.Empty;
 
     public Document? RightHandSideContent { get; init; }
+
+    public OpenGraphData? OpenGraph { get; init; }
 }
