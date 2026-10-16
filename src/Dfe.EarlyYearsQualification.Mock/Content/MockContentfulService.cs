@@ -718,19 +718,8 @@ public class MockContentfulService : IContentService
 
     public async Task<OpenGraphData?> GetOpenGraphData()
     {
-        return await Task.FromResult(new OpenGraphData
-                                     {
-                                         Title = "OG Title",
-                                         Description = "OG Description",
-                                         Domain = "OG Domain",
-                                         Image = new Asset
-                                                 {
-                                                     File = new File
-                                                            {
-                                                                Url = "test/url/og-image.png"
-                                                            }
-                                                 }
-                                     });
+        var startPage = await GetStartPage();
+        return startPage?.OpenGraph;
     }
 
     public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
@@ -1050,7 +1039,20 @@ public class MockContentfulService : IContentService
                                          CtaButtonText = "Start Button Text",
                                          PostCtaButtonContent = postCtaButtonContent,
                                          RightHandSideContentHeader = "Related content",
-                                         RightHandSideContent = rightHandSideContent
+                                         RightHandSideContent = rightHandSideContent,
+                                         OpenGraph = new OpenGraphData
+                                                     {
+                                                         Title = "OG Title",
+                                                         Description = "OG Description",
+                                                         Domain = "OG Domain",
+                                                         Image = new Asset
+                                                                 {
+                                                                     File = new File
+                                                                            {
+                                                                                Url = "test/url/og-image.png"
+                                                                            }
+                                                                 }
+                                                     }
                                      });
     }
 
@@ -1380,7 +1382,7 @@ public class MockContentfulService : IContentService
                     Href = "/",
                     OpenInNewTab = false
                 },
-                OpenGraphData = new OpenGraphData
+                OpenGraph = new OpenGraphData
                 {
                     Title = "EYQL OG Title (page override)",
                     Description = "EYQL OG Description (page override)",
@@ -1675,7 +1677,7 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   OpenGraphData = openGraphData
+                   OpenGraph = openGraphData
                };
     }
 }

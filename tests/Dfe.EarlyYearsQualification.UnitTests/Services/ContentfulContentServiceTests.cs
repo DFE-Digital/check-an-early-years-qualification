@@ -258,7 +258,7 @@ public class ContentfulContentServiceTests
                               {
                                   Heading = "Test Heading",
                                   Body = _testRichText,
-                                  OpenGraphData = new OpenGraphData { Title = "OG Title" }
+                                  OpenGraph = new OpenGraphData { Title = "OG Title" }
                               }
                           ]
                       };
@@ -277,8 +277,8 @@ public class ContentfulContentServiceTests
         result!.Heading.Should().Be("Test Heading");
         result.Body.Should().Be(_testRichText);
         result.Body.Should().NotBeNull();
-        result.OpenGraphData.Should().NotBeNull();
-        result.OpenGraphData!.Title.Should().Be("OG Title");
+        result.OpenGraph.Should().NotBeNull();
+        result.OpenGraph!.Title.Should().Be("OG Title");
     }
 
     [TestMethod]
@@ -1333,7 +1333,7 @@ public class ContentfulContentServiceTests
     }
 
     [TestMethod]
-    public async Task GetOpenGraphData_ReturnsData()
+    public async Task GetOpenGraphData_ReturnsDataLinkedFromStartPage()
     {
         var logger = new Mock<ILogger<ContentfulContentService>>();
         var clientMock = GetClientMock();
@@ -1342,34 +1342,58 @@ public class ContentfulContentServiceTests
 
         clientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                It.IsAny<QueryBuilder<StartPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<OpenGraphData> { Items = [data] });
+                  .ReturnsAsync(new ContentfulCollection<StartPage> { Items = [new StartPage { OpenGraph = data }] });
 
         var service = new ContentfulContentService(logger.Object, clientMock.Object, new Mock<IDateValidator>().Object);
 
         var result = await service.GetOpenGraphData();
 
         result.Should().Be(data);
+        clientMock.Verify(c => c.GetEntriesByType(It.IsAny<string>(),
+                                                  It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                  It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [TestMethod]
-    public async Task GetOpenGraphData_ContentfulHasNoData_ReturnsNull()
+    public async Task GetOpenGraphData_StartPageHasNoOpenGraphData_ReturnsNull()
     {
         var logger = new Mock<ILogger<ContentfulContentService>>();
         var clientMock = GetClientMock();
         
         clientMock.Setup(c =>
                              c.GetEntriesByType(It.IsAny<string>(),
-                                                It.IsAny<QueryBuilder<OpenGraphData>>(),
+                                                It.IsAny<QueryBuilder<StartPage>>(),
                                                 It.IsAny<CancellationToken>()))
-                  .ReturnsAsync(new ContentfulCollection<OpenGraphData> { Items = [] });
+                  .ReturnsAsync(new ContentfulCollection<StartPage> { Items = [new StartPage()] });
 
         var service = new ContentfulContentService(logger.Object, clientMock.Object, new Mock<IDateValidator>().Object);
 
         var result = await service.GetOpenGraphData();
 
         result.Should().BeNull();
+        logger.VerifyWarning("No open graph data linked from the start page");
+    }
+
+    [TestMethod]
+    public async Task GetOpenGraphData_ContentfulHasNoStartPage_ReturnsNull()
+    {
+        var logger = new Mock<ILogger<ContentfulContentService>>();
+        var clientMock = GetClientMock();
+        
+        clientMock.Setup(c =>
+                             c.GetEntriesByType(It.IsAny<string>(),
+                                                It.IsAny<QueryBuilder<StartPage>>(),
+                                                It.IsAny<CancellationToken>()))
+                  .ReturnsAsync(new ContentfulCollection<StartPage> { Items = [] });
+
+        var service = new ContentfulContentService(logger.Object, clientMock.Object, new Mock<IDateValidator>().Object);
+
+        var result = await service.GetOpenGraphData();
+
+        result.Should().BeNull();
+        logger.VerifyWarning("No open graph data linked from the start page");
     }
 
     [TestMethod]
@@ -1785,7 +1809,7 @@ public class ContentfulContentServiceTests
         var webViewPage = new WebViewPage
                           {
                               Heading = "Test Heading",
-                              OpenGraphData = new OpenGraphData { Title = "OG Title" }
+                              OpenGraph = new OpenGraphData { Title = "OG Title" }
                           };
 
         var pages = new ContentfulCollection<WebViewPage> { Items = [webViewPage] };
@@ -1803,8 +1827,8 @@ public class ContentfulContentServiceTests
 
         result.Should().NotBeNull();
         result.Should().BeSameAs(webViewPage);
-        result!.OpenGraphData.Should().NotBeNull();
-        result.OpenGraphData!.Title.Should().Be("OG Title");
+        result!.OpenGraph.Should().NotBeNull();
+        result.OpenGraph!.Title.Should().Be("OG Title");
     }
 
     [TestMethod]

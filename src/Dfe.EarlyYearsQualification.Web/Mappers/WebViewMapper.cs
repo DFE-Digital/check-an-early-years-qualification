@@ -23,7 +23,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             Heading = content.Heading,
             PostHeadingContent = await contentParser.ToHtml(content.PostHeadingContent),
             BackButton = NavigationLinkMapper.Map(content.BackButton),
-            OpenGraphData = OpenGraphDataMapper.Map(content.OpenGraphData),
+            OpenGraphData = OpenGraphDataMapper.Map(content.OpenGraph),
             Qualifications = await MapToQualificationModels(qualifications),
             DownloadHeading = content.DownloadHeading,
             DownloadSectionContent = await contentParser.ToHtml(content.DownloadSectionContent),
