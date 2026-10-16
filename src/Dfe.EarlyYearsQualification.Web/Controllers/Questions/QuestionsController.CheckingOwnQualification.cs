@@ -6,14 +6,20 @@ namespace Dfe.EarlyYearsQualification.Web.Controllers.Questions;
 
 public partial class QuestionsController
 {
-    [HttpGet("are-you-checking-your-own-qualification")]
+    [HttpGet("what-qualification-are-you-checking")]
     public async Task<IActionResult> AreYouCheckingYourOwnQualification()
     {
         return await GetRadioView(QuestionPages.AreYouCheckingYourOwnQualification, nameof(this.AreYouCheckingYourOwnQualification),
                                   Questions, questionService.GetIsUserCheckingTheirOwnQualification());
     }
-    
-    [HttpPost("are-you-checking-your-own-qualification")]
+
+    [HttpGet("are-you-checking-your-own-qualification")]
+    public IActionResult AreYouCheckingYourOwnQualificationLegacy()
+    {
+        return RedirectToActionPermanent(nameof(this.AreYouCheckingYourOwnQualification));
+    }
+
+    [HttpPost("what-qualification-are-you-checking")]
     public async Task<IActionResult> AreYouCheckingYourOwnQualification([FromForm] RadioQuestionModel model)
     {
         if (!ModelState.IsValid)

@@ -31,8 +31,19 @@ public class QuestionsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType.ActionName.Should().Be(nameof(QuestionPages.AreYouCheckingYourOwnQualification));
+        resultType.ActionName.Should().Be(nameof(QuestionsController.AreYouCheckingYourOwnQualification));
         _mockQuestionService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
+    }
+
+    [TestMethod]
+    public void AreYouCheckingYourOwnQualificationLegacy_RedirectsPermanentlyToNewUrl()
+    {
+        var result = GetSut().AreYouCheckingYourOwnQualificationLegacy();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(QuestionsController.AreYouCheckingYourOwnQualification));
+        resultType.Permanent.Should().BeTrue();
     }
 
     [TestMethod]

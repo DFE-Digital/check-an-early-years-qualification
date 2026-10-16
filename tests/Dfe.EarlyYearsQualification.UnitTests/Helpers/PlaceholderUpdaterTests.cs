@@ -12,6 +12,7 @@ public class PlaceholderUpdaterTests
     {
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         var result = placeholderUpdater.Replace(string.Empty);
         result.Should().BeEmpty();
@@ -22,6 +23,7 @@ public class PlaceholderUpdaterTests
     {
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         var result = placeholderUpdater.Replace(null!);
         result.Should().BeNull();
@@ -35,6 +37,7 @@ public class PlaceholderUpdaterTests
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         mockDateTimeAdapter.Setup(x => x.Now()).Returns(now);
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         const string text = "This contains no placeholders";
         var result = placeholderUpdater.Replace(text);
@@ -49,6 +52,7 @@ public class PlaceholderUpdaterTests
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         mockDateTimeAdapter.Setup(x => x.Now()).Returns(now);
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         const string text = "The year is $[actual-year]$";
         var result = placeholderUpdater.Replace(text);
@@ -63,6 +67,7 @@ public class PlaceholderUpdaterTests
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         mockDateTimeAdapter.Setup(x => x.Now()).Returns(now);
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         const string text = "Year is $[actual-year]$ and year again is $[actual-year]$";
         var result = placeholderUpdater.Replace(text);
@@ -79,6 +84,7 @@ public class PlaceholderUpdaterTests
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         var result = placeholderUpdater.Replace("This should be $[level-for-Sept14-to-Aug19]$");
         result.Should().Be("This should be level 3");
@@ -92,6 +98,7 @@ public class PlaceholderUpdaterTests
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         mockUserJourneyCookieService.Setup(x => x.GetLevelOfQualification()).Returns(level);
+
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
         var result = placeholderUpdater.Replace("This should be $[level-for-Sept14-to-Aug19]$");
         result.Should().Be("This should be level 3 or level 6");
@@ -103,7 +110,7 @@ public class PlaceholderUpdaterTests
         var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
         var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
         mockUserJourneyCookieService.Setup(x => x.GetWhenWasQualificationStarted()).Returns((9, 2013));
-
+        
         var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
 
         var result = placeholderUpdater.Replace("The qualification started on $[start-date]$");
@@ -124,5 +131,22 @@ public class PlaceholderUpdaterTests
         var result = placeholderUpdater.Replace(original);
 
         result.Should().Be(original);
+    }
+    
+    [TestMethod]
+    public void Replace_TextContainsCharacterPlaceholder_ReturnsExpectedString()
+    {
+        var mockDateTimeAdapter = new Mock<IDateTimeAdapter>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var placeholderUpdater = new PlaceholderUpdater(mockDateTimeAdapter.Object, mockUserJourneyCookieService.Object);
+
+        const int maxCharacterLimit = 1000;
+        const string original = "The max characters should be $[characters]$";
+        var result = placeholderUpdater.Replace(original, maxCharacterLimit.ToString());
+
+        var expected = $"The max characters should be {maxCharacterLimit}";
+
+        result.Should().Be(expected);
     }
 }

@@ -10,7 +10,7 @@ function getUrls(authSecret, port) {
         `wait for url to be http://localhost:${port}/questions/pre-check`,
         'click element #yes',
         'click element #pre-check-submit',
-        `wait for url to be http://localhost:${port}/questions/are-you-checking-your-own-qualification`,
+        `wait for url to be http://localhost:${port}/questions/what-qualification-are-you-checking`,
         'click element #no',
         'click element #question-submit',
         `wait for url to be http://localhost:${port}/questions/where-was-the-qualification-awarded`,
@@ -63,8 +63,8 @@ function getUrls(authSecret, port) {
             actions: basicActions.concat(`navigate to http://localhost:${port}/cookies`)
         },
         {
-            url: `http://localhost:${port}/questions/are-you-checking-your-own-qualification`,
-            actions: basicActions.concat(`navigate to http://localhost:${port}/questions/are-you-checking-your-own-qualification`)
+            url: `http://localhost:${port}/questions/what-qualification-are-you-checking`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/questions/what-qualification-are-you-checking`)
         },
         {
             url: `http://localhost:${port}/questions/where-was-the-qualification-awarded`,
