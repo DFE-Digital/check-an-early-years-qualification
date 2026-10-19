@@ -10,6 +10,8 @@ terraform {
   required_version = ">= 1.10.5"
 }
 
+
+
 provider "azurerm" {
   resource_provider_registrations = "none"
 

@@ -47,3 +47,15 @@ output "kv_mi_id" {
   description = "ID of the Managed Identity for the Key Vault"
   value       = var.environment != "development" ? azurerm_user_assigned_identity.kv_mi[0].id : null
 }
+
+output "rbackv_id" {
+  description = "ID of the Key Vault"
+  value       = azurerm_key_vault.rbackv.id
+}
+
+output "key_vault_rbac_name" {
+  value = azurerm_key_vault.rbackv.name
+}
+output "key_vault_rbac_uri" {
+  value = azurerm_key_vault.rbackv.vault_uri
+}
