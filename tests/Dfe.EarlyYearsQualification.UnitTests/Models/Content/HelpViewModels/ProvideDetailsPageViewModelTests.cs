@@ -19,7 +19,7 @@ public class ProvideDetailsPageViewModelTests
 
         // Assert
         attributes.Should().ContainKey("class");
-        attributes["class"].Should().Be("govuk-textarea");
+        attributes["class"].Should().Be("govuk-textarea govuk-!-margin-bottom-2");
         attributes.Should().ContainKey("autocomplete");
         attributes["autocomplete"].Should().Be("off");
         attributes.Should().ContainKey("aria-describedby");
@@ -40,7 +40,7 @@ public class ProvideDetailsPageViewModelTests
 
         // Assert
         attributes.Should().ContainKey("class");
-        attributes["class"].Should().Be("govuk-textarea govuk-input--error");
+        attributes["class"].Should().Be("govuk-textarea govuk-!-margin-bottom-2 govuk-input--error");
         attributes.Should().ContainKey("autocomplete");
         attributes["autocomplete"].Should().Be("off");
         attributes.Should().ContainKey("aria-describedby");

@@ -14,6 +14,10 @@ public class DropdownQuestionModel : BaseQuestionModel
 
     public string NotInListText { get; set; } = string.Empty;
 
+    public string NotInListHintText { get; set; } = string.Empty;
+
+    public string PageParagraph { get; set; } = string.Empty;
+
     public bool HasErrors { get; set; }
 
     public string DropdownId { get; init; } = "awarding-organisation-select";
@@ -22,4 +26,30 @@ public class DropdownQuestionModel : BaseQuestionModel
 
     [IncludeInTelemetry]
     public bool NotInTheList { get; set; }
+
+    public bool HasPageParagraph => !string.IsNullOrEmpty(PageParagraph);
+
+    public bool HasNotInListHint => !string.IsNullOrEmpty(NotInListHintText);
+
+    public string NotInListHintId => $"{CheckboxId}-hint";
+
+    public IDictionary<string, object> CheckboxAttributes
+    {
+        get
+        {
+            var attributes = new Dictionary<string, object>
+                             {
+                                 { "class", "govuk-checkboxes__input" },
+                                 { "id", CheckboxId },
+                                 { "name", "awarding-organisation" }
+                             };
+
+            if (HasNotInListHint)
+            {
+                attributes["aria-describedby"] = NotInListHintId;
+            }
+
+            return attributes;
+        }
+    }
 }

@@ -36,7 +36,7 @@ public interface IHelpService
 
     public Task<HelpProvideDetailsPage?> GetHelpProvideDetailsPage();
 
-    public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage content, string reasonForEnquiring);
+    public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(HelpProvideDetailsPage content);
 
     public Task<HelpEmailAddressPage?> GetHelpEmailAddressPage();
 
@@ -61,4 +61,6 @@ public interface IHelpService
     public DateQuestionModel MapDateModel(DateQuestionModel model, DateQuestion question, DateValidationResult validationResult, string objectName);
 
     public void AddQualificationDetailsValidationErrors(QualificationDetailsPageViewModel model, HelpQualificationDetailsPage content, ModelStateDictionary modelState);
+
+    public int GetMaxCharacterLimit();
 }
