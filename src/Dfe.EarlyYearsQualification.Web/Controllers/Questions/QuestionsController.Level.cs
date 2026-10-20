@@ -1,4 +1,5 @@
 ﻿using Dfe.EarlyYearsQualification.Content.Constants;
+using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Web.Attributes;
 using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +36,26 @@ public partial class QuestionsController
         }
 
         return questionService.RedirectBasedOnQualificationLevelSelected(model.Option);
+    }
+
+    /// <summary>
+    ///     Saves any level the user has selected (without requiring one) before sending them to the
+    ///     "Early years qualification levels" page, so it is pre-selected when they come back.
+    /// </summary>
+    [RedirectIfDateMissing]
+    [HttpPost("what-level-is-the-qualification/qualification-levels")]
+    public async Task<IActionResult> SaveLevelAndViewQualificationLevels([FromForm] RadioQuestionModel model)
+    {
+        var questionPage = await questionService.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification);
+
+        var isValidOption = questionPage is not null
+                            && questionPage.Options.OfType<Option>().Any(x => x.Value == model.Option);
+
+        if (isValidOption)
+        {
+            questionService.SetLevelOfQualification(model.Option);
+        }
+
+        return RedirectToAction(nameof(AdviceController.EarlyYearsQualificationLevels), "Advice");
     }
 }
