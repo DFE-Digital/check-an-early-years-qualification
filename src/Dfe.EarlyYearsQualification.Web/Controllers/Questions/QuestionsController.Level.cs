@@ -48,8 +48,7 @@ public partial class QuestionsController
     {
         var questionPage = await questionService.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification);
 
-        var isValidOption = questionPage is not null
-                            && questionPage.Options.OfType<Option>().Any(x => x.Value == model.Option);
+        var isValidOption = questionPage?.Options?.OfType<Option>().Any(x => x.Value == model.Option) == true;
 
         if (isValidOption)
         {
