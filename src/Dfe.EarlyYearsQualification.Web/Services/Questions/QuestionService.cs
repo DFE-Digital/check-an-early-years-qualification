@@ -56,6 +56,11 @@ public class QuestionService(
         return userJourneyCookieService.GetLevelOfQualification();
     }
 
+    public void SetLevelOfQualification(string level)
+    {
+        userJourneyCookieService.SetLevelOfQualification(level);
+    }
+
     public string? GetWhereWasQualificationAwarded()
     {
         return userJourneyCookieService.GetWhereWasQualificationAwarded();

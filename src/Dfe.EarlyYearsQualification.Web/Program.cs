@@ -249,7 +249,7 @@ namespace Dfe.EarlyYearsQualification.Web
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthorization(); 
 
             app.MapControllerRoute(
                                     "default",

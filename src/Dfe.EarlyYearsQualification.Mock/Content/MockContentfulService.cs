@@ -86,6 +86,11 @@ public class MockContentfulService : IContentService
                    StaticPages.HowToFindASuitableCourse =>
                        await Task.FromResult(CreateStaticPage("How to find a suitable course",
                                                               body, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol")),
+
+                   StaticPages.EarlyYearsQualificationLevels =>
+                       await Task.FromResult(CreateStaticPage("Early years qualification levels",
+                                                              body, WhatLevelIsTheQualificationPath,
+                                                              backButtonText: "Back to what level is the qualification")),
                    _ => null
                };
     }
@@ -1570,8 +1575,29 @@ public class MockContentfulService : IContentService
                               Label = "Not Sure", Value ="0"
                           }
                       };
-        return CreateRadioQuestionPage("What level is the qualification?", options,
-                                       "/questions/when-was-the-qualification-awarded");
+        var page = CreateRadioQuestionPage("What level is the qualification?", options,
+                                           "/questions/when-was-the-qualification-awarded");
+
+        return new RadioQuestionPage
+               {
+                   Question = page.Question,
+                   Options = page.Options,
+                   CtaButtonText = page.CtaButtonText,
+                   ErrorMessage = page.ErrorMessage,
+                   BackButton = page.BackButton,
+                   ErrorBannerHeading = page.ErrorBannerHeading,
+                   ErrorBannerLinkText = page.ErrorBannerLinkText,
+                   PostHeadingContent = new Document
+                                        {
+                                            Content =
+                                            [
+                                                ContentfulContentHelper.ParagraphWithEmbeddedLink("Find out more about ",
+                                                    "early years qualification levels",
+                                                    "/advice/early-years-qualification-levels",
+                                                    ".")
+                                            ]
+                                        }
+               };
     }
 
     private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,
@@ -1665,7 +1691,8 @@ public class MockContentfulService : IContentService
     }
 
     private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl,
-                                               OpenGraphData? openGraphData = null)
+                                               OpenGraphData? openGraphData = null,
+                                               string backButtonText = "TEST")
     {
         return new StaticPage
                {
@@ -1673,7 +1700,7 @@ public class MockContentfulService : IContentService
                    Heading = heading,
                    BackButton = new NavigationLink
                                 {
-                                    DisplayText = "TEST",
+                                    DisplayText = backButtonText,
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
