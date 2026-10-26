@@ -33,17 +33,6 @@ output "kv_id" {
   value       = azurerm_key_vault.kv.id
 }
 
-output "kv_service_gov_uk_cert_secret_id" {
-  description = "service.gov.uk SSL certificate Secret ID"
-  # value       =  azurerm_key_vault_certificate.kv_service_gov_uk_cert[0].secret_id
-  value = data.azurerm_key_vault_certificate.service_gov_uk_cert.secret_id
-}
-
-output "kv_service_gov_uk_cert_versionless_secret_id" {
-  description = "SSL certificate Secret ID"
-  value       = data.azurerm_key_vault_certificate.service_gov_uk_cert.versionless_secret_id
-}
-
 output "kv_mi_id" {
   description = "ID of the Managed Identity for the Key Vault"
   #value = azurerm_user_assigned_identity.kv_mi[0].id
@@ -62,4 +51,10 @@ output "key_vault_rbac_name" {
 output "key_vault_rbac_uri" {
   value = azurerm_key_vault.rbackv.vault_uri
 }
+output "kv_service_gov_uk_cert_secret_id" {
+  value = try(azurerm_key_vault_certificate.rbackv_service_gov_uk_cert[0].secret_id, null)
+}
 
+output "kv_service_gov_uk_cert_versionless_secret_id" {
+  value = try(azurerm_key_vault_certificate.rbackv_service_gov_uk_cert[0].versionless_secret_id, null)
+}
