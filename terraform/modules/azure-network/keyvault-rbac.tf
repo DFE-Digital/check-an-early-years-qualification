@@ -129,5 +129,5 @@ resource "azurerm_key_vault_secret" "govuk_notify_api_key_rbac" {
 resource "azurerm_key_vault_secret" "download_endpoint_secret_rbac" {
   name         = "Download--AuthSecret"
   value        = var.download_endpoint_secret
-  key_vault_id = azurerm_key_vault.kv.id
+  key_vault_id = azurerm_key_vault.rbackv.id
 }

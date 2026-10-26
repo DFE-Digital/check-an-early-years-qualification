@@ -363,35 +363,35 @@ data "azurerm_linux_web_app" "ref" {
 }
 
 # Grants permissions to key vault for the managed identity of the App Service
-resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
-  key_vault_id            = var.kv_id
-  tenant_id               = data.azurerm_client_config.az_config.tenant_id
-  object_id               = data.azurerm_linux_web_app.ref.identity.0.principal_id
-  key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
-  secret_permissions      = ["Get", "List"]
-  certificate_permissions = ["Get"]
+#resource "azurerm_key_vault_access_policy" "webapp_kv_app_service" {
+# key_vault_id            = var.kv_id
+#tenant_id               = data.azurerm_client_config.az_config.tenant_id
+#object_id               = data.azurerm_linux_web_app.ref.identity.0.principal_id
+#key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
+#secret_permissions      = ["Get", "List"]
+#certificate_permissions = ["Get"]
 
-  lifecycle {
-    ignore_changes = [object_id, tenant_id]
-  }
-}
+#lifecycle {
+# ignore_changes = [object_id, tenant_id]
+#}
+#}
 
 # Grants permissions to key vault for the managed identity of the App Service slot
-resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
+#resource "azurerm_key_vault_access_policy" "webapp_kv_app_service_slot" {
 
-  count = var.environment != "development" ? 1 : 0
+# count = var.environment != "development" ? 1 : 0
 
-  key_vault_id            = var.kv_id
-  tenant_id               = data.azurerm_client_config.az_config.tenant_id
-  object_id               = azurerm_linux_web_app_slot.webapp_slot.0.identity.0.principal_id
-  key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
-  secret_permissions      = ["Get", "List"]
-  certificate_permissions = ["Get"]
+#key_vault_id            = var.kv_id
+#tenant_id               = data.azurerm_client_config.az_config.tenant_id
+#object_id               = azurerm_linux_web_app_slot.webapp_slot.0.identity.0.principal_id
+#key_permissions         = ["Get", "UnwrapKey", "WrapKey"]
+#secret_permissions      = ["Get", "List"]
+#certificate_permissions = ["Get"]
 
-  lifecycle {
-    ignore_changes = [object_id, tenant_id]
-  }
-}
+#lifecycle {
+# ignore_changes = [object_id, tenant_id]
+#}
+#}
 
 resource "azurerm_app_service_certificate" "webapp_service_gov_uk_custom_domain_cert" {
   # Custom hostname only deployed to the Test and Production subscription

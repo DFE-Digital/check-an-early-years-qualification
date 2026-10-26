@@ -16,10 +16,11 @@ locals {
 
   # Web Application Configuration
   webapp_app_settings = {
-    "ENVIRONMENT"                                       = var.environment
-    "WEBSITES_ENABLE_APP_SERVICE_STORAGE"               = "false"
-    "WEBSITES_CONTAINER_START_TIME_LIMIT"               = 720
-    "KeyVault__Endpoint"                                = "https://${var.resource_name_prefix}-kv-pe-kv.vault.azure.net/"
+    "ENVIRONMENT"                         = var.environment
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
+    "WEBSITES_CONTAINER_START_TIME_LIMIT" = 720
+    #"KeyVault__Endpoint"                               = "https://${var.resource_name_prefix}-kv-pe-kv.vault.azure.net/"
+    "KeyVault__Endpoint"                                = module.network.key_vault_rbac_uri
     "ContentfulOptions__UsePreviewApi"                  = var.contentful_use_preview_api
     "WEBSITES_PORT"                                     = "8080"
     "ServiceAccess__IsPublic"                           = var.webapp_access_is_public
