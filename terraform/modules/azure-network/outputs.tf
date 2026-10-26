@@ -35,17 +35,20 @@ output "kv_id" {
 
 output "kv_service_gov_uk_cert_secret_id" {
   description = "service.gov.uk SSL certificate Secret ID"
-  value       = var.environment != "development" ? azurerm_key_vault_certificate.kv_service_gov_uk_cert[0].secret_id : null
+  # value       =  azurerm_key_vault_certificate.kv_service_gov_uk_cert[0].secret_id
+  value = data.azurerm_key_vault_certificate.service_gov_uk_cert.secret_id
 }
 
 output "kv_service_gov_uk_cert_versionless_secret_id" {
   description = "SSL certificate Secret ID"
-  value       = var.environment != "development" ? azurerm_key_vault_certificate.kv_service_gov_uk_cert[0].versionless_secret_id : null
+  value       = data.azurerm_key_vault_certificate.service_gov_uk_cert.versionless_secret_id
 }
 
 output "kv_mi_id" {
   description = "ID of the Managed Identity for the Key Vault"
-  value       = var.environment != "development" ? azurerm_user_assigned_identity.kv_mi[0].id : null
+  #value = azurerm_user_assigned_identity.kv_mi[0].id
+  value = azurerm_user_assigned_identity.kv_mi_rbac.id
+
 }
 
 output "rbackv_id" {
@@ -59,3 +62,4 @@ output "key_vault_rbac_name" {
 output "key_vault_rbac_uri" {
   value = azurerm_key_vault.rbackv.vault_uri
 }
+

@@ -11,7 +11,8 @@ resource "azurerm_key_vault" "rbackv" {
 
   rbac_authorization_enabled = true
 
-  public_network_access_enabled = false
+  public_network_access_enabled   = false
+  enabled_for_template_deployment = true
 
   network_acls {
     default_action = "Allow"
@@ -69,15 +70,24 @@ resource "azurerm_role_assignment" "kv_administrator" {
   principal_type     = "ServicePrincipal"
 }
 
+
+
 resource "azurerm_role_assignment" "kv_admin_sp" {
-  scope              = azurerm_key_vault.rbackv.id
-  role_definition_id = data.azurerm_role_definition.kv_admin.role_definition_id
-  principal_id       = data.azurerm_client_config.az_config.object_id
-  principal_type     = "ServicePrincipal"
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = data.azurerm_client_config.az_config.object_id
 }
 
-
 #Identities
+
+
+
+
+resource "azurerm_role_assignment" "kv_mi_secrets_user" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.kv_mi_rbac.principal_id
+}
 resource "azurerm_user_assigned_identity" "cl-identity-reader" {
   name                = "${var.resource_name_prefix}mid-uks-cl-r"
   location            = var.location
@@ -130,4 +140,13 @@ resource "azurerm_key_vault_secret" "download_endpoint_secret_rbac" {
   name         = "Download--AuthSecret"
   value        = var.download_endpoint_secret
   key_vault_id = azurerm_key_vault.rbackv.id
+}
+
+
+
+# After
+resource "azurerm_user_assigned_identity" "kv_mi_rbac" {
+  name                = "${var.resource_name_prefix}-kv-mi-rbac"
+  location            = var.location
+  resource_group_name = var.resource_group
 }
