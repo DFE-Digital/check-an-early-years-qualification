@@ -81,6 +81,25 @@ public class AdvicePageMapperTests
     }
 
     [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public async Task Map_PassInAdvicePage_MapsIsIndexable(bool isIndexable)
+    {
+        var advicePage = new StaticPage
+                         {
+                             Heading = "This is the heading",
+                             Body = ContentfulContentHelper.Paragraph("This is the body"),
+                             IsIndexable = isIndexable
+                         };
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new StaticPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(advicePage);
+
+        result.IsIndexable.Should().Be(isIndexable);
+    }
+
+    [TestMethod]
     [DataRow(true, UserTypes.Practitioner)]
     [DataRow(false, UserTypes.Manager)]
     public async Task Map_PassInCannotFindQualificationPage_ReturnsModel(bool isPractitionerPage, string  expectedUserType)

@@ -208,6 +208,22 @@ public class MockContentfulServiceTests
         page.Heading.Should().Be("Dynamic Page Heading");
         page.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body of the dynamic route");
+        page.OpenGraph.Should().BeNull();
+        page.IsIndexable.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public async Task GetStaticPageByRoute_FindAnApprovedCourse_ReturnsOpenGraphData()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var page = await contentfulService.GetStaticPageByRoute("find-an-approved-early-years-course");
+
+        page.Should().NotBeNull();
+        page.OpenGraph.Should().NotBeNull();
+        page.OpenGraph.Title.Should().Be("Find an approved early years course OG Title");
+        page.OpenGraph.Description.Should().Be("Find an approved early years course OG Description");
+        page.IsIndexable.Should().BeTrue();
     }
 
     [TestMethod]
@@ -1392,6 +1408,7 @@ public class MockContentfulServiceTests
         result.Should().BeAssignableTo<WebViewPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Heading.Should().Be("Early Years Qualification List");
+        result.IsIndexable.Should().BeTrue();
         result.DownloadHeading.Should().Be("Download the early years qualification list");
         result.DownloadSectionContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("The download section content"));
         result.DownloadButtonText.Should().Be("Download qualification list");
