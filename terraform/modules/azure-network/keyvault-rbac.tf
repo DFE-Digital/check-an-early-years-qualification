@@ -1,4 +1,6 @@
-# Create Key Vault with rbac
+# ============================================================
+# Key Vault (RBAC, private endpoint only)
+# ============================================================
 resource "azurerm_key_vault" "rbackv" {
   location            = var.location
   name                = "${var.resource_name_prefix}-kvrbac"
@@ -6,15 +8,14 @@ resource "azurerm_key_vault" "rbackv" {
   sku_name            = "standard"
   tenant_id           = data.azurerm_client_config.az_config.tenant_id
 
-  purge_protection_enabled = true
-
+  purge_protection_enabled   = true
   rbac_authorization_enabled = true
 
   public_network_access_enabled   = false
   enabled_for_template_deployment = true
 
   network_acls {
-    default_action = "Allow"
+    default_action = "Deny"
     bypass         = "AzureServices"
   }
 
@@ -26,9 +27,9 @@ resource "azurerm_key_vault" "rbackv" {
   }
 }
 
-
-# enable logging for KeyVault to write to the log analytics workspace
-
+# ============================================================
+# Diagnostic logging
+# ============================================================
 resource "azurerm_monitor_diagnostic_setting" "rbackv_logs" {
   name                       = "rbackv-to-log-analytics-workspace"
   target_resource_id         = azurerm_key_vault.rbackv.id
@@ -43,9 +44,110 @@ resource "azurerm_monitor_diagnostic_setting" "rbackv_logs" {
   }
 }
 
+# ============================================================
+# Managed identities (declared before role assignments)
+# ============================================================
+resource "azurerm_user_assigned_identity" "cl-identity-reader" {
+  name                = "${var.resource_name_prefix}mid-uks-cl-r"
+  location            = var.location
+  resource_group_name = var.resource_group
+}
 
-# Certificate issuer only deployed to the Test and Production subscription
+resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
+  name                = "${var.resource_name_prefix}mid-uks-cl-a"
+  location            = var.location
+  resource_group_name = var.resource_group
+}
 
+resource "azurerm_user_assigned_identity" "kv_mi_rbac" {
+  name                = "${var.resource_name_prefix}-kv-mi-rbac"
+  location            = var.location
+  resource_group_name = var.resource_group
+}
+
+resource "azurerm_user_assigned_identity" "agw_mi_rbac" {
+  count               = var.environment != "development" ? 1 : 0
+  name                = "${var.resource_name_prefix}-agw-mi-rbac"
+  location            = var.location
+  resource_group_name = var.resource_group
+}
+
+# ============================================================
+# Role assignments (RBAC on the new vault)
+# ============================================================
+
+# Terraform pipeline SP — writes secrets during apply
+resource "azurerm_role_assignment" "sp_kv_secrets_officer" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azurerm_client_config.az_config.object_id
+}
+
+# Terraform pipeline SP — writes keys and certificates during apply
+resource "azurerm_role_assignment" "kv_admin_sp" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = data.azurerm_client_config.az_config.object_id
+}
+
+# Web app identity — reads secrets
+resource "azurerm_role_assignment" "kv_mi_secrets_user" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.kv_mi_rbac.principal_id
+}
+
+# App Gateway identity (non-dev only) — reads secrets for TLS
+resource "azurerm_role_assignment" "agw_mi_secrets_user" {
+  count                = var.environment != "development" ? 1 : 0
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.agw_mi_rbac[0].principal_id
+}
+
+# Reader identity — reads secrets
+resource "azurerm_role_assignment" "kv_user" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.cl-identity-reader.principal_id
+  principal_type       = "ServicePrincipal"
+}
+
+# Administrator identity — reads and writes secrets
+resource "azurerm_role_assignment" "kv_officer" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azurerm_user_assigned_identity.cl-identity-administrator.principal_id
+  principal_type       = "ServicePrincipal"
+}
+
+# Administrator identity — full data-plane access
+resource "azurerm_role_assignment" "kv_administrator" {
+  scope                = azurerm_key_vault.rbackv.id
+  role_definition_name = "Key Vault Administrator"
+  principal_id         = azurerm_user_assigned_identity.cl-identity-administrator.principal_id
+  principal_type       = "ServicePrincipal"
+}
+
+# ============================================================
+# Wait for RBAC propagation (600s = 10 min)
+# ============================================================
+resource "time_sleep" "wait_for_rbac" {
+  depends_on = [
+    azurerm_role_assignment.sp_kv_secrets_officer,
+    azurerm_role_assignment.kv_admin_sp,
+    azurerm_role_assignment.kv_mi_secrets_user,
+    azurerm_role_assignment.kv_user,
+    azurerm_role_assignment.kv_officer,
+    azurerm_role_assignment.kv_administrator,
+    azurerm_role_assignment.agw_mi_secrets_user,
+  ]
+  create_duration = "600s"
+}
+
+# ============================================================
+# Certificate issuer + certificate (non-dev only)
+# ============================================================
 resource "azurerm_key_vault_certificate_issuer" "rbackv_ca" {
   count = var.environment != "development" ? 1 : 0
 
@@ -61,10 +163,10 @@ resource "azurerm_key_vault_certificate_issuer" "rbackv_ca" {
     last_name     = var.kv_certificate_authority_admin_last_name
     phone         = var.kv_certificate_authority_admin_phone_no
   }
+
+  depends_on = [time_sleep.wait_for_rbac]
 }
 
-
-# Certificate only deployed to the Test and Production subscription
 resource "azurerm_key_vault_certificate" "rbackv_service_gov_uk_cert" {
   count = var.environment != "development" ? 1 : 0
 
@@ -99,178 +201,67 @@ resource "azurerm_key_vault_certificate" "rbackv_service_gov_uk_cert" {
       validity_in_months = 12
     }
   }
+
+  depends_on = [
+    time_sleep.wait_for_rbac,
+    azurerm_key_vault_certificate_issuer.rbackv_ca,
+  ]
 }
 
+# ============================================================
+# Data protection key
+# ============================================================
 resource "azurerm_key_vault_key" "rbackv_data_protection" {
   name         = "data-protection"
   key_vault_id = azurerm_key_vault.rbackv.id
   key_type     = "RSA"
   key_size     = 2048
   key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey"]
+
+  depends_on = [time_sleep.wait_for_rbac]
 }
 
-
-resource "azurerm_user_assigned_identity" "agw_mi_rbac" {
-  count = var.environment != "development" ? 1 : 0
-
-  name                = "${var.resource_name_prefix}-agw-mi-rbac"
-  location            = var.location
-  resource_group_name = var.resource_group
-}
-
-resource "azurerm_role_assignment" "agw_mi_secrets_user" {
-  count = var.environment != "development" ? 1 : 0
-
-  scope                = azurerm_key_vault.rbackv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.agw_mi_rbac[0].principal_id
-}
-
-# RBAC: allow app identity to read secrets (use object_id, not client_id)
-
-data "azurerm_role_definition" "kv_secrets_user" {
-  name  = "Key Vault Secrets User"
-  scope = azurerm_key_vault.rbackv.id
-}
-
-data "azurerm_role_definition" "kv_secrets_officer" {
-  name  = "Key Vault Secrets Officer"
-  scope = azurerm_key_vault.rbackv.id
-}
-
-data "azurerm_role_definition" "kv_admin" {
-  name  = "Key Vault Administrator"
-  scope = azurerm_key_vault.rbackv.id
-}
-
-# Grant the Service Principal the "Key Vault Secrets Officer" role
-resource "azurerm_role_assignment" "sp_kv_secrets_officer" {
-  scope                = azurerm_key_vault.rbackv.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.az_config.object_id
-}
-
-# Add a wait timer for RBAC replication (prevents race conditions)
-resource "time_sleep" "wait_for_rbac" {
-  depends_on      = [azurerm_role_assignment.sp_kv_secrets_officer]
-  create_duration = "60s"
-}
-
-#Identities
-resource "azurerm_user_assigned_identity" "cl-identity-reader" {
-  name                = "${var.resource_name_prefix}mid-uks-cl-r"
-  location            = var.location
-  resource_group_name = var.resource_group
-
-  #tags = local.common_tags
-}
-
-resource "azurerm_user_assigned_identity" "cl-identity-administrator" {
-  name                = "${var.resource_name_prefix}mid-uks-cl-a"
-  location            = var.location
-  resource_group_name = var.resource_group
-
-  # tags = local.common_tags
-}
-
-# Role assignments
-resource "azurerm_role_assignment" "kv_user" {
-  scope              = azurerm_key_vault.rbackv.id
-  role_definition_id = data.azurerm_role_definition.kv_secrets_user.role_definition_id
-  principal_id       = azurerm_user_assigned_identity.cl-identity-reader.principal_id
-  principal_type     = "ServicePrincipal"
-}
-
-resource "azurerm_role_assignment" "kv_officer" {
-  scope              = azurerm_key_vault.rbackv.id
-  role_definition_id = data.azurerm_role_definition.kv_secrets_officer.role_definition_id
-  principal_id       = azurerm_user_assigned_identity.cl-identity-administrator.principal_id
-  principal_type     = "ServicePrincipal"
-}
-
-resource "azurerm_role_assignment" "kv_administrator" {
-  scope              = azurerm_key_vault.rbackv.id
-  role_definition_id = data.azurerm_role_definition.kv_admin.role_definition_id
-  principal_id       = azurerm_user_assigned_identity.cl-identity-administrator.principal_id
-  principal_type     = "ServicePrincipal"
-}
-
-
-
-resource "azurerm_role_assignment" "kv_admin_sp" {
-  scope                = azurerm_key_vault.rbackv.id
-  role_definition_name = "Key Vault Administrator"
-  principal_id         = data.azurerm_client_config.az_config.object_id
-}
-
-#Identities
-
-
-
-
-resource "azurerm_role_assignment" "kv_mi_secrets_user" {
-  scope                = azurerm_key_vault.rbackv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_user_assigned_identity.kv_mi_rbac.principal_id
-}
-
+# ============================================================
 # Secrets
+# ============================================================
 resource "azurerm_key_vault_secret" "contentful_delivery_api_key_rbac" {
   name         = "ContentfulOptions--DeliveryApiKey"
   value        = var.contentful_delivery_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
-  depends_on = [
-    time_sleep.wait_for_rbac
-  ]
+  depends_on   = [time_sleep.wait_for_rbac]
 }
 
 resource "azurerm_key_vault_secret" "contentful_preview_api_key_rbac" {
   name         = "ContentfulOptions--PreviewApiKey"
   value        = var.contentful_preview_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
-  depends_on = [
-    time_sleep.wait_for_rbac
-  ]
+  depends_on   = [time_sleep.wait_for_rbac]
 }
 
 resource "azurerm_key_vault_secret" "contentful_management_api_key_rbac" {
   name         = "ContentfulOptions--ManagementApiKey"
   value        = var.contentful_management_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
-  depends_on = [
-    time_sleep.wait_for_rbac
-  ]
+  depends_on   = [time_sleep.wait_for_rbac]
 }
 
 resource "azurerm_key_vault_secret" "contentful_space_id_rbac" {
   name         = "ContentfulOptions--SpaceId"
   value        = var.contentful_space_id
   key_vault_id = azurerm_key_vault.rbackv.id
-  depends_on = [
-    time_sleep.wait_for_rbac
-  ]
+  depends_on   = [time_sleep.wait_for_rbac]
 }
 
 resource "azurerm_key_vault_secret" "govuk_notify_api_key_rbac" {
   name         = "Notifications--ApiKey"
   value        = var.govuk_notify_api_key
   key_vault_id = azurerm_key_vault.rbackv.id
-  depends_on = [
-    time_sleep.wait_for_rbac
-  ]
+  depends_on   = [time_sleep.wait_for_rbac]
 }
 
 resource "azurerm_key_vault_secret" "download_endpoint_secret_rbac" {
   name         = "Download--AuthSecret"
   value        = var.download_endpoint_secret
   key_vault_id = azurerm_key_vault.rbackv.id
-}
-
-
-
-# After
-resource "azurerm_user_assigned_identity" "kv_mi_rbac" {
-  name                = "${var.resource_name_prefix}-kv-mi-rbac"
-  location            = var.location
-  resource_group_name = var.resource_group
+  depends_on   = [time_sleep.wait_for_rbac]
 }
