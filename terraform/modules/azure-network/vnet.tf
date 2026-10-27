@@ -64,13 +64,4 @@ resource "azurerm_subnet" "private-endpoint-subnet" {
   address_prefixes                  = ["172.1.6.0/26"]
   service_endpoints                 = ["Microsoft.Storage"]
   private_endpoint_network_policies = "Enabled"
-
-  delegation {
-    name = "${var.resource_name_prefix}-webapp-dn"
-
-    service_delegation {
-      name    = "Microsoft.Web/serverFarms"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
-    }
-  }
 }
