@@ -1705,7 +1705,9 @@ public class MockContentfulService : IContentService
     }
 
     private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl,
-                                               OpenGraphData? openGraphData = null, string backButtonText = "TEST", bool isIndexable = false)
+                                               OpenGraphData? openGraphData = null, 
+                                               string backButtonText = "TEST", 
+                                               bool isIndexable = false)
     {
         return new StaticPage
                {
