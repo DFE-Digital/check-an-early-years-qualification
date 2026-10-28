@@ -77,17 +77,19 @@ resource "azurerm_user_assigned_identity" "agw_mi_rbac" {
 # ============================================================
 
 # Terraform pipeline SP — writes secrets during apply
-resource "azurerm_role_assignment" "sp_kv_secrets_officer" {
-  scope                = azurerm_key_vault.rbackv.id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.az_config.object_id
-}
+# resource "azurerm_role_assignment" "sp_kv_secrets_officer" {
+#   scope                = azurerm_key_vault.rbackv.id
+#   role_definition_name = "Key Vault Secrets Officer"
+#   principal_id         = data.azurerm_client_config.az_config.object_id
+#   principal_type       = "ServicePrincipal"
+# }
 
 # Terraform pipeline SP — writes keys and certificates during apply
 resource "azurerm_role_assignment" "kv_admin_sp" {
   scope                = azurerm_key_vault.rbackv.id
   role_definition_name = "Key Vault Administrator"
   principal_id         = data.azurerm_client_config.az_config.object_id
+  principal_type       = "ServicePrincipal"
 }
 
 # Web app identity — reads secrets
@@ -95,6 +97,7 @@ resource "azurerm_role_assignment" "kv_mi_secrets_user" {
   scope                = azurerm_key_vault.rbackv.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.kv_mi_rbac.principal_id
+  principal_type       = "ServicePrincipal"
 }
 
 # App Gateway identity (non-dev only) — reads secrets for TLS
@@ -103,6 +106,7 @@ resource "azurerm_role_assignment" "agw_mi_secrets_user" {
   scope                = azurerm_key_vault.rbackv.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.agw_mi_rbac[0].principal_id
+  principal_type       = "ServicePrincipal"
 }
 
 # Reader identity — reads secrets
@@ -134,7 +138,7 @@ resource "azurerm_role_assignment" "kv_administrator" {
 # ============================================================
 resource "time_sleep" "wait_for_rbac" {
   depends_on = [
-    azurerm_role_assignment.sp_kv_secrets_officer,
+    #azurerm_role_assignment.sp_kv_secrets_officer,
     azurerm_role_assignment.kv_admin_sp,
     azurerm_role_assignment.kv_mi_secrets_user,
     azurerm_role_assignment.kv_user,
