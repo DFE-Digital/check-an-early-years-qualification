@@ -11,7 +11,7 @@ resource "azurerm_key_vault" "rbackv" {
   purge_protection_enabled   = true
   rbac_authorization_enabled = true
 
-  public_network_access_enabled   = false
+  public_network_access_enabled   = true
   enabled_for_template_deployment = true
 
   network_acls {
