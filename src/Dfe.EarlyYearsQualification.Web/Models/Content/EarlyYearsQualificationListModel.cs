@@ -8,6 +8,8 @@ public class EarlyYearsQualificationListModel
 
     public OpenGraphDataModel? OpenGraphData { get; init; }
 
+    public bool IsIndexable { get; init; }
+
     public string Heading { get; init; } = string.Empty;
     
     public string PostHeadingContent { get; init; } = string.Empty;

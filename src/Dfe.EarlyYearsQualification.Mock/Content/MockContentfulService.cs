@@ -98,6 +98,19 @@ public class MockContentfulService : IContentService
     public async Task<StaticPage?> GetStaticPageByRoute(string route)
     {
         var body = ContentfulContentHelper.Paragraph("This is the body of the dynamic route");
+        if (route == "find-an-approved-early-years-course")
+        {
+            var openGraphData = new OpenGraphData
+                                {
+                                    Title = "Find an approved early years course OG Title",
+                                    Description = "Find an approved early years course OG Description",
+                                    Domain = "OG Domain"
+                                };
+
+            return await Task.FromResult(CreateStaticPage("Dynamic Page Heading",
+                                                          body, "/", openGraphData, isIndexable: true));
+        }
+
         return await Task.FromResult(CreateStaticPage("Dynamic Page Heading",
                                                       body, "/"));
     }
@@ -1360,6 +1373,7 @@ public class MockContentfulService : IContentService
         return await Task.FromResult(
             new WebViewPage
             {
+                IsIndexable = true,
                 Heading = "Early Years Qualification List",
                 DownloadButtonText = "Download qualification list",
                 DownloadHeading = "Download the early years qualification list",
@@ -1691,8 +1705,9 @@ public class MockContentfulService : IContentService
     }
 
     private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl,
-                                               OpenGraphData? openGraphData = null,
-                                               string backButtonText = "TEST")
+                                               OpenGraphData? openGraphData = null, 
+                                               string backButtonText = "TEST", 
+                                               bool isIndexable = false)
     {
         return new StaticPage
                {
@@ -1704,7 +1719,8 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   OpenGraph = openGraphData
+                   OpenGraph = openGraphData,
+                   IsIndexable = isIndexable
                };
     }
 }

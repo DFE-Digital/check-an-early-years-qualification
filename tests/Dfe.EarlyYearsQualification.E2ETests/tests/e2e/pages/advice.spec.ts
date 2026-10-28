@@ -1,9 +1,11 @@
-﻿import {test} from '@playwright/test';
+﻿import {test, expect} from '@playwright/test';
 import {
     startJourney,
     checkText,
     setCookie,
-    journeyCookieName
+    journeyCookieName,
+    doesNotExist,
+    hasAttribute
 } from '../../_shared/playwrightWrapper';
 
 test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
@@ -60,5 +62,19 @@ test.describe('A spec that tests advice pages', {tag: "@e2e"}, () => {
         await page.goto("/advice/level-7-qualification-after-aug-2019");
         await checkText(page, "#static-page-heading", "Level 7 qualification after aug 2019");
         await checkText(page, "#static-page-body", "Test Static Page Body");
+    });
+
+    test("Find an approved early years course page is indexable and uses its OpenGraph description", async ({page}) => {
+        await page.goto("/advice/find-an-approved-early-years-course");
+        await doesNotExist(page, "meta[name='robots']");
+        await expect(page).toHaveTitle("Dynamic Page Heading - Check an Early Years qualification");
+        await hasAttribute(page, "meta[property='og:title']", "content", "Find an approved early years course OG Title");
+        await hasAttribute(page, "meta[name='description']", "content", "Find an approved early years course OG Description");
+    });
+
+    test("Other advice pages are not indexable", async ({page}) => {
+        await page.goto("/advice/qualifications-achieved-in-scotland");
+        await hasAttribute(page, "meta[name='robots']", "content", "noindex, nofollow");
+        await expect(page).toHaveTitle("Qualifications achieved in Scotland - Check an Early Years qualification");
     });
 });
