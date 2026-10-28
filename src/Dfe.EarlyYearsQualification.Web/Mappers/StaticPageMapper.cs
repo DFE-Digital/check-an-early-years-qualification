@@ -18,6 +18,7 @@ public class StaticPageMapper(IGovUkContentParser contentParser) : IStaticPageMa
                    BodyContent = bodyHtml,
                    BackButton = NavigationLinkMapper.Map(page.BackButton),
                    OpenGraphData = OpenGraphDataMapper.Map(page.OpenGraph),
+                   IsIndexable = page.IsIndexable,
                };
     }
 

@@ -9,4 +9,6 @@ public class StaticPageModel
     public NavigationLinkModel? BackButton { get; init; }
 
     public OpenGraphDataModel? OpenGraphData { get; init; }
+
+    public bool IsIndexable { get; init; }
 }
