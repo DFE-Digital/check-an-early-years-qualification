@@ -226,4 +226,13 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await page.locator("button[value^='qualification-level']").click();
         await doesNotExist(page, `button[value^='qualification-level']`);
     });
+
+    test(`Link to WebView with query params sets the filters correctly`, async ({ page }) => {
+        await page.goto("/early-years-qualification-list/link?levelFilter=3&nationFilter=england&searchTermFilter=Cache&startDateFilter=Post-September%202014");
+        await checkUrl(page, "/early-years-qualification-list");
+        await checkTextContains(page, "button[value^='search-term']", "Cache");
+        await checkTextContains(page, "button[value^='nation']", "England");
+        await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
+        await checkTextContains(page, "button[value^='qualification-level']", `3`);
+    });
 });

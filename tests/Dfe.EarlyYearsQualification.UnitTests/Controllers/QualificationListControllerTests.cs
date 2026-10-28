@@ -283,6 +283,92 @@ public class QualificationListControllerTests
         resultType.FileContents.Should().Equal(mockContent);
         resultType.FileDownloadName.Should().Be(expectedFileName);
     }
+    
+    [TestMethod]
+    public void Link_WhenValidFilterValuesPassed_AppliesFiltersWithMappedModelAndRedirectsToIndex()
+    {
+        const string nation = "England";
+        const int level = 3;
+        const string startDate = "Post-September%202014";
+        const string searchTerm = "Early Years Educator";
+        
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
+        
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+
+        var result = controller.Link(nation, level, startDate, searchTerm) as RedirectToActionResult;
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(nameof(QualificationListController.Index), result.ActionName);
+
+        mockWebViewService.Verify(s => s.ApplyFilters(It.Is<EarlyYearsQualificationListModel>(m =>
+                                                              m.NationFilter == nation &&
+                                                              m.QualificationLevelFilter == level.ToString() &&
+                                                              m.QualificationStartDateFilter == startDate &&
+                                                              m.SearchTermFilter == searchTerm
+                                                          )), Times.Once);
+    }
+
+    [TestMethod]
+    [DataRow(null, null, null, null)]
+    [DataRow("", null, "", "")]
+    [DataRow("   ", null, "   ", "   ")]
+    public void Link_WhenFiltersAreNullOrWhitespace_LeavesModelPropertiesDefaultAndRedirectsToIndex(
+        string? nation, int? level, string? startDate, string? searchTerm)
+    {
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
+        
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+        
+        var result = controller.Link(nation, level, startDate, searchTerm) as RedirectToActionResult;
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(nameof(QualificationListController.Index), result.ActionName);
+
+        mockWebViewService.Verify(s => s.ApplyFilters(It.Is<EarlyYearsQualificationListModel>(m =>
+                                                              m.NationFilter == string.Empty &&
+                                                              m.QualificationLevelFilter == string.Empty  &&
+                                                              m.QualificationStartDateFilter == string.Empty  &&
+                                                              m.SearchTermFilter == string.Empty 
+                                                          )), Times.Once);
+    }
+
+    [TestMethod]
+    public void Link_WhenOnlyLevelFilterProvided_AppliesOnlyLevelFilter()
+    {
+        const int level = 2;
+        
+        var mockLogger = new Mock<ILogger<QualificationListController>>();
+        var mockWebViewService = new Mock<IWebViewService>();
+        var mockQualificationDownloadService = new Mock<IQualificationDownloadService>();
+        var mockEnvironmentService = CreateEnvironmentService();
+        
+        var controller = new QualificationListController(mockLogger.Object, mockWebViewService.Object,
+                                                         mockQualificationDownloadService.Object,
+                                                         mockEnvironmentService.Object);
+        
+        var result = controller.Link(null, level, null, null) as RedirectToActionResult;
+
+        Assert.IsNotNull(result);
+        Assert.AreEqual(nameof(QualificationListController.Index), result.ActionName);
+
+        mockWebViewService.Verify(s => s.ApplyFilters(It.Is<EarlyYearsQualificationListModel>(m =>
+                                                              m.QualificationLevelFilter == level.ToString() &&
+                                                              m.NationFilter == string.Empty  &&
+                                                              m.QualificationStartDateFilter == string.Empty  &&
+                                                              m.SearchTermFilter == string.Empty 
+                                                          )), Times.Once);
+    }
 
     private static Mock<IEnvironmentService> CreateEnvironmentService(string environment = "Development")
     {
