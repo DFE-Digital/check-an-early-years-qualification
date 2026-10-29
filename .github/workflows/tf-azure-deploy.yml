@@ -184,8 +184,8 @@ jobs:
         
       # Cleanup the IP addresses
       - name: Cleanup Runner IP
-          if: always()
-          run: |
-            az storage account network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
+        if: always()
+        run: |
+          az storage account network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
             
-            az keyvault network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
+          az keyvault network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
