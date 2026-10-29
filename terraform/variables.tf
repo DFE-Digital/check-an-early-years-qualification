@@ -242,8 +242,7 @@ variable "download_endpoint_secret" {
   type        = string
 }
 
-
-# variable "webapp_principal_id" {
-#   type        = string
-#   description = "Principal ID of the web app's managed identity, for blob data access."
-# }
+variable "github_runner_ip" {
+  description = "Public IP address of the GitHub Actions runner"
+  type        = string
+}

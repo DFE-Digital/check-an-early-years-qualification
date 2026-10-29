@@ -94,7 +94,9 @@ module "network" {
   govuk_notify_api_key                      = var.govuk_notify_api_key
   log_analytics_workspace_id                = module.monitor.logs_id
   download_endpoint_secret                  = var.download_endpoint_secret
+  github_runner_ip                          = var.github_runner_ip
   depends_on                                = [module.monitor]
+
 }
 
 # Create storage account for web app

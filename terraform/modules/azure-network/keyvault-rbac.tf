@@ -17,7 +17,17 @@ resource "azurerm_key_vault" "rbackv" {
   network_acls {
     default_action = "Deny"
     bypass         = "AzureServices"
+
+
+    #   lifecycle {
+    #   ignore_changes = [network_acls]
+    # }
+
+    ip_rules = [
+      "${var.github_runner_ip}/32"
+    ]
   }
+
 
   tags = {
     "Environment"      = var.environment
