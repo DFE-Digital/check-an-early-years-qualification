@@ -15,6 +15,8 @@ public interface IQuestionService
 
     public int? GetLevelOfQualification();
 
+    public void SetLevelOfQualification(string level);
+
     public string? GetWhereWasQualificationAwarded();
 
     public (int? startMonth, int? startYear) GetWhenWasQualificationStarted();

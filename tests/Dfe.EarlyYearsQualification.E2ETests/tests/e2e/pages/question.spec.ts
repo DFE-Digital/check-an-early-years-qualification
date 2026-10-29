@@ -525,15 +525,15 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await exists(page, 'input[id="7"]');
     });
 
-    test("Checks additional information on the what-level-is-the-qualification page", async ({page, context}) => {
+    test("Checks the qualification levels link on the what-level-is-the-qualification page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
         await page.goto("/questions/what-level-is-the-qualification");
 
-        await doesNotHaveAttribute(page, ".govuk-details", "open");
-        await checkText(page, ".govuk-details__summary-text", "This is the additional information header");
-        await checkText(page, ".govuk-details__text", "This is the additional information body");
-        await page.click(".govuk-details__summary-text");
-        await hasAttribute(page, ".govuk-details", "open");
+        await doesNotExist(page, ".govuk-details");
+        await checkText(page, "a[href='/advice/early-years-qualification-levels']", "early years qualification levels");
+        await page.click("a[href='/advice/early-years-qualification-levels']");
+        await checkUrl(page, "/advice/early-years-qualification-levels");
+        await checkText(page, "#back-button", "Back to what level is the qualification");
     });
 
     test("shows an error message when a user doesnt select an option on the what-level-is-the-qualification page", async ({
