@@ -80,6 +80,11 @@ jobs:
       - name: Azure Storage IP access
         if: ${{ inputs.action == 'Plan & Apply' }}
         run:  az storage account network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
+        
+      # Allows the current IP address access to the KeyVault for later terraform steps in the workflow
+      - name: Azure KeyVault IP access
+        if: ${{ inputs.action == 'Plan & Apply' }}
+        run: az keyvault network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
 
       # Initialise a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -177,3 +182,10 @@ jobs:
           resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
           webapp_name: ${{ vars.WEBAPP_NAME }}        
         
+      # Cleanup the IP addresses
+      - name: Cleanup Runner IP
+          if: always()
+          run: |
+            az storage account network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
+            
+            az keyvault network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
