@@ -76,12 +76,3 @@ export const pagesThatRedirectIfDateMissing = [
     "/advice/early-years-qualification-levels",
     "/advice/qualification-not-on-the-list"
 ]
-
-export const pagesWithUpDownFeedback = [
-    "/advice/qualifications-achieved-in-scotland",
-    "/advice/qualifications-achieved-in-wales",
-    "/advice/qualifications-achieved-in-northern-ireland",
-    "/advice/qualification-outside-the-united-kingdom",
-    "/advice/qualification-not-on-the-list",
-    "/qualifications/qualification-details/EYQ-240"
-]
