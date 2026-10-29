@@ -184,10 +184,26 @@ public class WebViewMapperTests
         qualificationModel.AdditionalRequirements.Should().Be("None");
     }
 
-    private static WebViewPage CreateContent()
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public async Task Map_MapsIsIndexable(bool isIndexable)
+    {
+        var content = CreateContent(isIndexable);
+        var mockContentParser = CreateContentParser();
+
+        var mapper = new WebViewMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(content, new WebViewFilters(), [], true);
+
+        result.IsIndexable.Should().Be(isIndexable);
+    }
+
+    private static WebViewPage CreateContent(bool isIndexable = false)
     {
         return new WebViewPage
                {
+                   IsIndexable = isIndexable,
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "Back",

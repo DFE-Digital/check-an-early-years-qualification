@@ -18,6 +18,7 @@
     var domain = string.Empty;
     var url = string.Empty;
     var imageUrl = string.Empty;
+    var isIndexable = ViewData["Indexable"] is true;
     var openGraphData = ViewData["OpenGraph"] as OpenGraphDataModel;
     if (openGraphData is null)
     {
@@ -36,7 +37,10 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="robots" content="noindex, nofollow"/>
+    @if (!isIndexable)
+    {
+        <meta name="robots" content="noindex, nofollow"/>
+    }
     <meta name="description" content="@description"/>
 
     <!-- Open Graph Meta Tags -->
@@ -124,7 +128,6 @@
     {
         <script src="~/js/gtm/form-handler.js" asp-append-version="true"></script>
     }
-    <script src="~/js/pages/components/up-down-feedback-component.js" asp-append-version="true"></script>
 }
 @Html.GovUkFrontendScriptImports()
 

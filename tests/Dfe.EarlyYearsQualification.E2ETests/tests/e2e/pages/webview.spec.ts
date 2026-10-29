@@ -6,7 +6,8 @@ import {
     checkUrl,
     goToStartPage,
     attributeContains,
-    doesNotExist
+    doesNotExist,
+    hasAttribute
 } from '../../_shared/playwrightWrapper';
 
 test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
@@ -44,6 +45,13 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkText(page, "input[value='6'] ~ label", "Level 6");
         await checkText(page, "input[value='7'] ~ label", "Level 7");
         await checkText(page, "#apply-filter-form button", "Apply filters");
+    });
+
+    test("Page is indexable and uses its OpenGraph description", async ({page}) => {
+        await doesNotExist(page, "meta[name='robots']");
+        await expect(page).toHaveTitle("Early Years Qualification List - Showing all the qualifications - Check an Early Years qualification");
+        await hasAttribute(page, "meta[property='og:title']", "content", "EYQL OG Title (page override)");
+        await hasAttribute(page, "meta[name='description']", "content", "EYQL OG Description (page override)");
     });
 
      test("Keyword filter returns expected qualification", async ({page}) => {
@@ -217,5 +225,14 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
         await checkTextContains(page, "button[value^='qualification-level']", `5`);
         await page.locator("button[value^='qualification-level']").click();
         await doesNotExist(page, `button[value^='qualification-level']`);
+    });
+
+    test(`Link to WebView with query params sets the filters correctly`, async ({ page }) => {
+        await page.goto("/early-years-qualification-list/link?levelFilter=3&nationFilter=england&searchTermFilter=Cache&startDateFilter=Post-September%202014");
+        await checkUrl(page, "/early-years-qualification-list");
+        await checkTextContains(page, "button[value^='search-term']", "Cache");
+        await checkTextContains(page, "button[value^='nation']", "England");
+        await checkTextContains(page, "button[value^='start-date']", "On or after September 2014");
+        await checkTextContains(page, "button[value^='qualification-level']", `3`);
     });
 });

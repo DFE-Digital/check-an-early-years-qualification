@@ -147,6 +147,21 @@ public class MockContentfulServiceTests
     }
 
     [TestMethod]
+    public async Task GetStaticPageById_EarlyYearsQualificationLevels_ReturnsExpectedDetails()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var result = await contentfulService.GetStaticPageById(StaticPages.EarlyYearsQualificationLevels);
+        result.Should().NotBeNull();
+        result.Should().BeAssignableTo<StaticPage>();
+        result.Heading.Should().Be("Early years qualification levels");
+        result.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test Static Page Body");
+        result.BackButton!.DisplayText.Should().Be("Back to what level is the qualification");
+        result.BackButton.Href.Should().Be("/questions/what-level-is-the-qualification");
+    }
+
+    [TestMethod]
     public async Task GetStaticPageById_HowToGetACopyOfTheCertificateOrTranscript_ReturnsExpectedDetails()
     {
         var contentfulService = new MockContentfulService();
@@ -208,6 +223,22 @@ public class MockContentfulServiceTests
         page.Heading.Should().Be("Dynamic Page Heading");
         page.Body!.Content[0].Should().BeAssignableTo<Paragraph>()
               .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the body of the dynamic route");
+        page.OpenGraph.Should().BeNull();
+        page.IsIndexable.Should().BeFalse();
+    }
+
+    [TestMethod]
+    public async Task GetStaticPageByRoute_FindAnApprovedCourse_ReturnsOpenGraphData()
+    {
+        var contentfulService = new MockContentfulService();
+
+        var page = await contentfulService.GetStaticPageByRoute("find-an-approved-early-years-course");
+
+        page.Should().NotBeNull();
+        page.OpenGraph.Should().NotBeNull();
+        page.OpenGraph.Title.Should().Be("Find an approved early years course OG Title");
+        page.OpenGraph.Description.Should().Be("Find an approved early years course OG Description");
+        page.IsIndexable.Should().BeTrue();
     }
 
     [TestMethod]
@@ -360,9 +391,11 @@ public class MockContentfulServiceTests
         result.ErrorMessage.Should().NotBeNullOrEmpty();
         result.ErrorBannerHeading.Should().NotBeNull();
         result.ErrorBannerLinkText.Should().NotBeNull();
-        result.AdditionalInformationHeader.Should().Be("This is the additional information header");
-        result.AdditionalInformationBody!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "This is the additional information body");
+        result.AdditionalInformationHeader.Should().BeEmpty();
+        result.AdditionalInformationBody.Should().BeNull();
+        result.PostHeadingContent!.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content[0].Should().BeAssignableTo<Text>()
+              .Which.Value.Should().Be("Find out more about ");
         result.Options.Should().NotBeNullOrEmpty();
         result.Options.Count.Should().Be(7);
         (result.Options[0] as Option)!.Label.Should().Be("Level 2");
@@ -1392,6 +1425,7 @@ public class MockContentfulServiceTests
         result.Should().BeAssignableTo<WebViewPage>();
         result.Heading.Should().NotBeNullOrEmpty();
         result.Heading.Should().Be("Early Years Qualification List");
+        result.IsIndexable.Should().BeTrue();
         result.DownloadHeading.Should().Be("Download the early years qualification list");
         result.DownloadSectionContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("The download section content"));
         result.DownloadButtonText.Should().Be("Download qualification list");
