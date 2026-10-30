@@ -87,6 +87,7 @@ jobs:
         run: az keyvault network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
         
       - name: Await Propagation
+        if: ${{ inputs.action == 'Plan & Apply' }}
         run: |
           echo "Waiting for firewall propagation..."
           for i in {1..30}; do
