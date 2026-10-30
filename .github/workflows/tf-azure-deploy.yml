@@ -174,7 +174,7 @@ jobs:
         id: tf-plan
         run: |
           export exitcode=0
-          terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+          terraform plan -var="github_runner_ip=$CURRENT_IP" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
           
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
           
@@ -188,7 +188,10 @@ jobs:
       # Terraform Apply
       - name: Terraform Apply
         if: ${{ inputs.action == 'Plan & Apply' }}
-        run: terraform apply -auto-approve tfplan
+        run: |
+          terraform apply \
+            -var="github_runner_ip=$CURRENT_IP" \
+            -auto-approve tfplan
             
         
       - name: Restart App Service
