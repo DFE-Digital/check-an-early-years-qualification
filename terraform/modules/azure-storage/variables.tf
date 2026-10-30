@@ -32,3 +32,8 @@ variable "logs_id" {
   description = "Log Analytics workspace ID"
   type        = string
 }
+
+variable "webapp_principal_id" {
+  type        = string
+  description = "Principal ID of the web app's managed identity, for blob data access."
+}

@@ -102,3 +102,8 @@ variable "download_endpoint_secret" {
   description = "Secret value to be supplied when calling download endpoint"
   type        = string
 }
+
+variable "github_runner_ip" {
+  description = "Public IP address of the GitHub Actions runner"
+  type        = string
+}

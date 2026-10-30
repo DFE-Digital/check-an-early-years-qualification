@@ -186,3 +186,26 @@ variable "tags" {
   description = "Resource tags"
   type        = map(string)
 }
+
+
+#kvrbac
+
+variable "rbackv_id" {
+  description = "ID of the Key Vault"
+  type        = string
+}
+
+# variable "rbackv_service_gov_uk_cert_secret_id" {
+#   description = "service.gov.uk SSL certificate Secret ID"
+#   type        = string
+# }
+
+# variable "rbackv_service_gov_uk_cert_versionless_secret_id" {
+#   description = "service.gov.uk SSL certificate versionless Secret ID"
+#   type        = string
+# }
+
+# variable "rbackv_mi_id" {
+#   description = "ID of the Managed Identity for the Key Vault"
+#   type        = string
+# }

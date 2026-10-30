@@ -73,11 +73,11 @@ resource "azurerm_storage_container" "data_protection" {
   }
 }
 
-resource "azurerm_key_vault_secret" "storage_connection_string" {
-  name         = "Storage--ConnectionString"
-  value        = azurerm_storage_account.sa.primary_connection_string
-  key_vault_id = var.kv_id
-}
+# resource "azurerm_key_vault_secret" "storage_connection_string" {
+#   name         = "Storage--ConnectionString"
+#   value        = azurerm_storage_account.sa.primary_connection_string
+#   key_vault_id = var.kv_id
+# }
 
 resource "azurerm_monitor_diagnostic_setting" "storage_account_diagnostics" {
   name                       = "storage-account-diagnostics"
@@ -91,4 +91,11 @@ resource "azurerm_monitor_diagnostic_setting" "storage_account_diagnostics" {
   enabled_metric {
     category = "AllMetrics"
   }
+}
+
+
+resource "azurerm_role_assignment" "webapp_storage_blob_contributor" {
+  scope                = azurerm_storage_account.sa.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = var.webapp_principal_id
 }

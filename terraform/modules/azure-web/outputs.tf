@@ -7,3 +7,7 @@ output "app_service_webapp_id" {
   description = "ID of the Web Application"
   value       = azurerm_linux_web_app.webapp.id
 }
+
+output "webapp_principal_id" {
+  value = azurerm_linux_web_app.webapp.identity[0].principal_id
+}
