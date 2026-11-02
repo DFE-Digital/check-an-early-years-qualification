@@ -56,4 +56,9 @@ public static class StaticPages
     ///     Entry ID for the "How to find a suitable course" help page.
     /// </summary>
     public const string HowToFindASuitableCourse = "5mvKGvZhk1BYfGuIwJ41iW";
+
+    /// <summary>
+    ///     Entry ID for the main journey "Early years qualification levels" page.
+    /// </summary>
+    public const string EarlyYearsQualificationLevels = "1QUDkDUKIlUWWJlyH1UsXr";
 }

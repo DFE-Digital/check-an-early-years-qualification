@@ -83,4 +83,33 @@ public class QualificationListController(
 
         return RedirectToAction(nameof(Index));
     }
+    
+    [HttpGet("link")]
+    public IActionResult Link(string? nationFilter, int? levelFilter, string? startDateFilter, string? searchTermFilter)
+    {
+        var model = new EarlyYearsQualificationListModel();
+        if (!string.IsNullOrWhiteSpace(nationFilter))
+        {
+            model.NationFilter = nationFilter;
+        }
+
+        if (levelFilter.HasValue)
+        {
+            model.QualificationLevelFilter = levelFilter.Value.ToString();
+        }
+        
+        if (!string.IsNullOrWhiteSpace(startDateFilter))
+        {
+            model.QualificationStartDateFilter = startDateFilter;
+        }
+        
+        if (!string.IsNullOrWhiteSpace(searchTermFilter))
+        {
+            model.SearchTermFilter = searchTermFilter;
+        }
+        
+        webViewService.ApplyFilters(model);
+
+        return RedirectToAction(nameof(Index));
+    }
 }
