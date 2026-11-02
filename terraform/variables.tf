@@ -188,6 +188,7 @@ variable "govuk_notify_api_key" {
 
 variable "cache_endpoint_secret" {
   description = "Secret value to be supplied when calling cache endpoint"
+  sensitive   = true
   type        = string
 }
 
@@ -239,5 +240,27 @@ variable "cache_type" {
 
 variable "download_endpoint_secret" {
   description = "Secret value to be supplied when calling download endpoint"
+  type        = string
+  sensitive   = true
+}
+
+variable "splunk_access_token" {
+  description = "Secret value to be supplied for the Splunk Access Token"
+  type        = string
+  sensitive   = true
+}
+
+variable "splunk_port" {
+  description = "Port to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "splunk_realm" {
+  description = "Realm to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "otel_service_name" {
+  description = "Realm to be used for the Splunk Integration"
   type        = string
 }
