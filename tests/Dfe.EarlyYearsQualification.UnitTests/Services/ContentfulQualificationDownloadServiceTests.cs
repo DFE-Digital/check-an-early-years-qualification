@@ -18,32 +18,27 @@ public class ContentfulQualificationDownloadServiceTests
 {
     private const string Locale = "en-GB";
 
-    private Mock<IContentfulClient> _clientMock = null!;
-    private Mock<IContentfulManagementClient> _managementClientMock = null!;
-    private Mock<IDownloadGenerator> _downloadGeneratorMock = null!;
-    private Mock<ILogger<ContentfulQualificationDownloadService>> _loggerMock = null!;
-    private Mock<IHttpClientFactory> _httpClientFactoryMock = null!;
-
-    [TestInitialize]
-    public void SetUp()
-    {
-        _clientMock = new Mock<IContentfulClient>();
-        _managementClientMock = new Mock<IContentfulManagementClient>();
-        _downloadGeneratorMock = new Mock<IDownloadGenerator>();
-        _loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
-        _httpClientFactoryMock = new Mock<IHttpClientFactory>();
-    }
-
     [TestMethod]
     [DataRow("Production", Assets.EarlyYearsQualificationList, "Early-Years-Qualifications-List.csv", "EYQL Download")]
     [DataRow("Staging", Assets.EarlyYearsQualificationListStaging, "Early-Years-Qualifications-List-Staging.csv", "EYQL Download Staging")]
     [DataRow("Development", Assets.EarlyYearsQualificationListDevelopment, "Early-Years-Qualifications-List-Development.csv", "EYQL Download Development")]
     public async Task GenerateEyqlDownloadByEnvironment_Environment_GeneratesAndPublishesAsset(string environment, string assetId, string expectedFileName, string expectedTitle)
     {
-        var qualifications = new ContentfulCollection<Qualification>
-                             {
-                                 Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
-                             };
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                   managementClientMock.Object,
+                                                   downloadGeneratorMock.Object,
+                                                   loggerMock.Object,
+                                                   httpClientFactoryMock.Object);
+        
+                                                   var qualifications = new ContentfulCollection<Qualification>
+                                                                        {
+                                                                            Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
+                                                                        };
         var existingAsset = CreateManagementAsset(assetId,
                                                   version: 5,
                                                   publishedVersion: 4,
@@ -51,17 +46,17 @@ public class ContentfulQualificationDownloadServiceTests
         var uploadedAsset = CreateManagementAsset(assetId, version: 7);
         var generatedContent = "header,value";
 
-        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()))
+        clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()))
                    .ReturnsAsync(qualifications);
-        _downloadGeneratorMock.Setup(generator => generator.GenerateQualificationListContent(It.IsAny<List<Qualification>>()))
+        downloadGeneratorMock.Setup(generator => generator.GenerateQualificationListContent(It.IsAny<List<Qualification>>()))
                               .Returns(generatedContent);
-        _managementClientMock.Setup(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
+        managementClientMock.Setup(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
                              .ReturnsAsync(new ContentfulCollection<ManagementAsset> { Items = [existingAsset] });
 
         ManagementAsset? createdAsset = null;
         byte[]? uploadedBytes = null;
 
-        _managementClientMock
+        managementClientMock
             .Setup(client => client.UploadFileAndCreateAsset(It.IsAny<ManagementAsset>(),
                                                              It.IsAny<byte[]>(),
                                                              It.IsAny<string>(),
@@ -73,16 +68,14 @@ public class ContentfulQualificationDownloadServiceTests
             })
             .ReturnsAsync(uploadedAsset);
 
-        var service = CreateService();
-
         await service.GenerateEyqlDownloadByEnvironment(environment);
 
-        _downloadGeneratorMock.Verify(generator => generator.GenerateQualificationListContent(
+        downloadGeneratorMock.Verify(generator => generator.GenerateQualificationListContent(
                                          It.Is<List<Qualification>>(items => items.Count == 1 && items[0].QualificationId == "qualification-id")),
                                      Times.Once);
-        _managementClientMock.Verify(client => client.UnpublishAsset(assetId, 4), Times.Once);
-        _managementClientMock.Verify(client => client.DeleteAsset(assetId, 5), Times.Once);
-        _managementClientMock.Verify(client => client.PublishAsset(assetId, 8), Times.Once);
+        managementClientMock.Verify(client => client.UnpublishAsset(assetId, 4), Times.Once);
+        managementClientMock.Verify(client => client.DeleteAsset(assetId, 5), Times.Once);
+        managementClientMock.Verify(client => client.PublishAsset(assetId, 8), Times.Once);
 
         createdAsset.Should().NotBeNull();
         createdAsset.SystemProperties.Id.Should().Be(assetId);
@@ -96,58 +89,96 @@ public class ContentfulQualificationDownloadServiceTests
     [TestMethod]
     public async Task GenerateEyqlDownloadByEnvironment_DownloadGeneratorReturnsEmptyContent_LogsWarningAndStops()
     {
-        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()))
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
+        
+        clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new ContentfulCollection<Qualification>
                                  {
                                      Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
                                  });
-        _downloadGeneratorMock.Setup(generator => generator.GenerateQualificationListContent(It.IsAny<List<Qualification>>()))
+        downloadGeneratorMock.Setup(generator => generator.GenerateQualificationListContent(It.IsAny<List<Qualification>>()))
                               .Returns(string.Empty);
-
-        var service = CreateService();
 
         await service.GenerateEyqlDownloadByEnvironment("Production");
 
-        _loggerMock.VerifyWarning("EYQL not generated. No content found.");
-        _managementClientMock.Verify(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()), Times.Never);
-        _managementClientMock.Verify(client => client.UploadFileAndCreateAsset(It.IsAny<ManagementAsset>(),
+        loggerMock.VerifyWarning("EYQL not generated. No content found.");
+        managementClientMock.Verify(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()), Times.Never);
+        managementClientMock.Verify(client => client.UploadFileAndCreateAsset(It.IsAny<ManagementAsset>(),
                                                                                It.IsAny<byte[]>(),
                                                                                It.IsAny<string>(),
                                                                                It.IsAny<CancellationToken>()),
                                      Times.Never);
-        _managementClientMock.Verify(client => client.PublishAsset(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
+        managementClientMock.Verify(client => client.PublishAsset(It.IsAny<string>(), It.IsAny<int>()), Times.Never);
     }
 
     [TestMethod]
     public async Task GenerateEyqlDownloadByEnvironment_UnknownEnvironment_LogsWarning()
     {
-        var service = CreateService();
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
 
         await service.GenerateEyqlDownloadByEnvironment("Test");
 
-        _loggerMock.VerifyWarning("Unknown environment: Test. No EYQL download generated.");
-        _clientMock.Verify(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()),
+        loggerMock.VerifyWarning("Unknown environment: Test. No EYQL download generated.");
+        clientMock.Verify(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()),
                            Times.Never);
     }
 
     [TestMethod]
     public async Task GenerateEyqlDownloadByEnvironment_WhenGenerationFails_LogsError()
     {
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
+        
         var exception = new InvalidOperationException("Failed to generate download");
 
-        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()))
+        clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(), It.IsAny<CancellationToken>()))
                    .ThrowsAsync(exception);
-
-        var service = CreateService();
 
         await service.GenerateEyqlDownloadByEnvironment("Production");
 
-        _loggerMock.VerifyError("Error generating EYQL download.", exception);
+        loggerMock.VerifyError("Error generating EYQL download.", exception);
     }
 
     [TestMethod]
     public async Task GetEyqlDownload_Production_ReturnsFileContentsAndFileName()
     {
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
+        
         var expectedBytes = Encoding.UTF8.GetBytes("csv-content");
         var asset = CreateManagementAsset(Assets.EarlyYearsQualificationList,
                                           version: 2,
@@ -165,12 +196,10 @@ public class ContentfulQualificationDownloadServiceTests
                                  Content = new ByteArrayContent(expectedBytes)
                              });
 
-        _managementClientMock.Setup(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
+        managementClientMock.Setup(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
                              .ReturnsAsync(new ContentfulCollection<ManagementAsset> { Items = [asset] });
-        _httpClientFactoryMock.Setup(factory => factory.CreateClient(It.IsAny<string>()))
+        httpClientFactoryMock.Setup(factory => factory.CreateClient(It.IsAny<string>()))
                               .Returns(new HttpClient(handler.Object));
-
-        var service = CreateService();
 
         var result = await service.GetEyqlDownload("Production");
 
@@ -187,14 +216,23 @@ public class ContentfulQualificationDownloadServiceTests
     [TestMethod]
     public async Task GetEyqlDownload_WhenAssetDoesNotExist_LogsWarningAndReturnsEmptyContent()
     {
-        _managementClientMock.Setup(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
+        
+        managementClientMock.Setup(client => client.GetAssetsCollection(It.IsAny<QueryBuilder<ManagementAsset>>()))
                              .ReturnsAsync(new ContentfulCollection<ManagementAsset> { Items = [] });
-
-        var service = CreateService();
 
         var result = await service.GetEyqlDownload("Production");
 
-        _loggerMock.VerifyWarning("EYQL not found.");
+        loggerMock.VerifyWarning("EYQL not found.");
         result.fileContents.Should().BeEmpty();
         result.fileName.Should().Be("Early-Years-Qualifications-List.csv");
     }
@@ -202,11 +240,20 @@ public class ContentfulQualificationDownloadServiceTests
     [TestMethod]
     public async Task GetEyqlDownload_UnknownEnvironment_LogsWarningAndReturnsEmptyResult()
     {
-        var service = CreateService();
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
 
         var result = await service.GetEyqlDownload("ThisIsNotAValidEnvironment");
 
-        _loggerMock.VerifyWarning("Unknown environment: ThisIsNotAValidEnvironment. No EYQL asset found.");
+        loggerMock.VerifyWarning("Unknown environment: ThisIsNotAValidEnvironment. No EYQL asset found.");
         result.fileContents.Should().BeEmpty();
         result.fileName.Should().BeEmpty();
     }
@@ -214,54 +261,64 @@ public class ContentfulQualificationDownloadServiceTests
     [TestMethod]
     public async Task GetEyqlDataForInternalDownload_DownloadGeneratorReturnsNull_ReturnsNull()
     {
-        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
+        
+        clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
                                                       It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new ContentfulCollection<Qualification>
                     {
                         Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
                     });
         
-        _downloadGeneratorMock.Setup(x => x.GenerateInternalQualificationListContent(It.IsAny<List<Qualification>>()))
+        downloadGeneratorMock.Setup(x => x.GenerateInternalQualificationListContent(It.IsAny<List<Qualification>>()))
                               .Returns(string.Empty);
-        
-        var service = CreateService();
-        
+
         var result = await service.GetEyqlDataForInternalDownload();
         
         result.Should().BeNull();
-        _loggerMock.VerifyWarning("No content found for internal download.");
+        loggerMock.VerifyWarning("No content found for internal download.");
     }
     
     [TestMethod]
     public async Task GetEyqlDataForInternalDownload_DownloadGeneratorReturnsString_ReturnsByteArray()
     {
+        var clientMock = new Mock<IContentfulClient>();
+        var managementClientMock = new Mock<IContentfulManagementClient>();
+        var downloadGeneratorMock = new Mock<IDownloadGenerator>();
+        var loggerMock = new Mock<ILogger<ContentfulQualificationDownloadService>>();
+        var httpClientFactoryMock = new Mock<IHttpClientFactory>();
+        var service = new ContentfulQualificationDownloadService(clientMock.Object,
+                                                                 managementClientMock.Object,
+                                                                 downloadGeneratorMock.Object,
+                                                                 loggerMock.Object,
+                                                                 httpClientFactoryMock.Object);
+        
         const string contentResult = "This is a test";
-        _clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
+        clientMock.Setup(client => client.GetEntries(It.IsAny<QueryBuilder<Qualification>>(),
                                                       It.IsAny<CancellationToken>()))
                    .ReturnsAsync(new ContentfulCollection<Qualification>
                                  {
                                      Items = [new Qualification("qualification-id", "Qualification", "Awarding organisation", 3)]
                                  });
         
-        _downloadGeneratorMock.Setup(x => x.GenerateInternalQualificationListContent(It.IsAny<List<Qualification>>()))
+        downloadGeneratorMock.Setup(x => x.GenerateInternalQualificationListContent(It.IsAny<List<Qualification>>()))
                               .Returns(contentResult);
-        
-        var service = CreateService();
+
         var expectedByteArray = Encoding.UTF8.GetBytes(contentResult);
         
         var result = await service.GetEyqlDataForInternalDownload();
         
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(expectedByteArray);
-    }
-
-    private ContentfulQualificationDownloadService CreateService()
-    {
-        return new ContentfulQualificationDownloadService(_clientMock.Object,
-                                                          _managementClientMock.Object,
-                                                          _downloadGeneratorMock.Object,
-                                                          _loggerMock.Object,
-                                                          _httpClientFactoryMock.Object);
     }
 
     private static ManagementAsset CreateManagementAsset(string assetId,

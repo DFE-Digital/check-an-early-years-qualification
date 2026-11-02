@@ -466,6 +466,8 @@ public class MockContentfulServiceTests
         result.DefaultText.Should().Be("Test Default Dropdown Text");
         result.DropdownHeading.Should().Be("Test Dropdown Heading");
         result.NotInListText.Should().Be("Test Not In The List");
+        result.NotInListHintText.Should().Be("Test Not In The List Hint Text");
+        result.PageParagraph.Should().Be("Test Page Paragraph");
     }
 
     [TestMethod]
@@ -499,15 +501,17 @@ public class MockContentfulServiceTests
         result.SearchCriteriaHeading.Should().Be("Your search");
         result.MultipleQualificationsFoundText.Should().Be("matching qualifications");
         result.SingleQualificationFoundText.Should().Be("matching qualification");
-        result.PreSearchBoxContent!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Pre search box content");
         result.PostQualificationListContentHeading.Should().Be("Post qualification list header");
         result.PostQualificationListContent!.Content[0].Should().BeAssignableTo<Hyperlink>()
               .Which.Content.Should().Contain(x => ((Text)x).Value == "Link to not on list advice page");
         result.AnyLevelHeading.Should().Be("any level");
         result.AnyAwardingOrganisationHeading.Should().Be("various awarding organisations");
-        result.NoResultsText!.Content[0].Should().BeAssignableTo<Paragraph>()
-              .Which.Content.Should().ContainSingle(x => ((Text)x).Value == "Test no qualifications text");
+        result.NoResultsText!.Content.Should().HaveCount(4);
+        result.NoResultsText.Content[0].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().Contain(x => (x as Text) != null && (x as Text)!.Value == " to make sure they are correct.");
+        result.NoResultsText.Content[3].Should().BeAssignableTo<Paragraph>()
+              .Which.Content.Should().Contain(x => (x as Text) != null && (x as Text)!.Value == "Go to ");
+        result.NoMatchingQualificationsHeading.Should().Be("No matching qualifications were found");
         result.ClearSearchText.Should().Be("Clear search");
         result.AwardedLocationPrefixText.Should().Be("awarded in");
         result.StartDatePrefixText.Should().Be("started in");

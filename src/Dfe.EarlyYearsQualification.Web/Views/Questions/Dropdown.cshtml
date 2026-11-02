@@ -43,6 +43,11 @@
                         </h1>
                     </legend>
 
+                    @if (Model.HasPageParagraph)
+                    {
+                        <p class="govuk-body govuk-!-margin-bottom-6" id="page-paragraph">@Model.PageParagraph</p>
+                    }
+
                     @if (!string.IsNullOrEmpty(Model.AdditionalInformationHeader) && !string.IsNullOrEmpty(Model.AdditionalInformationBody))
                     {
                         await Html.RenderPartialAsync("Partials/AdditionalInformation", new AdditionalInformationModel
@@ -66,8 +71,12 @@
                     </div>
 
                     <div class="govuk-checkboxes__item">
-                        @Html.CheckBoxFor(x => x.NotInTheList, new { @class = "govuk-checkboxes__input", id = Model.CheckboxId, name = "awarding-organisation" })
+                        @Html.CheckBoxFor(x => x.NotInTheList, Model.CheckboxAttributes)
                         @Html.Label(Model.CheckboxId, Model.NotInListText, new { @class = "govuk-label govuk-checkboxes__label" })
+                        @if (Model.HasNotInListHint)
+                        {
+                            <div id="@Model.NotInListHintId" class="govuk-hint govuk-checkboxes__hint">@Model.NotInListHintText</div>
+                        }
                     </div>
                 </fieldset>
             </div>

@@ -1,0 +1,32 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationListModel;
+
+@{
+    ViewData["Title"] = "Qualifications";
+}
+
+@section BeforeMainContent {
+    @{
+        await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <h1 id="heading" class="govuk-heading-xl">@Model.Header</h1>
+            </div>
+        </div>
+        @{ await Html.RenderPartialAsync("Partials/SearchCriteria", Model); }
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <h2 id="no-matching-qualifications-heading" class="govuk-heading-m govuk-!-static-margin-bottom-8" tabindex="-1">
+                    @Model.NoMatchingQualificationsHeading
+                </h2>
+                <div id="no-result-content">
+                    @Html.Raw(Model.NoResultText)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

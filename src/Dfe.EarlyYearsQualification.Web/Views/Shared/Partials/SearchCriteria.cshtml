@@ -1,0 +1,16 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.QualificationListModel
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <p id="your-search-header" class="govuk-body">
+            @Model.SearchCriteriaHeading
+        </p>
+        <ul class="govuk-list govuk-list--bullet govuk-!-static-margin-bottom-8">
+            <li id="filter-country">@Model.Filters.Country</li>
+            <li id="filter-start-date">@Model.Filters.StartDate</li>
+            <li id="filter-awarded-date">@Model.Filters.AwardedDate</li>
+            <li id="filter-level">@Model.Filters.Level</li>
+            <li id="filter-org">@Model.Filters.AwardingOrganisation</li>
+        </ul>
+    </div>
+</div>

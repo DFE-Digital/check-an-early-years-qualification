@@ -49,10 +49,10 @@ public class WebViewMapperTests
         result.BackButton.OpenInNewTab.Should().Be(content.BackButton.OpenInNewTab);
 
         result.OpenGraphData.Should().NotBeNull();
-        result.OpenGraphData!.Title.Should().Be(content.OpenGraphData!.Title);
-        result.OpenGraphData.Description.Should().Be(content.OpenGraphData.Description);
-        result.OpenGraphData.Domain.Should().Be(content.OpenGraphData.Domain);
-        result.OpenGraphData.ImageUrl.Should().Be(content.OpenGraphData.Image!.File.Url);
+        result.OpenGraphData!.Title.Should().Be(content.OpenGraph!.Title);
+        result.OpenGraphData.Description.Should().Be(content.OpenGraph.Description);
+        result.OpenGraphData.Domain.Should().Be(content.OpenGraph.Domain);
+        result.OpenGraphData.ImageUrl.Should().Be(content.OpenGraph.Image!.File.Url);
 
         result.DownloadHeading.Should().Be(content.DownloadHeading);
         result.DownloadSectionContent.Should().Be("Download section");
@@ -236,7 +236,7 @@ public class WebViewMapperTests
                    ],
                    MultipleQualificationsFoundText = "qualifications found",
                    SingleQualificationFoundText = "qualification found",
-                   OpenGraphData = new OpenGraphData
+                   OpenGraph = new OpenGraphData
                    {
                        Title = "OG Title",
                        Description = "OG Description",

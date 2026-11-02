@@ -17,113 +17,199 @@ namespace Dfe.EarlyYearsQualification.UnitTests.Services;
 [TestClass]
 public class QualificationDetailsServiceTests
 {
-    private Mock<IGovUkContentParser> _mockContentParser = new Mock<IGovUkContentParser>();
-    private Mock<IContentService> _mockContentService = new Mock<IContentService>();
-    private Mock<ILogger<QualificationDetailsService>> _mockLogger = new Mock<ILogger<QualificationDetailsService>>();
-    private Mock<IUserJourneyCookieService> _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-    private Mock<IPlaceholderUpdater> _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-    private Mock<IQualificationDetailsMapper> _mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
-    private Mock<IQualificationSearchService> _mockQualificationSearchService = new Mock<IQualificationSearchService>();
-
-    private QualificationDetailsService GetSut()
-    {
-        return new QualificationDetailsService(
-                                               _mockLogger.Object,
-                                               _mockContentService.Object,
-                                               _mockContentParser.Object,
-                                               _mockUserJourneyCookieService.Object,
-                                               _mockPlaceholderUpdater.Object,
-                                               _mockQualificationDetailsMapper.Object,
-                                               _mockQualificationSearchService.Object
-                                              );
-    }
-
-    [TestInitialize]
-    public void Initialize()
-    {
-        _mockLogger = new Mock<ILogger<QualificationDetailsService>>();
-        _mockContentService = new Mock<IContentService>();
-        _mockContentParser = new Mock<IGovUkContentParser>();
-        _mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
-        _mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
-        _mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
-    }
-
+    
     [TestMethod]
     public async Task GetFilteredQualifications_Calls_SearchService_GetFilteredQualifications()
     {
-        _ = await GetSut().GetFilteredQualifications();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                               mockLogger.Object,
+                                               mockContentService.Object,
+                                               mockContentParser.Object,
+                                               mockUserJourneyCookieService.Object,
+                                               mockPlaceholderUpdater.Object,
+                                               mockQualificationDetailsMapper.Object,
+                                               mockQualificationSearchService.Object
+                                              );
+        _ = await service.GetFilteredQualifications();
 
-        _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(), Times.Once);
+        mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(), Times.Once);
     }
     
     [TestMethod]
     public async Task GetFilteredQualifications_CallsWithOverride_SearchService_GetFilteredQualifications()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string searchCriteriaOverride = "override";
-        _ = await GetSut().GetFilteredQualifications(searchCriteriaOverride);
+        _ = await service.GetFilteredQualifications(searchCriteriaOverride);
 
-        _mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(searchCriteriaOverride), Times.Once);
+        mockQualificationSearchService.Verify(o => o.GetFilteredQualifications(searchCriteriaOverride), Times.Once);
     }
     
     [TestMethod]
     public async Task GetQualificationById_Calls_SearchService_GetQualification()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string qualificationId = "ABC-123";
-        _ = await GetSut().GetQualificationById(qualificationId);
+        _ = await service.GetQualificationById(qualificationId);
 
-        _mockQualificationSearchService.Verify(o => o.GetQualificationById(qualificationId), Times.Once);
+        mockQualificationSearchService.Verify(o => o.GetQualificationById(qualificationId), Times.Once);
     }
 
     [TestMethod]
     public async Task GetDetailsPage_QualificationIsADegree_GetDetailsPage()
     {
-        var sut = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
 
         var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 6)
                             { IsTheQualificationADegree = true };
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
+        _ = await service.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, true, false),
+        mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, true, false),
                                    Times.Once);
     }
 
     [TestMethod]
     public async Task GetDetailsPage_QualificationIsApprovedAtLevel6_GetDetailsPage()
     {
-        var sut = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
 
         var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 6)
                             { IsAutomaticallyApprovedAtLevel6 = true };
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
+        _ = await service.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019,false, true),
+        mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019,false, true),
                                    Times.Once);
     }
 
     [TestMethod]
     public async Task GetDetailsPage_QualificationIsNotADegree_GetDetailsPage()
     {
-        var sut = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
 
         var qualification = new Qualification("TST001", "Qual Name", "Awarding Org", 3);
 
-        _ = await sut.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
+        _ = await service.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, qualification);
 
-        _mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, false, false),
+        mockContentService.Verify(o => o.GetQualificationDetailsPage(false, false, 3, 6, 2001, 5, 2019, false, false),
                                    Times.Once);
     }
 
     [TestMethod]
     public void HasStartDate_Calls_Cookies_GetWhenQualificationStarted()
     {
-        var sut = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
 
-        _ = sut.HasStartDate();
+        _ = service.HasStartDate();
 
-        _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
     }
 
     [TestMethod]
@@ -132,10 +218,26 @@ public class QualificationDetailsServiceTests
     [DataRow(null, 1)]
     public void HasStartDate_NullDates_ReturnsFalse(int? month, int? year)
     {
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
-        var sut = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
 
-        var result = sut.HasStartDate();
+        var result = service.HasStartDate();
 
         result.Should().BeFalse();
     }
@@ -144,10 +246,26 @@ public class QualificationDetailsServiceTests
     [DataRow(1, 1)]
     public void HasStartDate_GotDates_ReturnsTrue(int? month, int? year)
     {
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
-        var sut = GetSut();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((month, year));
 
-        var result = sut.HasStartDate();
+        var result = service.HasStartDate();
 
         result.Should().BeTrue();
     }
@@ -155,6 +273,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void QualificationContainsQtsQuestion_NullQuestions_ReturnsFalse()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qualification = new Qualification(It.IsAny<string>(),
                                               It.IsAny<string>(),
                                               It.IsAny<string>(),
@@ -164,9 +300,7 @@ public class QualificationDetailsServiceTests
                                 AdditionalRequirementQuestions = null
                             };
 
-        var sut = GetSut();
-
-        var result = sut.QualificationContainsQtsQuestion(qualification);
+        var result = service.QualificationContainsQtsQuestion(qualification);
 
         result.Should().BeFalse();
     }
@@ -177,6 +311,24 @@ public class QualificationDetailsServiceTests
     [DataRow("uwxyz", false)]
     public void QualificationContainsQtsQuestion_GotQuestions_ReturnsTrueIfQts(string questionId, bool expectedResult)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qualification = new Qualification(It.IsAny<string>(),
                                               It.IsAny<string>(),
                                               It.IsAny<string>(),
@@ -192,9 +344,7 @@ public class QualificationDetailsServiceTests
                                 ]
                             };
 
-        var sut = GetSut();
-
-        var result = sut.QualificationContainsQtsQuestion(qualification);
+        var result = service.QualificationContainsQtsQuestion(qualification);
 
         result.Should().Be(expectedResult);
     }
@@ -202,14 +352,30 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void DoAdditionalAnswersMatchQuestions_NoAnswers_ReturnsTrue()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var details = new QualificationDetailsModel
                       {
                           AdditionalRequirementAnswers = []
                       };
 
-        var sut = GetSut();
-
-        var result = sut.DoAdditionalAnswersMatchQuestions(details);
+        var result = service.DoAdditionalAnswersMatchQuestions(details);
 
         result.Should().BeTrue();
     }
@@ -221,6 +387,24 @@ public class QualificationDetailsServiceTests
     [DataRow("uwxyz", false)]
     public void DoAdditionalAnswersMatchQuestions_GotAnswers_ReturnsTrueIfExists(string answer, bool expectedResult)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var details = new QualificationDetailsModel
                       {
                           AdditionalRequirementAnswers =
@@ -232,9 +416,7 @@ public class QualificationDetailsServiceTests
                           ]
                       };
 
-        var sut = GetSut();
-
-        var result = sut.DoAdditionalAnswersMatchQuestions(details);
+        var result = service.DoAdditionalAnswersMatchQuestions(details);
 
         result.Should().Be(expectedResult);
     }
@@ -246,6 +428,24 @@ public class QualificationDetailsServiceTests
     [DataRow(false, "yes", true)]
     public void AnswersIndicateNotFullAndRelevant(bool fullAndRelevant, string answer, bool expectedResult)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var additionalRequirementsAnswers = new List<AdditionalRequirementAnswerModel>
                                             {
                                                 new AdditionalRequirementAnswerModel
@@ -255,9 +455,7 @@ public class QualificationDetailsServiceTests
                                                 }
                                             };
 
-        var sut = GetSut();
-
-        var result = sut.AnswersIndicateNotFullAndRelevant(additionalRequirementsAnswers);
+        var result = service.AnswersIndicateNotFullAndRelevant(additionalRequirementsAnswers);
 
         result.Should().Be(expectedResult);
     }
@@ -265,13 +463,30 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant_NoAnswers_Returns_False()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qualification =
             new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>());
         List<AdditionalRequirementAnswerModel> additionalRequirementAnswerModels = null!;
-        var sut = GetSut();
 
         var result =
-            sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
+            service.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
 
         result.Should().BeFalse();
     }
@@ -284,6 +499,24 @@ public class QualificationDetailsServiceTests
     public void UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant_Returns_AnswerAsBool(
         string answer, bool qtsFullAndRelevant, bool expectedResult)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qts = new AdditionalRequirementQuestion
                   {
                       Sys = new SystemProperties
@@ -302,10 +535,9 @@ public class QualificationDetailsServiceTests
                                                     new AdditionalRequirementAnswerModel
                                                     { Question = qts.Question, Answer = answer }
                                                 };
-        var sut = GetSut();
 
         var result =
-            sut.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
+            service.UserAnswerMatchesQtsQuestionAnswerToBeFullAndRelevant(qualification, additionalRequirementAnswerModels);
 
         result.Should().Be(expectedResult);
     }
@@ -313,11 +545,27 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void MapAdditionalRequirementAnswers_Null_ReturnsNull()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         List<AdditionalRequirementQuestion> additionalRequirementQuestions = null!;
 
-        var sut = GetSut();
-
-        var result = sut.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
+        var result = service.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
 
         result.Should().BeNull();
     }
@@ -325,25 +573,58 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void MapAdditionalRequirementAnswers_Calls_Cookies_GetAdditionalQuestionsAnswers()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>();
 
-        var sut = GetSut();
+        _ = service.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
 
-        _ = sut.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
-
-        _mockUserJourneyCookieService.Verify(o => o.GetAdditionalQuestionsAnswers(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetAdditionalQuestionsAnswers(), Times.Once);
     }
 
     [TestMethod]
     public void MapAdditionalRequirementAnswers_NullAnswers_ReturnsEmpty()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>();
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers())
+        mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers())
                                      .Returns((Dictionary<string, string>)null!);
-        var sut = GetSut();
 
-        var result = sut.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
+        var result = service.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
 
         result.Should().BeEquivalentTo(new List<AdditionalRequirementAnswerModel>());
     }
@@ -351,6 +632,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void MapAdditionalRequirementAnswers_MapsCorrectly()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var additionalRequirementQuestions = new List<AdditionalRequirementQuestion>
                                              {
                                                  new AdditionalRequirementQuestion
@@ -405,10 +704,9 @@ public class QualificationDetailsServiceTests
                            }
                        };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
-        var sut = GetSut();
+        mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
 
-        var result = sut.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
+        var result = service.MapAdditionalRequirementAnswers(additionalRequirementQuestions);
 
         result.Should().BeEquivalentTo(expected);
     }
@@ -416,6 +714,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void RemainingAnswersIndicateFullAndRelevant_FullAndRelevant_ReturnsExpected()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qtsQuestion = new AdditionalRequirementQuestion { Question = "Qts" };
         var details = new QualificationDetailsModel
                       {
@@ -432,9 +748,8 @@ public class QualificationDetailsServiceTests
                               }
                           ]
                       };
-        var sut = GetSut();
 
-        var result = sut.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
+        var result = service.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
 
         result.isFullAndRelevant.Should().BeTrue();
     }
@@ -442,6 +757,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void RemainingAnswersIndicateFullAndRelevant_NotFullAndRelevant_ReturnsExpected()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qtsQuestion = new AdditionalRequirementQuestion { Question = "Qts" };
         var details = new QualificationDetailsModel
                       {
@@ -458,9 +791,8 @@ public class QualificationDetailsServiceTests
                               }
                           ]
                       };
-        var sut = GetSut();
 
-        var result = sut.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
+        var result = service.RemainingAnswersIndicateFullAndRelevant(details, qtsQuestion);
 
         result.isFullAndRelevant.Should().BeFalse();
     }
@@ -468,6 +800,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task CheckLevel6Requirements_ChecksCorrectly()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var qualification = new Qualification(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), 6)
                             {
                                 RatioRequirements =
@@ -480,18 +830,16 @@ public class QualificationDetailsServiceTests
                             };
         var details = new QualificationDetailsModel();
 
-        _mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(true);
+        mockUserJourneyCookieService.Setup(o => o.WasStartedBeforeSeptember2014()).Returns(true);
 
-        var sut = GetSut();
-
-        var result = await sut.CheckLevel6Requirements(qualification, details);
+        var result = await service.CheckLevel6Requirements(qualification, details);
 
         result.RatioRequirements.ApprovedForLevel2.Should().Be(QualificationApprovalStatus.NotApproved);
         result.RatioRequirements.ApprovedForLevel3.Should().Be(QualificationApprovalStatus.NotApproved);
         result.RatioRequirements.ApprovedForLevel6.Should().Be(QualificationApprovalStatus.NotApproved);
         result.RatioRequirements.ApprovedForUnqualified.Should().Be(QualificationApprovalStatus.Approved);
 
-        _mockContentParser.Verify(o => o.ToHtml(It.IsAny<Document>()), Times.Once);
+        mockContentParser.Verify(o => o.ToHtml(It.IsAny<Document>()), Times.Once);
     }
 
     [TestMethod]
@@ -505,6 +853,24 @@ public class QualificationDetailsServiceTests
     public async Task MapDetails_(int? startMonth, int? startYear, string dateStarted, int? awardMonth, int? awardYear,
                                   string dateAwarded)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string qualificationId = "qualificationId";
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
@@ -526,21 +892,20 @@ public class QualificationDetailsServiceTests
                                        }
                           };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((startMonth, startYear));
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((awardMonth, awardYear));
 
-        _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
-        _mockQualificationDetailsMapper
+        mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
+        mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), dateStarted, dateAwarded,
                               hasMultipleQualificationsWithSameName, isFullAndRelevant))
             .ReturnsAsync(new QualificationDetailsModel());
-
-        var sut = GetSut();
-        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant, null);
+        
+        var result = await service.MapDetails(qualification, detailsPage, isFullAndRelevant, null);
 
         result.Should().NotBeNull();
-        _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
+        mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
                                                           It.IsAny<List<AdditionalRequirementAnswerModel>>(),
                                                           dateStarted, dateAwarded, hasMultipleQualificationsWithSameName, isFullAndRelevant),
                                                Times.Once);
@@ -549,6 +914,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task MapDetails_StartDateBeforeSeptember2014_PassesBeforeString()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string qualificationId = "qualificationId";
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
@@ -569,21 +952,19 @@ public class QualificationDetailsServiceTests
                           };
 
         // Start date: August 2014 => before September 2014
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((8, 2014));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
-        _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
-        _mockQualificationDetailsMapper
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((8, 2014));
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
+        mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
+        mockQualificationDetailsMapper
             .Setup(x => x.Map(qualification, detailsPage, backButton,
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), "Before 1 September 2014", string.Empty,
                               hasMultipleQualificationsWithSameName, isFullAndRelevant))
             .ReturnsAsync(new QualificationDetailsModel());
-
-        var sut = GetSut();
-
-        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant, null);
+        
+        var result = await service.MapDetails(qualification, detailsPage, isFullAndRelevant, null);
 
         result.Should().NotBeNull();
-        _mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
+        mockQualificationDetailsMapper.Verify(x => x.Map(qualification, detailsPage, backButton,
                                                           It.IsAny<List<AdditionalRequirementAnswerModel>>(),
                                                           "Before 1 September 2014", string.Empty, 
                                                           hasMultipleQualificationsWithSameName, isFullAndRelevant),
@@ -593,6 +974,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task MapDetails_PassesAdditionalRequirementAnswersToMapper()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string qualificationId = "qualificationId";
         const string qualificationName = "qualificationName";
         const string awardingOrganisationTitle = "awardingOrganisationTitle";
@@ -620,14 +1019,14 @@ public class QualificationDetailsServiceTests
                                        }
                           };
 
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
-        _mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationStarted()).Returns((null, null));
+        mockUserJourneyCookieService.Setup(o => o.GetWhenWasQualificationAwarded()).Returns((null, null));
 
         var userAnswers = new Dictionary<string, string> { { "Q1", "yes" } };
-        _mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
+        mockUserJourneyCookieService.Setup(o => o.GetAdditionalQuestionsAnswers()).Returns(userAnswers);
 
-        _mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
-        _mockQualificationDetailsMapper
+        mockQualificationSearchService.Setup(x => x.GetFilteredQualifications(It.IsAny<string>())).ReturnsAsync(new List<Qualification>());
+        mockQualificationDetailsMapper
             .Setup(x => x.Map(It.IsAny<Qualification>(), It.IsAny<QualificationDetailsPage>(), It.IsAny<NavigationLink?>(),
                               It.IsAny<List<AdditionalRequirementAnswerModel>>(), It.IsAny<string>(), It.IsAny<string>(),
                               hasMultipleQualificationsWithSameName, isFullAndRelevant))
@@ -641,14 +1040,12 @@ public class QualificationDetailsServiceTests
                                                      Question = "Q1"
                                                  }
                                              };
-
-        var sut = GetSut();
-
-        var result = await sut.MapDetails(qualification, detailsPage, isFullAndRelevant, additionalRequirementAnswerModels);
+        
+        var result = await service.MapDetails(qualification, detailsPage, isFullAndRelevant, additionalRequirementAnswerModels);
 
         result.Should().NotBeNull();
 
-        _mockQualificationDetailsMapper.Verify(x => x.Map(
+        mockQualificationDetailsMapper.Verify(x => x.Map(
             qualification,
             detailsPage,
             backButton,
@@ -661,14 +1058,32 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsFullAndRelevant_ShowsApprovedText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string ratiosTextNotFullAndRelevant = "Not approved";
         const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new QualificationDetailsPage
                                  {
@@ -691,9 +1106,7 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
     }
@@ -701,14 +1114,32 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsNotFullAndRelevantAndOutsideOfAug19_ShowsNotApprovedText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string ratiosTextNotFullAndRelevant = "Not approved";
         const string ratiosTextL3PlusNotFrBetweenSep14Aug19 = "Not approved L3+ between Sep14 and Aug19";
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
         var ratiosTextL3PlusNotFrBetweenSep14Aug19Doc =
             new Document { NodeType = ratiosTextL3PlusNotFrBetweenSep14Aug19 };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextL3PlusNotFrBetweenSep14Aug19Doc))
                           .ReturnsAsync(ratiosTextL3PlusNotFrBetweenSep14Aug19);
         var detailsPageContent = new QualificationDetailsPage
                                  {
@@ -733,11 +1164,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -746,6 +1175,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void SetQualificationResultSuccessDetails_ShowsSuccessText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage
                                  {
                                      Labels = new DetailsPageLabels
@@ -761,9 +1208,7 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        var sut = GetSut();
-
-        sut.SetQualificationResultSuccessDetails(model, detailsPageContent.Labels);
+        service.SetQualificationResultSuccessDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
@@ -776,6 +1221,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndOutsideOfAug19_ShowsCorrectText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage
                                  {
                                      Labels = new DetailsPageLabels
@@ -799,11 +1262,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(false);
 
-        var sut = GetSut();
-
-        sut.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
+        service.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
@@ -816,6 +1277,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public void SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_ShowsCorrectText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage
                                  {
                                      Labels = new DetailsPageLabels
@@ -839,11 +1318,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
 
-        var sut = GetSut();
-
-        sut.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
+        service.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
@@ -857,6 +1334,24 @@ public class QualificationDetailsServiceTests
     public void
         SetQualificationResultFailureDetails_IsNotFullAndRelevantAndL3BetweenSep14AndAug19_Level_6_ShowsCorrectText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage
                                  {
                                      Labels = new DetailsPageLabels
@@ -880,11 +1375,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
 
-        var sut = GetSut();
-
-        sut.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
+        service.SetQualificationResultFailureDetails(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.QualificationResultHeading.Should().Be(detailsPageContent.Labels.QualificationResultHeading);
@@ -897,9 +1390,27 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_L2_NotFullAndRelevant_ShowNotFullAndRelevantText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string ratiosTextNotFullAndRelevant = "Not approved";
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
         var detailsPageContent = new QualificationDetailsPage
                                  {
@@ -921,10 +1432,8 @@ public class QualificationDetailsServiceTests
                                             },
                         Content = new DetailsPageModel()
                     };
-
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -933,6 +1442,24 @@ public class QualificationDetailsServiceTests
     [TestMethod]
     public async Task SetRatiosText_IsFullAndRelevantAndL2BeforeJune2016_ShowNoText()
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
@@ -945,11 +1472,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeJune2016()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeJune2016()).Returns(true);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().BeNull();
@@ -961,6 +1486,24 @@ public class QualificationDetailsServiceTests
     [DataRow(5)]
     public async Task SetRatiosText_IsFullAndRelevantAwardedBeforeSept2014_ShowsNoText(int level)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
@@ -975,11 +1518,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeSeptember2014()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeSeptember2014()).Returns(true);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().BeNull();
@@ -990,6 +1531,24 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsFullAndRelevantForAllLevels_ShowNoText(int level)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
@@ -1005,9 +1564,7 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().BeNull();
@@ -1018,6 +1575,24 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsFullAndRelevantForAllLevelsButL6AwardedBeforeSeptember2014_ShowNoText(int level)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         var detailsPageContent = new QualificationDetailsPage();
 
         var model = new QualificationDetailsModel
@@ -1033,12 +1608,10 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeSeptember2014()).Returns(true);
-        _mockUserJourneyCookieService.Setup(x => x.WasAwardedOnOrAfterSeptember2014()).Returns(false);
+        mockUserJourneyCookieService.Setup(x => x.WasAwardedBeforeSeptember2014()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasAwardedOnOrAfterSeptember2014()).Returns(false);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().BeNull();
@@ -1052,14 +1625,32 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsNotFullAndRelevantStartedBeforeSeptember2014_NotFandRAndL3EBR(int level)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string ratiosTextNotFullAndRelevant = "Not approved";
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
 
         const string l3Ebr = "l3 Ebr";
         var l3EbrDoc = new Document { NodeType = l3Ebr };
-        _mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
+        mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
                           .ReturnsAsync(l3Ebr);
         var detailsPageContent = new QualificationDetailsPage
                                  {
@@ -1083,12 +1674,10 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(true);
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019()).Returns(false);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019()).Returns(false);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -1103,14 +1692,32 @@ public class QualificationDetailsServiceTests
     [DataRow(7)]
     public async Task SetRatiosText_IsNotFullAndRelevantStartedOnOrAfterSeptember2019_NotFandRAndL3EBR(int level)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string ratiosTextNotFullAndRelevant = "Not approved";
         var ratiosTextNotFullAndRelevantDoc = new Document { NodeType = ratiosTextNotFullAndRelevant };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevant);
 
         const string l3Ebr = "l3 Ebr";
         var l3EbrDoc = new Document { NodeType = l3Ebr };
-        _mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
+        mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
                           .ReturnsAsync(l3Ebr);
         var detailsPageContent = new QualificationDetailsPage
                                  {
@@ -1134,12 +1741,10 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(false);
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBeforeSeptember2014()).Returns(false);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedOnOrAfterSeptember2019()).Returns(true);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevant);
@@ -1155,15 +1760,33 @@ public class QualificationDetailsServiceTests
     public async Task
         SetRatiosText_IsNotFullAndRelevantStartedBetweenSeptember2014AndSeptember2019_NotFandRL3AndL3EBR(int level)
     {
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
         const string ratiosTextNotFullAndRelevantBetweenDates = "Not approved between dates";
         var ratiosTextNotFullAndRelevantBetweenDatesDoc =
             new Document { NodeType = ratiosTextNotFullAndRelevantBetweenDates };
-        _mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantBetweenDatesDoc))
+        mockContentParser.Setup(o => o.ToHtml(ratiosTextNotFullAndRelevantBetweenDatesDoc))
                           .ReturnsAsync(ratiosTextNotFullAndRelevantBetweenDates);
 
         const string l3Ebr = "l3 Ebr";
         var l3EbrDoc = new Document { NodeType = l3Ebr };
-        _mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
+        mockContentParser.Setup(o => o.ToHtml(l3EbrDoc))
                           .ReturnsAsync(l3Ebr);
         var detailsPageContent = new QualificationDetailsPage
                                  {
@@ -1187,11 +1810,9 @@ public class QualificationDetailsServiceTests
                         Content = new DetailsPageModel()
                     };
 
-        _mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
+        mockUserJourneyCookieService.Setup(x => x.WasStartedBetweenSeptember2014AndAugust2019()).Returns(true);
 
-        var sut = GetSut();
-
-        await sut.SetRatioText(model, detailsPageContent.Labels);
+        await service.SetRatioText(model, detailsPageContent.Labels);
 
         model.Content.Should().NotBeNull();
         model.Content.RatiosText.Should().Be(ratiosTextNotFullAndRelevantBetweenDates);
@@ -1204,28 +1825,82 @@ public class QualificationDetailsServiceTests
     public void GetUserIsCheckingOwnQualification_Calls_UserJourneyCookieService_GetIsUserCheckingTheirOwnQualification(
         string input, bool expected)
     {
-        _mockUserJourneyCookieService.Setup(o => o.GetIsUserCheckingTheirOwnQualification())
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
+        mockUserJourneyCookieService.Setup(o => o.GetIsUserCheckingTheirOwnQualification())
                                      .Returns(input);
 
-        var result = GetSut().GetUserIsCheckingOwnQualification();
+        var result = service.GetUserIsCheckingOwnQualification();
 
         result.Should().Be(expected);
-        _mockUserJourneyCookieService.Verify(o => o.GetIsUserCheckingTheirOwnQualification(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetIsUserCheckingTheirOwnQualification(), Times.Once);
     }
 
     [TestMethod]
     public void GetLevelOfQualification_Calls_UserJourneyCookieService_GetLevelOfQualification()
     {
-        _ = GetSut().GetLevelOfQualification();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
+        _ = service.GetLevelOfQualification();
 
-        _mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetLevelOfQualification(), Times.Once);
     }
 
     [TestMethod]
     public void GetWhenWasQualificationStarted_Calls_UserJourneyCookieService_GetWhenWasQualificationStarted()
     {
-        _ = GetSut().GetWhenWasQualificationStarted();
+        var mockLogger = new Mock<ILogger<QualificationDetailsService>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+        var mockPlaceholderUpdater = new Mock<IPlaceholderUpdater>();
+        var mockQualificationDetailsMapper = new Mock<IQualificationDetailsMapper>();
+        var mockQualificationSearchService = new Mock<IQualificationSearchService>();
+        
+        var service = new QualificationDetailsService(
+                                                      mockLogger.Object,
+                                                      mockContentService.Object,
+                                                      mockContentParser.Object,
+                                                      mockUserJourneyCookieService.Object,
+                                                      mockPlaceholderUpdater.Object,
+                                                      mockQualificationDetailsMapper.Object,
+                                                      mockQualificationSearchService.Object
+                                                     );
+        
+        _ = service.GetWhenWasQualificationStarted();
 
-        _mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
+        mockUserJourneyCookieService.Verify(o => o.GetWhenWasQualificationStarted(), Times.Once);
     }
 }

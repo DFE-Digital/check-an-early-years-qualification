@@ -566,6 +566,15 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await exists(page, '#question-submit');
     });
 
+    test("Checks the page paragraph and not in the list hint on the what-is-the-awarding-organisation page", async ({page, context}) => {
+        await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
+        await page.goto("/questions/what-is-the-awarding-organisation");
+
+        await checkText(page, "#page-paragraph", "Test Page Paragraph");
+        await checkText(page, "#awarding-organisation-not-in-list-hint", "Test Not In The List Hint Text");
+        await hasAttribute(page, "#awarding-organisation-not-in-list", "aria-describedby", "awarding-organisation-not-in-list-hint");
+    });
+
     test("Checks additional information on the what-is-the-awarding-organisation page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
         await page.goto("/questions/what-is-the-awarding-organisation");
@@ -626,8 +635,8 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 1);
     });
 
-    test("Checks the content on are-you-checking-your-own-qualification page", async ({page}) => {
-        await page.goto("/questions/are-you-checking-your-own-qualification");
+    test("Checks the content on what-qualification-are-you-checking page", async ({page}) => {
+        await page.goto("/questions/what-qualification-are-you-checking");
 
         await checkText(page, "#question", "Are you checking your qualification or someone else's?");
         await exists(page, "#yes");

@@ -489,16 +489,35 @@ public class MockContentfulService : IContentService
                                          SearchCriteriaHeading = "Your search",
                                          MultipleQualificationsFoundText = "matching qualifications",
                                          SingleQualificationFoundText = "matching qualification",
-                                         PreSearchBoxContent =
-                                             ContentfulContentHelper.Paragraph("Pre search box content"),
                                          PostQualificationListContentHeading = "Post qualification list header",
                                          PostQualificationListContent =
                                              ContentfulContentHelper.Link("Link to not on list advice page",
                                                                           "/advice/qualification-not-on-the-list"),
                                          AnyLevelHeading = "any level",
                                          AnyAwardingOrganisationHeading = "various awarding organisations",
-                                         NoResultsText =
-                                             ContentfulContentHelper.Paragraph("Test no qualifications text"),
+                                         NoResultsText = new Document
+                                                          {
+                                                              Content =
+                                                              [
+                                                                  ContentfulContentHelper.ParagraphWithEmbeddedLink(
+                                                                   "",
+                                                                   "Check your answers",
+                                                                   "/questions/check-your-answers",
+                                                                   " to make sure they are correct."),
+                                                                  ContentfulContentHelper.Paragraph(
+                                                                   "If you checked your answers and still cannot find the qualification you are looking for, the qualification may not be recognised as full and relevant.")
+                                                                   .Content[0],
+                                                                  ContentfulContentHelper.Paragraph(
+                                                                   "If a qualification is not recognised as full and relevant, the qualification holder can still work as an unqualified member of staff in an early years setting.")
+                                                                   .Content[0],
+                                                                  ContentfulContentHelper.ParagraphWithEmbeddedLink(
+                                                                   "Go to ",
+                                                                   "I cannot find the qualification",
+                                                                   "/advice/qualification-not-on-the-list",
+                                                                   " for more detail about what to do next.")
+                                                              ]
+                                                          },
+                                         NoMatchingQualificationsHeading = "No matching qualifications were found",
                                          ClearSearchText = "Clear search",
                                          AwardedLocationPrefixText = "awarded in",
                                          StartDatePrefixText = "started in",
@@ -506,6 +525,21 @@ public class MockContentfulService : IContentService
                                          LevelPrefixText = "level",
                                          AwardedByPrefixText = "awarded by",
                                          QualificationNumberLabel = "Qualification Number (QN)",
+                                         SearchWithinSingleHeading = "Search within this qualification",
+                                         SearchWithinMultipleHeadingFormat = "Search within these {0} qualifications",
+                                         EnterKeywordsSingleContent =
+                                             "Enter keywords from the qualification name to search within this matching qualification",
+                                         EnterKeywordsMultipleContentFormat =
+                                             "Enter keywords from the qualification name to search within these {0} matching qualifications",
+                                         SearchMatchHeadingFormat = "{0} of {1} qualifications matches \"{2}\".",
+                                         SearchNoMatchGuidanceIntroFormat =
+                                             "Your search only checks the {0} matching qualifications shown on this page.",
+                                         SearchNoMatchGuidance =
+                                             ContentfulContentHelper.ParagraphThenUnorderedList(
+                                              "Try:",
+                                              "double-check your spelling",
+                                              "use fewer words in your search",
+                                              "use words from the qualification name, rather than the level or awarding organisation name"),
                                          SearchResultsContent =
                                          [
                                              new SearchResultContent
@@ -684,19 +718,8 @@ public class MockContentfulService : IContentService
 
     public async Task<OpenGraphData?> GetOpenGraphData()
     {
-        return await Task.FromResult(new OpenGraphData
-                                     {
-                                         Title = "OG Title",
-                                         Description = "OG Description",
-                                         Domain = "OG Domain",
-                                         Image = new Asset
-                                                 {
-                                                     File = new File
-                                                            {
-                                                                Url = "test/url/og-image.png"
-                                                            }
-                                                 }
-                                     });
+        var startPage = await GetStartPage();
+        return startPage?.OpenGraph;
     }
 
     public async Task<CheckYourAnswersPage?> GetCheckYourAnswersPage()
@@ -1016,7 +1039,20 @@ public class MockContentfulService : IContentService
                                          CtaButtonText = "Start Button Text",
                                          PostCtaButtonContent = postCtaButtonContent,
                                          RightHandSideContentHeader = "Related content",
-                                         RightHandSideContent = rightHandSideContent
+                                         RightHandSideContent = rightHandSideContent,
+                                         OpenGraph = new OpenGraphData
+                                                     {
+                                                         Title = "OG Title",
+                                                         Description = "OG Description",
+                                                         Domain = "OG Domain",
+                                                         Image = new Asset
+                                                                 {
+                                                                     File = new File
+                                                                            {
+                                                                                Url = "test/url/og-image.png"
+                                                                            }
+                                                                 }
+                                                     }
                                      });
     }
 
@@ -1202,7 +1238,13 @@ public class MockContentfulService : IContentService
                     },
                     AdditionalInformationWarningText = "Do not include any personal information",
                     AdditionalInformationErrorMessage = "Provide information about how we can help you",
-                    ErrorBannerHeading = ThereIsAProblem
+                    ErrorBannerHeading = ThereIsAProblem,
+                    StaticCharactersRemainingMessage = "You can enter up to $[characters]$ characters",
+                    DynamicCharactersRemainingMessage = "You have $[characters]$ characters remaining",
+                    SingularCharacterRemainingMessage = "You have 1 character remaining",
+                    DynamicTooManyCharactersEnteredMessage = "You have entered $[characters]$ characters too many",
+                    SingularTooManyCharactersEnteredMessage = "You have entered 1 character too many",
+                    TooManyCharactersEnteredErrorMessage = "Enter $[characters]$ characters or less"
                 }
             ),
             HelpPages.TechnicalIssueProvideDetails => await Task.FromResult(
@@ -1219,7 +1261,13 @@ public class MockContentfulService : IContentService
                     },
                     AdditionalInformationWarningText = "Do not include any personal information",
                     AdditionalInformationErrorMessage = "Provide information about how we can help you",
-                    ErrorBannerHeading = ThereIsAProblem
+                    ErrorBannerHeading = ThereIsAProblem,
+                    StaticCharactersRemainingMessage = "You can enter up to $[characters]$ characters",
+                    DynamicCharactersRemainingMessage = "You have $[characters]$ characters remaining",
+                    SingularCharacterRemainingMessage = "You have 1 character remaining",
+                    DynamicTooManyCharactersEnteredMessage = "You have entered $[characters]$ characters too many",
+                    SingularTooManyCharactersEnteredMessage = "You have entered 1 character too many",
+                    TooManyCharactersEnteredErrorMessage = "Enter $[characters]$ characters or less"
                 }
             ),
             _ => null
@@ -1334,7 +1382,7 @@ public class MockContentfulService : IContentService
                     Href = "/",
                     OpenInNewTab = false
                 },
-                OpenGraphData = new OpenGraphData
+                OpenGraph = new OpenGraphData
                 {
                     Title = "EYQL OG Title (page override)",
                     Description = "EYQL OG Description (page override)",
@@ -1600,6 +1648,8 @@ public class MockContentfulService : IContentService
                    DefaultText = "Test Default Dropdown Text",
                    DropdownHeading = "Test Dropdown Heading",
                    NotInListText = "Test Not In The List",
+                   NotInListHintText = "Test Not In The List Hint Text",
+                   PageParagraph = "Test Page Paragraph",
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "TEST",
@@ -1627,7 +1677,7 @@ public class MockContentfulService : IContentService
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   OpenGraphData = openGraphData
+                   OpenGraph = openGraphData
                };
     }
 }

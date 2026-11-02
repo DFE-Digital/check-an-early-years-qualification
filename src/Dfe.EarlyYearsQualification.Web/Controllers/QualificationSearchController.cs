@@ -22,7 +22,12 @@ public class QualificationSearchController(
             return RedirectToAction("Index", "Error");
         }
 
-        return View(qualifications);
+        if (!qualifications.HasSearchCriteria && qualifications.TotalNumberOfQualifications == 0)
+        {
+            return View("NoResults", qualifications);
+        }
+
+        return View("Get", qualifications);
     }
 
     [HttpPost]

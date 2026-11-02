@@ -7,7 +7,7 @@ public interface IQualificationSearchService
 {
     void Refine(string refineSearch);
     Task<QualificationListModel?> GetQualifications();
-    Task<QualificationListModel> MapList(QualificationListPage content, List<Qualification>? qualifications);
+    Task<QualificationListModel> MapList(QualificationListPage content, List<Qualification>? qualifications, int totalNumberOfQualifications);
     Task<List<Qualification>> GetFilteredQualifications(string? searchCriteriaOverride = null);
     Task<Qualification?> GetQualificationById(string qualificationId);
     FilterModel GetFilterModel(QualificationListPage content);

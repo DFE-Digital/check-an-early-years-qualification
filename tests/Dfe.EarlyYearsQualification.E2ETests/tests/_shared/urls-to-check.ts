@@ -1,7 +1,7 @@
 export const pages = [
     "/",
     "/cookies",
-    "/questions/are-you-checking-your-own-qualification",
+    "/questions/what-qualification-are-you-checking",
     "/questions/where-was-the-qualification-awarded",
     "/questions/when-was-the-qualification-started",
     "/questions/when-was-the-qualification-awarded",
@@ -28,7 +28,7 @@ export const pages = [
 ];
 
 export const pagesWithForms = [
-    "/questions/are-you-checking-your-own-qualification",
+    "/questions/what-qualification-are-you-checking",
     "/questions/where-was-the-qualification-awarded",
     "/questions/when-was-the-qualification-started",
     "/questions/when-was-the-qualification-awarded",
