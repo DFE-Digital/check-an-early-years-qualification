@@ -440,6 +440,7 @@ resource "azurerm_role_assignment" "webapp_kv_user" {
   scope                = var.kv_id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_linux_web_app.webapp.identity[0].principal_id
+  principal_type       = "ServicePrincipal"
 }
 
 resource "azurerm_role_assignment" "webapp_slot_kv_user" {
@@ -447,6 +448,7 @@ resource "azurerm_role_assignment" "webapp_slot_kv_user" {
   scope                = var.rbackv_id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_linux_web_app_slot.webapp_slot[0].identity[0].principal_id
+  principal_type       = "ServicePrincipal"
 }
 
 # Grant the Azure App Service platform service principal permission to import certificates
@@ -454,4 +456,5 @@ resource "azurerm_role_assignment" "app_service_cert_import" {
   scope                = var.rbackv_id
   role_definition_name = "Key Vault Certificate User"
   principal_id         = azurerm_linux_web_app.webapp.identity[0].principal_id
+  principal_type       = "ServicePrincipal"
 }

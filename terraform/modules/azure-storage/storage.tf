@@ -98,4 +98,5 @@ resource "azurerm_role_assignment" "webapp_storage_blob_contributor" {
   scope                = azurerm_storage_account.sa.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = var.webapp_principal_id
+  principal_type       = "ServicePrincipal"
 }
