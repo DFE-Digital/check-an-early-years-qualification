@@ -8,6 +8,8 @@ public class EarlyYearsQualificationListModel
 
     public OpenGraphDataModel? OpenGraphData { get; init; }
 
+    public bool IsIndexable { get; init; }
+
     public string Heading { get; init; } = string.Empty;
     
     public string PostHeadingContent { get; init; } = string.Empty;
@@ -74,13 +76,13 @@ public class EarlyYearsQualificationListModel
 
     public List<IOptionItemModel> NationFilters { get; set; } = [];
 
-    public string QualificationLevelFilter { get; init; } = string.Empty;
+    public string QualificationLevelFilter { get; set; } = string.Empty;
 
-    public string QualificationStartDateFilter { get; init; } = string.Empty;
+    public string QualificationStartDateFilter { get; set; } = string.Empty;
 
-    public string NationFilter { get; init; } = string.Empty;
+    public string NationFilter { get; set; } = string.Empty;
 
-    public string SearchTermFilter { get; init; } = string.Empty;
+    public string SearchTermFilter { get; set; } = string.Empty;
 
     public string SelectedNationFilterLabel { get; init; } = string.Empty;
 

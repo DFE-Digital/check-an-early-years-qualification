@@ -86,6 +86,11 @@ public class MockContentfulService : IContentService
                    StaticPages.HowToFindASuitableCourse =>
                        await Task.FromResult(CreateStaticPage("How to find a suitable course",
                                                               body, "/help/I-want-to-check-whether-a-course-is-approved-before-I-enrol")),
+
+                   StaticPages.EarlyYearsQualificationLevels =>
+                       await Task.FromResult(CreateStaticPage("Early years qualification levels",
+                                                              body, WhatLevelIsTheQualificationPath,
+                                                              backButtonText: "Back to what level is the qualification")),
                    _ => null
                };
     }
@@ -93,6 +98,19 @@ public class MockContentfulService : IContentService
     public async Task<StaticPage?> GetStaticPageByRoute(string route)
     {
         var body = ContentfulContentHelper.Paragraph("This is the body of the dynamic route");
+        if (route == "find-an-approved-early-years-course")
+        {
+            var openGraphData = new OpenGraphData
+                                {
+                                    Title = "Find an approved early years course OG Title",
+                                    Description = "Find an approved early years course OG Description",
+                                    Domain = "OG Domain"
+                                };
+
+            return await Task.FromResult(CreateStaticPage("Dynamic Page Heading",
+                                                          body, "/", openGraphData, isIndexable: true));
+        }
+
         return await Task.FromResult(CreateStaticPage("Dynamic Page Heading",
                                                       body, "/"));
     }
@@ -1355,6 +1373,7 @@ public class MockContentfulService : IContentService
         return await Task.FromResult(
             new WebViewPage
             {
+                IsIndexable = true,
                 Heading = "Early Years Qualification List",
                 DownloadButtonText = "Download qualification list",
                 DownloadHeading = "Download the early years qualification list",
@@ -1570,8 +1589,29 @@ public class MockContentfulService : IContentService
                               Label = "Not Sure", Value ="0"
                           }
                       };
-        return CreateRadioQuestionPage("What level is the qualification?", options,
-                                       "/questions/when-was-the-qualification-awarded");
+        var page = CreateRadioQuestionPage("What level is the qualification?", options,
+                                           "/questions/when-was-the-qualification-awarded");
+
+        return new RadioQuestionPage
+               {
+                   Question = page.Question,
+                   Options = page.Options,
+                   CtaButtonText = page.CtaButtonText,
+                   ErrorMessage = page.ErrorMessage,
+                   BackButton = page.BackButton,
+                   ErrorBannerHeading = page.ErrorBannerHeading,
+                   ErrorBannerLinkText = page.ErrorBannerLinkText,
+                   PostHeadingContent = new Document
+                                        {
+                                            Content =
+                                            [
+                                                ContentfulContentHelper.ParagraphWithEmbeddedLink("Find out more about ",
+                                                    "early years qualification levels",
+                                                    "/advice/early-years-qualification-levels",
+                                                    ".")
+                                            ]
+                                        }
+               };
     }
 
     private static RadioQuestionPage CreateRadioQuestionPage(string question, List<IOptionItem> options,
@@ -1665,7 +1705,9 @@ public class MockContentfulService : IContentService
     }
 
     private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl,
-                                               OpenGraphData? openGraphData = null)
+                                               OpenGraphData? openGraphData = null, 
+                                               string backButtonText = "TEST", 
+                                               bool isIndexable = false)
     {
         return new StaticPage
                {
@@ -1673,11 +1715,12 @@ public class MockContentfulService : IContentService
                    Heading = heading,
                    BackButton = new NavigationLink
                                 {
-                                    DisplayText = "TEST",
+                                    DisplayText = backButtonText,
                                     Href = backButtonUrl,
                                     OpenInNewTab = false
                                 },
-                   OpenGraph = openGraphData
+                   OpenGraph = openGraphData,
+                   IsIndexable = isIndexable
                };
     }
 }

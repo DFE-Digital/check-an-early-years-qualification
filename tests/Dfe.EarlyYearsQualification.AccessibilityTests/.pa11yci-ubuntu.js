@@ -151,6 +151,10 @@ function getUrls(authSecret, port) {
             actions: basicActions.concat(`navigate to http://localhost:${port}/advice/level-7-qualification-after-aug-2019`)
         },
         {
+            url: `http://localhost:${port}/advice/early-years-qualification-levels`,
+            actions: basicActions.concat(`navigate to http://localhost:${port}/advice/early-years-qualification-levels`)
+        },
+        {
             url: `http://localhost:${port}/advice/nursing-qualifications`,
             actions: basicActions.concat(`navigate to http://localhost:${port}/advice/nursing-qualifications`)
         },

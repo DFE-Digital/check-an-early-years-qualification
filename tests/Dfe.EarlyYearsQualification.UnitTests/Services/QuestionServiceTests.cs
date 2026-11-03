@@ -75,6 +75,16 @@ public class QuestionServiceTests
     }
 
     [TestMethod]
+    public void SetLevelOfQualification_Calls_UserJourneyCookieService_SetLevelOfQualification()
+    {
+        // Act
+        GetSut().SetLevelOfQualification("3");
+
+        // Assert
+        _mockUserJourneyCookieService.Verify(x => x.SetLevelOfQualification("3"), Times.Once);
+    }
+
+    [TestMethod]
     public void GetLevelOfQualification_Calls_UserJourneyCookieService_GetLevelOfQualification()
     {
         // Act
