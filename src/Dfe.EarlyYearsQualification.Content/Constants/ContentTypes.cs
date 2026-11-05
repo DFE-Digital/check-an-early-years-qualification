@@ -33,4 +33,5 @@ public static class ContentTypes
     public const string RadioButtonAndDateInput = "radioButtonAndDateInput";
     public const string WebViewPage = "webViewPage";
     public const string SearchResultContent = "searchResultContent";
+    public const string NotificationBanner = "notificationBanner";
 }

@@ -630,3 +630,7 @@ ol.govuk-list.govuk-list--number ol.govuk-list.govuk-list--number {
     display: inline-flex;
     align-items: center;
 }
+
+.notification-banner--full-width .govuk-notification-banner__content > * {
+    max-width: none;
+}

@@ -1428,6 +1428,9 @@ public class MockContentfulServiceTests
         result.IsIndexable.Should().BeTrue();
         result.DownloadHeading.Should().Be("Download the early years qualification list");
         result.DownloadSectionContent.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("The download section content"));
+        result.NotificationBanner.Should().NotBeNull();
+        result.NotificationBanner!.Heading.Should().Be("Important");
+        result.NotificationBanner.Body.Should().BeEquivalentTo(ContentfulContentHelper.Paragraph("Notification banner body"));
         result.DownloadButtonText.Should().Be("Download qualification list");
         result.QualificationLevelLabel.Should().Be("Qualification level");
         result.StaffChildRatioLabel.Should().Be("Staff:child ratios");

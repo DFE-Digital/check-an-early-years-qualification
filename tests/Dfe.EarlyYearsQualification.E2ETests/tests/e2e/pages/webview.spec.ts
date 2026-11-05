@@ -19,6 +19,8 @@ test.describe("A spec that tests the webview page", {tag: "@e2e"}, () => {
     test("Checks the content on early-years-qualification-list page", async ({page}) => {
         await attributeContains(page, "#back-button", 'href', '/');
         await checkText(page, "#heading", "Early Years Qualification List");
+        await checkText(page, "#qualification-list-notification-banner-title", "Important");
+        await checkTextContains(page, "#qualification-list-notification-banner-content", "Notification banner body");
         await checkTextContains(page, "#post-heading-content", "This list shows all the qualifications that are approved by the Department for Education as full and relevant");
         await checkTextContains(page, "#post-heading-content", "The download section content");
         await checkText(page, "#download-heading", "Download the early years qualification list");
