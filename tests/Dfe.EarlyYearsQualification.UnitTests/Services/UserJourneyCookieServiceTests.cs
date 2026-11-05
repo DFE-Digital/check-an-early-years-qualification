@@ -1822,9 +1822,6 @@ public class UserJourneyCookieServiceTests
         cookies.cookies.Should().ContainKey(CookieKeyNames.UserJourneyKey);
         cookies.cookies[CookieKeyNames.UserJourneyKey].Should().Be(expectedCookieValue);
 
-        var in29Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(29));
-        var in30Minutes = new DateTimeOffset(DateTime.Now.AddMinutes(30));
-
         cookies.mockContext
                .Verify(m =>
                            m.SetOutboundCookie(CookieKeyNames.UserJourneyKey,
@@ -1832,8 +1829,7 @@ public class UserJourneyCookieServiceTests
                                                It.Is<CookieOptions>(options =>
                                                                         options.Secure
                                                                         && options.HttpOnly
-                                                                        && options.Expires > in29Minutes
-                                                                        && options.Expires < in30Minutes)
+                                                                        && options.Expires == null)
                                               ),
                        Times.Once);
     }
@@ -1862,10 +1858,10 @@ public class UserJourneyCookieServiceTests
                    .Callback((string key, string value, CookieOptions _) => cookiesReturned[key] = value)
                    .Verifiable();
 
-        mockManager.Setup(x => x.CreateCookieOptions(It.IsAny<DateTimeOffset>(), It.IsAny<bool>())).Returns(
-             new CookieOptions()
+        mockManager.Setup(x => x.CreateCookieOptions(null, It.IsAny<bool>())).Returns(
+             new CookieOptions
              {
-                 Expires = new DateTimeOffset(DateTime.Now.AddMinutes(30)),
+                 Expires = null,
                  HttpOnly = true,
                  Secure = true
              }

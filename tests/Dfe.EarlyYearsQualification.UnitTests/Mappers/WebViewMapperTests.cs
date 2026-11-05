@@ -105,6 +105,7 @@ public class WebViewMapperTests
         qualificationModel.QualificationNumber.Should().Be("123 / 456 / 789");
         qualificationModel.AdditionalRequirements.Should().Be("Rich text additional requirements");
         qualificationModel.Notes.Should().Be("Some notes");
+        result.NotificationBanner.Should().BeNull();
     }
 
     [TestMethod]
@@ -199,11 +200,34 @@ public class WebViewMapperTests
         result.IsIndexable.Should().Be(isIndexable);
     }
 
-    private static WebViewPage CreateContent(bool isIndexable = false)
+    [TestMethod]
+    public async Task Map_WithNotificationBanner_MapsNotificationBanner()
+    {
+        var notificationBanner = new NotificationBanner
+                                 {
+                                     Heading = "Important",
+                                     Body = ContentfulContentHelper.Paragraph("Banner body")
+                                 };
+        var content = CreateContent(notificationBanner: notificationBanner);
+        var mockContentParser = CreateContentParser((notificationBanner.Body, "<p>Banner body</p>"));
+
+        var mapper = new WebViewMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(content, new WebViewFilters(), [], true);
+
+        result.NotificationBanner.Should().NotBeNull();
+        result.NotificationBanner!.Id.Should().Be("qualification-list-notification-banner");
+        result.NotificationBanner.Heading.Should().Be("Important");
+        result.NotificationBanner.Body.Should().Be("<p>Banner body</p>");
+        result.NotificationBanner.FullWidth.Should().BeTrue();
+    }
+
+    private static WebViewPage CreateContent(bool isIndexable = false, NotificationBanner? notificationBanner = null)
     {
         return new WebViewPage
                {
                    IsIndexable = isIndexable,
+                   NotificationBanner = notificationBanner,
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "Back",

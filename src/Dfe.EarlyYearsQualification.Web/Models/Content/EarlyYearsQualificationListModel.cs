@@ -99,5 +99,7 @@ public class EarlyYearsQualificationListModel
         }
     }
 
+    public NotificationBannerModel? NotificationBanner { get; init; }
+
     public bool IsProductionEnvironment { get; init; } = true;
 }
