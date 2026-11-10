@@ -25,19 +25,19 @@ public class AdvicePageMapperTests
                                               OpenInNewTab = true,
                                               Href = "/"
                                           },
-                             OpenGraphData = new OpenGraphData
-                                             {
-                                                 Title = "OG Title",
-                                                 Description = "OG Description",
-                                                 Domain = "OG Domain",
-                                                 Image = new Asset
-                                                         {
-                                                             File = new File
-                                                                    {
-                                                                        Url = "test/url/og-image.png"
-                                                                    }
-                                                         }
-                                             }
+                             OpenGraph = new OpenGraphData
+                                         {
+                                             Title = "OG Title",
+                                             Description = "OG Description",
+                                             Domain = "OG Domain",
+                                             Image = new Asset
+                                                     {
+                                                         File = new File
+                                                                {
+                                                                    Url = "test/url/og-image.png"
+                                                                }
+                                                     }
+                                         }
                          };
 
         var mockContentParser = new Mock<IGovUkContentParser>();
@@ -50,10 +50,10 @@ public class AdvicePageMapperTests
         result.BodyContent.Should().BeSameAs(body);
         result.BackButton.Should().BeEquivalentTo(advicePage.BackButton, options => options.Excluding(x => x.Sys));
         result.OpenGraphData.Should().NotBeNull();
-        result.OpenGraphData!.Title.Should().Be(advicePage.OpenGraphData.Title);
-        result.OpenGraphData.Description.Should().Be(advicePage.OpenGraphData.Description);
-        result.OpenGraphData.Domain.Should().Be(advicePage.OpenGraphData.Domain);
-        result.OpenGraphData.ImageUrl.Should().Be(advicePage.OpenGraphData.Image!.File.Url);
+        result.OpenGraphData!.Title.Should().Be(advicePage.OpenGraph.Title);
+        result.OpenGraphData.Description.Should().Be(advicePage.OpenGraph.Description);
+        result.OpenGraphData.Domain.Should().Be(advicePage.OpenGraph.Domain);
+        result.OpenGraphData.ImageUrl.Should().Be(advicePage.OpenGraph.Image!.File.Url);
     }
 
     [TestMethod]
@@ -78,6 +78,25 @@ public class AdvicePageMapperTests
         var result = await mapper.Map(advicePage);
 
         result.OpenGraphData.Should().BeNull();
+    }
+
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public async Task Map_PassInAdvicePage_MapsIsIndexable(bool isIndexable)
+    {
+        var advicePage = new StaticPage
+                         {
+                             Heading = "This is the heading",
+                             Body = ContentfulContentHelper.Paragraph("This is the body"),
+                             IsIndexable = isIndexable
+                         };
+
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new StaticPageMapper(mockContentParser.Object);
+        var result = await mapper.Map(advicePage);
+
+        result.IsIndexable.Should().Be(isIndexable);
     }
 
     [TestMethod]

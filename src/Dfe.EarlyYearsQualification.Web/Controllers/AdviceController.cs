@@ -105,6 +105,13 @@ public class AdviceController(
         return await GetViewById(StaticPages.Level7QualificationAfterAug2019);
     }
 
+    [HttpGet("early-years-qualification-levels")]
+    [RedirectIfDateMissing]
+    public async Task<IActionResult> EarlyYearsQualificationLevels()
+    {
+        return await GetViewById(StaticPages.EarlyYearsQualificationLevels);
+    }
+
     [HttpGet("help")]
     public IActionResult Help()
     {

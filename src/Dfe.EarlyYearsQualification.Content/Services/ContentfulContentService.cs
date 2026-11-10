@@ -229,14 +229,21 @@ public class ContentfulContentService(
 
     public async Task<OpenGraphData?> GetOpenGraphData()
     {
-        var openGraphEntities = await GetEntriesByType<OpenGraphData>();
-        if (openGraphEntities is null || !openGraphEntities.Any())
+        // The service-wide default is the open graph data linked from the start page.
+        var startPageContentType = ContentTypeLookup[typeof(StartPage)];
+        var queryBuilder = new QueryBuilder<StartPage>()
+                           .ContentTypeIs(startPageContentType)
+                           .Include(2);
+
+        var startPageEntries = await GetEntriesByType(queryBuilder);
+        var openGraphData = startPageEntries?.FirstOrDefault()?.OpenGraph;
+
+        if (openGraphData is null)
         {
-            Logger.LogWarning("No open graph data entry returned");
+            Logger.LogWarning("No open graph data linked from the start page");
             return null;
         }
 
-        var openGraphData = openGraphEntities.First();
         return openGraphData;
     }
 

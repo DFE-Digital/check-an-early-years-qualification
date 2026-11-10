@@ -10,5 +10,7 @@ public class StaticPage
 
     public NavigationLink? BackButton { get; init; }
 
-    public OpenGraphData? OpenGraphData { get; init; }
+    public OpenGraphData? OpenGraph { get; init; }
+
+    public bool IsIndexable { get; init; }
 }

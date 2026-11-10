@@ -3,7 +3,6 @@ using Dfe.EarlyYearsQualification.Content.Entities;
 using Dfe.EarlyYearsQualification.Content.Entities.Help;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
 using Dfe.EarlyYearsQualification.Web.Constants;
-using Dfe.EarlyYearsQualification.Web.Controllers.Base;
 using Dfe.EarlyYearsQualification.Web.Helpers;
 using Dfe.EarlyYearsQualification.Web.Mappers;
 using Dfe.EarlyYearsQualification.Web.Mappers.Interfaces;
@@ -24,14 +23,15 @@ public class HelpService(
     IUserJourneyCookieService userJourneyCookieService,
     INotificationService notificationService,
     IDateQuestionModelValidator questionModelValidator,
-    IRadioQuestionHelpPageMapper RadioQuestionHelpPageMapper,
+    IRadioQuestionHelpPageMapper radioQuestionHelpPageMapper,
     IHelpQualificationDetailsPageMapper helpQualificationDetailsPageMapper,
     IHelpProvideDetailsPageMapper helpProvideDetailsPageMapper,
     IHelpEmailAddressPageMapper helpEmailAddressPageMapper,
     IHelpConfirmationPageMapper helpConfirmationPageMapper,
     IStaticPageMapper staticPageMapper,
-    IPlaceholderUpdater placeholderUpdater
-) : ServiceController, IHelpService
+    IPlaceholderUpdater placeholderUpdater,
+    IConfiguration configuration
+) : IHelpService
 {
 
     public string GetWhyAreYouContactingUsSelectedOption()
@@ -114,7 +114,7 @@ public class HelpService(
 
     public async Task<RadioQuestionHelpPageViewModel> MapRadioQuestionHelpPageContentToViewModelAsync(RadioQuestionHelpPage content)
     {
-        return await RadioQuestionHelpPageMapper.MapRadioQuestionHelpPageContentToViewModelAsync(content);
+        return await radioQuestionHelpPageMapper.MapRadioQuestionHelpPageContentToViewModelAsync(content);
     }
 
     public void SetAnyPreviouslyEnteredQualificationDetailsFromCookie(QualificationDetailsPageViewModel viewModel, HelpQualificationDetailsPage content)
@@ -203,9 +203,11 @@ public class HelpService(
     }
 
     public ProvideDetailsPageViewModel MapProvideDetailsPageContentToViewModel(
-        HelpProvideDetailsPage content, string reasonForEnquiring)
+        HelpProvideDetailsPage content)
     {
-        return helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, reasonForEnquiring);
+        var maxCharacterLimit = GetMaxCharacterLimit();
+        var model = helpProvideDetailsPageMapper.MapProvideDetailsPageContentToViewModel(content, maxCharacterLimit, placeholderUpdater);
+        return model;
     }
 
     public async Task<HelpEmailAddressPage?> GetHelpEmailAddressPage()
@@ -313,7 +315,7 @@ public class HelpService(
     public void AddQualificationDetailsValidationErrors(QualificationDetailsPageViewModel model, HelpQualificationDetailsPage content, ModelStateDictionary modelState)
     {
         AddQualificationNameError(model, modelState);
-        AddOptionError(model, modelState, content);
+        AddOptionError(model, modelState);
 
         var isRadioOptionSelected = !string.IsNullOrEmpty(model.Option);
         var isRadioOptionBefore2014 = model.Option == content.BeforeSeptember2014Option.Value;
@@ -342,6 +344,22 @@ public class HelpService(
         AddAwardingOrganisationError(model, modelState);
     }
 
+    public int GetMaxCharacterLimit()
+    {
+        const string configKey = "Help:MessageCharacterLimit";
+        if (configuration == null)
+        {
+            throw new InvalidOperationException("IConfiguration service could not be resolved.");
+        }
+
+        var maxLengthConfig = configuration[configKey];
+        if (!int.TryParse(maxLengthConfig, out var maxLength))
+        {
+            throw new InvalidOperationException($"Configuration key '{configKey}' is missing or not a valid integer.");
+        }
+        return maxLength;
+    }
+
     private static void AddQualificationNameError(QualificationDetailsPageViewModel model, ModelStateDictionary modelState)
     {
         model.HasQualificationNameError = modelState.Keys.Any(_ => modelState["QualificationName"]?.Errors.Count > 0);
@@ -357,7 +375,7 @@ public class HelpService(
         }
     }
 
-    private static void AddOptionError(QualificationDetailsPageViewModel model, ModelStateDictionary modelState, HelpQualificationDetailsPage content)
+    private static void AddOptionError(QualificationDetailsPageViewModel model, ModelStateDictionary modelState)
     {
         model.HasOptionError = modelState.Keys.Any(_ => modelState["Option"]?.Errors.Count > 0);
         if (model.HasOptionError)
