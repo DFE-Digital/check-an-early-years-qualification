@@ -49,10 +49,10 @@ public class WebViewMapperTests
         result.BackButton.OpenInNewTab.Should().Be(content.BackButton.OpenInNewTab);
 
         result.OpenGraphData.Should().NotBeNull();
-        result.OpenGraphData!.Title.Should().Be(content.OpenGraphData!.Title);
-        result.OpenGraphData.Description.Should().Be(content.OpenGraphData.Description);
-        result.OpenGraphData.Domain.Should().Be(content.OpenGraphData.Domain);
-        result.OpenGraphData.ImageUrl.Should().Be(content.OpenGraphData.Image!.File.Url);
+        result.OpenGraphData!.Title.Should().Be(content.OpenGraph!.Title);
+        result.OpenGraphData.Description.Should().Be(content.OpenGraph.Description);
+        result.OpenGraphData.Domain.Should().Be(content.OpenGraph.Domain);
+        result.OpenGraphData.ImageUrl.Should().Be(content.OpenGraph.Image!.File.Url);
 
         result.DownloadHeading.Should().Be(content.DownloadHeading);
         result.DownloadSectionContent.Should().Be("Download section");
@@ -184,10 +184,26 @@ public class WebViewMapperTests
         qualificationModel.AdditionalRequirements.Should().Be("None");
     }
 
-    private static WebViewPage CreateContent()
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public async Task Map_MapsIsIndexable(bool isIndexable)
+    {
+        var content = CreateContent(isIndexable);
+        var mockContentParser = CreateContentParser();
+
+        var mapper = new WebViewMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(content, new WebViewFilters(), [], true);
+
+        result.IsIndexable.Should().Be(isIndexable);
+    }
+
+    private static WebViewPage CreateContent(bool isIndexable = false)
     {
         return new WebViewPage
                {
+                   IsIndexable = isIndexable,
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "Back",
@@ -236,7 +252,7 @@ public class WebViewMapperTests
                    ],
                    MultipleQualificationsFoundText = "qualifications found",
                    SingleQualificationFoundText = "qualification found",
-                   OpenGraphData = new OpenGraphData
+                   OpenGraph = new OpenGraphData
                    {
                        Title = "OG Title",
                        Description = "OG Description",

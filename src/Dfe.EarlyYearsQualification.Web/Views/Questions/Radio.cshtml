@@ -1,3 +1,4 @@
+@using Dfe.EarlyYearsQualification.Web.Controllers.Questions
 @using Dfe.EarlyYearsQualification.Web.Models.Content
 @using Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels
 @model Dfe.EarlyYearsQualification.Web.Models.Content.QuestionModels.RadioQuestionModel
@@ -9,6 +10,11 @@
 @section Scripts
 {
     <script src="~/js/pages/components/radio-button-with-nested-input.js" asp-append-version="true"></script>
+    @if (Model.ActionName == nameof(QuestionsController.WhatLevelIsTheQualification))
+    {
+        <script src="~/js/pages/what-level-is-the-qualification-page.js" asp-append-version="true"
+                data-save-level-url="@Url.Action(nameof(QuestionsController.SaveLevelAndViewQualificationLevels), "Questions")"></script>
+    }
 }
 
 @section BeforeMainContent {

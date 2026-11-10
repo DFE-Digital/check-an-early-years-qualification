@@ -624,6 +624,70 @@ public class AdviceControllerTests
     }
 
     [TestMethod]
+    public async Task EarlyYearsQualificationLevels_ContentServiceReturnsNoAdvicePage_RedirectsToErrorPage()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockAdvicePageMapper = new Mock<IStaticPageMapper>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
+
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.EarlyYearsQualificationLevels))
+                          .ReturnsAsync((StaticPage?)null).Verifiable();
+
+        var result = await controller.EarlyYearsQualificationLevels();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+
+        resultType.Should().NotBeNull();
+
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("Error");
+
+        mockLogger.VerifyError("No content for the advice page");
+    }
+
+    [TestMethod]
+    public async Task EarlyYearsQualificationLevels_ContentServiceReturnsAdvicePage_ReturnsAdvicePageModel()
+    {
+        var mockLogger = new Mock<ILogger<AdviceController>>();
+        var mockContentService = new Mock<IContentService>();
+        var mockAdvicePageMapper = new Mock<IStaticPageMapper>();
+
+        var controller = new AdviceController(mockLogger.Object,
+                                              mockContentService.Object,
+                                              UserJourneyMockNoOp.Object,
+                                              mockAdvicePageMapper.Object);
+
+        var advicePage = new StaticPage { Heading = Heading, Body = ContentfulContentHelper.Text(BodyContent) };
+        mockContentService.Setup(x => x.GetStaticPageById(StaticPages.EarlyYearsQualificationLevels))
+                          .ReturnsAsync(advicePage);
+
+        mockAdvicePageMapper.Setup(x => x.Map(advicePage))
+                            .ReturnsAsync(new StaticPageModel { Heading = Heading, BodyContent = BodyContent });
+
+        var result = await controller.EarlyYearsQualificationLevels();
+
+        result.Should().NotBeNull();
+
+        var resultType = result as ViewResult;
+        resultType.Should().NotBeNull();
+
+        var model = resultType.Model as StaticPageModel;
+        model.Should().NotBeNull();
+
+        model.Heading.Should().Be(advicePage.Heading);
+        model.BodyContent.Should().Be(BodyContent);
+
+        mockAdvicePageMapper.Verify(x => x.Map(It.IsAny<StaticPage>()), Times.Once);
+    }
+
+    [TestMethod]
     public void OnActionExecuting_ClearsCookies()
     {
         var mockLogger = new Mock<ILogger<AdviceController>>();

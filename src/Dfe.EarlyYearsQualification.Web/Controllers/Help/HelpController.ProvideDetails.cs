@@ -24,7 +24,7 @@ public partial class HelpController
             return RedirectToAction("Index", "Error");
         }
 
-        var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
+        var viewModel = helpService.MapProvideDetailsPageContentToViewModel(content);
 
         viewModel.ProvideAdditionalInformation = enquiry.AdditionalInformation;
 
@@ -51,10 +51,14 @@ public partial class HelpController
                 logger.LogError("'Help provide details page' content could not be found");
                 return RedirectToAction("Index", "Error");
             }
+            
+            viewModel = helpService.MapProvideDetailsPageContentToViewModel(content);
 
-            viewModel = helpService.MapProvideDetailsPageContentToViewModel(content, enquiry.ReasonForEnquiring);
+            bool hasMaxCharacterLimitError = ModelState["ProvideAdditionalInformation"]?.Errors
+                                                    .Any(e => e.ErrorMessage.Contains("string with a maximum length", StringComparison.OrdinalIgnoreCase)) ?? false;
 
-            viewModel.HasAdditionalInformationError = ModelState.Keys.Any(_ => ModelState["ProvideAdditionalInformation"]?.Errors.Count > 0);
+            viewModel.HasAdditionalInformationError = !hasMaxCharacterLimitError;
+            viewModel.HasMaxCharacterLimitError = hasMaxCharacterLimitError;
 
             return View("ProvideDetails", viewModel);
         }

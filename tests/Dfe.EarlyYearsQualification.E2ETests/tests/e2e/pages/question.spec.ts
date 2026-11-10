@@ -525,15 +525,15 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await exists(page, 'input[id="7"]');
     });
 
-    test("Checks additional information on the what-level-is-the-qualification page", async ({page, context}) => {
+    test("Checks the qualification levels link on the what-level-is-the-qualification page", async ({page, context}) => {
         await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
         await page.goto("/questions/what-level-is-the-qualification");
 
-        await doesNotHaveAttribute(page, ".govuk-details", "open");
-        await checkText(page, ".govuk-details__summary-text", "This is the additional information header");
-        await checkText(page, ".govuk-details__text", "This is the additional information body");
-        await page.click(".govuk-details__summary-text");
-        await hasAttribute(page, ".govuk-details", "open");
+        await doesNotExist(page, ".govuk-details");
+        await checkText(page, "a[href='/advice/early-years-qualification-levels']", "early years qualification levels");
+        await page.click("a[href='/advice/early-years-qualification-levels']");
+        await checkUrl(page, "/advice/early-years-qualification-levels");
+        await checkText(page, "#back-button", "Back to what level is the qualification");
     });
 
     test("shows an error message when a user doesnt select an option on the what-level-is-the-qualification page", async ({
@@ -564,6 +564,15 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await exists(page, "#awarding-organisation-select");
         await exists(page, "#awarding-organisation-not-in-list");
         await exists(page, '#question-submit');
+    });
+
+    test("Checks the page paragraph and not in the list hint on the what-is-the-awarding-organisation page", async ({page, context}) => {
+        await setCookie(context, '%7B%22WhenWasQualificationStarted%22%3A%227%2F2015%22%7D', journeyCookieName);
+        await page.goto("/questions/what-is-the-awarding-organisation");
+
+        await checkText(page, "#page-paragraph", "Test Page Paragraph");
+        await checkText(page, "#awarding-organisation-not-in-list-hint", "Test Not In The List Hint Text");
+        await hasAttribute(page, "#awarding-organisation-not-in-list", "aria-describedby", "awarding-organisation-not-in-list-hint");
     });
 
     test("Checks additional information on the what-is-the-awarding-organisation page", async ({page, context}) => {
@@ -626,8 +635,8 @@ test.describe("A spec that tests question pages", {tag: "@e2e"}, () => {
         await hasClass(page, ".govuk-form-group", /govuk-form-group--error/, 1);
     });
 
-    test("Checks the content on are-you-checking-your-own-qualification page", async ({page}) => {
-        await page.goto("/questions/are-you-checking-your-own-qualification");
+    test("Checks the content on what-qualification-are-you-checking page", async ({page}) => {
+        await page.goto("/questions/what-qualification-are-you-checking");
 
         await checkText(page, "#question", "Are you checking your qualification or someone else's?");
         await exists(page, "#yes");

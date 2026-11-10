@@ -31,8 +31,19 @@ public class QuestionsControllerTests
 
         var resultType = result as RedirectToActionResult;
         resultType.Should().NotBeNull();
-        resultType.ActionName.Should().Be(nameof(QuestionPages.AreYouCheckingYourOwnQualification));
+        resultType.ActionName.Should().Be(nameof(QuestionsController.AreYouCheckingYourOwnQualification));
         _mockQuestionService.Verify(x => x.ResetUserJourneyCookie(), Times.Once);
+    }
+
+    [TestMethod]
+    public void AreYouCheckingYourOwnQualificationLegacy_RedirectsPermanentlyToNewUrl()
+    {
+        var result = GetSut().AreYouCheckingYourOwnQualificationLegacy();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(QuestionsController.AreYouCheckingYourOwnQualification));
+        resultType.Permanent.Should().BeTrue();
     }
 
     [TestMethod]
@@ -778,6 +789,54 @@ public class QuestionsControllerTests
 
         result.Should().NotBeNull();
         _mockQuestionService.Verify(x => x.RedirectBasedOnQualificationLevelSelected(level), Times.Once);
+    }
+
+    [TestMethod]
+    public async Task SaveLevelAndViewQualificationLevels_ValidOption_SavesLevelAndRedirectsToLevelsPage()
+    {
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification))
+                            .ReturnsAsync(new RadioQuestionPage { Options = [new Option { Label = "Level 3", Value = "3" }] });
+
+        var result = await GetSut().SaveLevelAndViewQualificationLevels(new RadioQuestionModel { Option = "3" });
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(AdviceController.EarlyYearsQualificationLevels));
+        resultType.ControllerName.Should().Be("Advice");
+
+        _mockQuestionService.Verify(x => x.SetLevelOfQualification("3"), Times.Once);
+    }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("99")]
+    public async Task SaveLevelAndViewQualificationLevels_NoOrInvalidOption_DoesNotSaveLevelAndRedirectsToLevelsPage(string option)
+    {
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification))
+                            .ReturnsAsync(new RadioQuestionPage { Options = [new Option { Label = "Level 3", Value = "3" }] });
+
+        var result = await GetSut().SaveLevelAndViewQualificationLevels(new RadioQuestionModel { Option = option });
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(AdviceController.EarlyYearsQualificationLevels));
+
+        _mockQuestionService.Verify(x => x.SetLevelOfQualification(It.IsAny<string>()), Times.Never);
+    }
+
+    [TestMethod]
+    public async Task SaveLevelAndViewQualificationLevels_NoQuestionPageContent_DoesNotSaveLevelAndRedirectsToLevelsPage()
+    {
+        _mockQuestionService.Setup(x => x.GetRadioQuestionPageContent(QuestionPages.WhatLevelIsTheQualification))
+                            .ReturnsAsync((RadioQuestionPage?)null);
+
+        var result = await GetSut().SaveLevelAndViewQualificationLevels(new RadioQuestionModel { Option = "3" });
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be(nameof(AdviceController.EarlyYearsQualificationLevels));
+
+        _mockQuestionService.Verify(x => x.SetLevelOfQualification(It.IsAny<string>()), Times.Never);
     }
 
     [TestMethod]

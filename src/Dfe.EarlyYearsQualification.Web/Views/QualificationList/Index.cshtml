@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = $"{Model.Heading} - {Model.ShowingAllQualificationsLabel}";
     ViewData["OpenGraph"] = Model.OpenGraphData;
+    ViewData["Indexable"] = Model.IsIndexable;
 }
 
 @section Scripts

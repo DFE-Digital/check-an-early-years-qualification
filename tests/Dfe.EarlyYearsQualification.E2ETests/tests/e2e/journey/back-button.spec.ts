@@ -14,7 +14,8 @@ import {
     confirmQualification,
     processAdditionalRequirement,
     confirmAdditonalRequirementsAnswers,
-    checkDetailsPage
+    checkDetailsPage,
+    checkElementIsChecked
 } from '../../_shared/playwrightWrapper';
 
 test.describe("A spec used to test the main back button route through the journey", {tag: "@e2e"}, () => {
@@ -59,6 +60,21 @@ test.describe("A spec used to test the main back button route through the journe
         await checkUrl(page, "/questions/where-was-the-qualification-awarded");
         await clickBackButton(page);
         await checkUrl(page, process.env.WEBAPP_URL + "/");
+    });
+
+    test("the back button on the early years qualification levels page returns to the level question with the answer pre-selected", async ({page}) => {
+        await whereWasTheQualificationAwarded(page, "#england");
+        await startedOnOrAfterSeptember2014(page, "10", "2020");
+        await whenWasQualificationAwarded(page, "1", "2021");
+        await checkUrl(page, "/questions/what-level-is-the-qualification");
+
+        // select a level but follow the link without pressing continue
+        await page.locator('input[id="3"]').click();
+        await page.click("a[href='/advice/early-years-qualification-levels']");
+        await checkUrl(page, "/advice/early-years-qualification-levels");
+        await clickBackButton(page);
+        await checkUrl(page, "/questions/what-level-is-the-qualification");
+        await checkElementIsChecked(page, 'input[id="3"]');
     });
 
     test.describe("back buttons should all navigate to the appropriate pages in the main journey", async () => {

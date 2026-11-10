@@ -11,6 +11,7 @@ This module provisions a new Azure Resource Group that assembles together the in
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.10.5 |
+| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | >= 2.12.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | = 4.57.0 |
 
 ## Providers
@@ -70,8 +71,12 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_notifications_help_page_form_email_address"></a> [notifications\_help\_page\_form\_email\_address](#input\_notifications\_help\_page\_form\_email\_address) | GovUK Notify Help Page Email Address | `string` | n/a | yes |
 | <a name="input_notifications_help_page_form_template_id"></a> [notifications\_help\_page\_form\_template\_id](#input\_notifications\_help\_page\_form\_template\_id) | GovUK Notify Help Page Email Template Id | `string` | n/a | yes |
 | <a name="input_notifications_is_test_environment"></a> [notifications\_is\_test\_environment](#input\_notifications\_is\_test\_environment) | Flag to indicate if the notification comes from a test environment | `bool` | n/a | yes |
+| <a name="input_otel_service_name"></a> [otel\_service\_name](#input\_otel\_service\_name) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_service_gov_uk_custom_domain_name"></a> [service\_gov\_uk\_custom\_domain\_name](#input\_service\_gov\_uk\_custom\_domain\_name) | Custom domain hostname for the service.gov.uk domain | `string` | n/a | yes |
+| <a name="input_splunk_access_token"></a> [splunk\_access\_token](#input\_splunk\_access\_token) | Secret value to be supplied for the Splunk Access Token | `string` | n/a | yes |
+| <a name="input_splunk_port"></a> [splunk\_port](#input\_splunk\_port) | Port to be used for the Splunk Integration | `string` | n/a | yes |
+| <a name="input_splunk_realm"></a> [splunk\_realm](#input\_splunk\_realm) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_webapp_access_is_public"></a> [webapp\_access\_is\_public](#input\_webapp\_access\_is\_public) | Web app service is public, and access is unchallenged | `bool` | `false` | no |
 | <a name="input_webapp_access_key_1"></a> [webapp\_access\_key\_1](#input\_webapp\_access\_key\_1) | Web app access key for invited access 1 | `string` | n/a | yes |
 | <a name="input_webapp_access_key_2"></a> [webapp\_access\_key\_2](#input\_webapp\_access\_key\_2) | Web app access key for invited access 2 | `string` | n/a | yes |
