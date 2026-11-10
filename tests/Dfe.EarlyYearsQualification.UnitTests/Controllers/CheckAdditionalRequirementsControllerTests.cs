@@ -696,6 +696,44 @@ public class CheckAdditionalRequirementsControllerTests
     }
 
     [TestMethod]
+    public async Task ConfirmAnswers_QualHasQuestionsButAnswersIsNull_RedirectToFirstQuestion()
+    {
+        var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
+        var mockRepository = new Mock<IQualificationsRepository>();
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mockContentService = new Mock<IContentService>();
+        var mockUserJourneyCookieService = new Mock<IUserJourneyCookieService>();
+
+        var qualification = CreateQualification(CreateAdditionalRequirementQuestions());
+
+        mockRepository.Setup(x => x.GetById("Test-123"))
+                      .ReturnsAsync(qualification);
+
+        mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
+                          .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage());
+        
+        mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
+                                    .Returns((Dictionary<string, string>)null!);
+
+        var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
+                                                                   mockRepository.Object,
+                                                                   mockContentService.Object,
+                                                                   mockContentParser.Object,
+                                                                   mockUserJourneyCookieService.Object);
+
+        var result = await controller.ConfirmAnswers("Test-123");
+
+        result.Should().NotBeNull();
+
+        var resultType = result as RedirectToActionResult;
+        resultType.Should().NotBeNull();
+        resultType.ActionName.Should().Be("Index");
+        resultType.ControllerName.Should().Be("CheckAdditionalRequirements");
+        resultType.RouteValues.Should().Contain("qualificationId", "Test-123");
+        resultType.RouteValues.Should().Contain("questionIndex", 1);
+    }
+    
+    [TestMethod]
     public async Task ConfirmAnswers_QualHasQuestionsButNoAnswers_RedirectToFirstQuestion()
     {
         var mockLogger = new Mock<ILogger<CheckAdditionalRequirementsController>>();
@@ -711,6 +749,9 @@ public class CheckAdditionalRequirementsControllerTests
 
         mockContentService.Setup(x => x.GetCheckAdditionalRequirementsAnswerPage())
                           .ReturnsAsync(new CheckAdditionalRequirementsAnswerPage());
+
+        mockUserJourneyCookieService.Setup(x => x.GetAdditionalQuestionsAnswers())
+                                    .Returns(new Dictionary<string, string>());
 
         var controller = new CheckAdditionalRequirementsController(mockLogger.Object,
                                                                    mockRepository.Object,
