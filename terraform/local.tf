@@ -58,8 +58,8 @@ locals {
     "ServiceAccess__Keys__2"           = var.webapp_access_key_1
     "ServiceAccess__Keys__3"           = var.webapp_access_key_2
     "Cache__Type"                      = var.cache_type
-    "OTEL_SERVICE_NAME"                   = var.otel_service_name
-    "SPLUNK_PORT"                         = var.splunk_port
-    "SPLUNK_REALM"                        = var.splunk_realm
+    "OTEL_SERVICE_NAME"                = var.otel_service_name
+    "SPLUNK_PORT"                      = var.splunk_port
+    "SPLUNK_REALM"                     = var.splunk_realm
   }
 }
