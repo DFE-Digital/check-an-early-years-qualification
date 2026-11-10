@@ -260,7 +260,8 @@ public class CheckAdditionalRequirementsController(
                                                                               Dictionary<string, string>
                                                                                   additionalRequirementAnswers)
     {
-        if (qualification.AdditionalRequirementQuestions is null
+        if (additionalRequirementAnswers.Count == 0
+            || qualification.AdditionalRequirementQuestions is null
             || qualification.AdditionalRequirementQuestions.All(x => x.Sys.Id != AdditionalRequirementQuestions
                                                                          .QtsQuestion))
         {
