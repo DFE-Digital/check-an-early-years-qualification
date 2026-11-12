@@ -19,22 +19,22 @@ runs:
         max_attempts=5
 
         until [ ${attempt_counter} -eq ${max_attempts} ]; do
-          status_code=$(curl --output /dev/null --silent -i --fail -w '%{response_code}\n' "https://${WEBAPP_URL}.azurewebsites.net/health");
+          status_code=$(curl --output /dev/null --silent -w '%{http_code}' "https://${WEBAPP_URL}.azurewebsites.net/health")
 
           echo "Response status code: $status_code"
             
-          if [[ $status_code -eq "200" ]]; then
+          if [[ "$status_code" -eq 200 ]]; then
             echo "Success"
             exit 0
           else
-            attempt_counter=$(($attempt_counter+1))
+            attempt_counter=$((attempt_counter + 1))
             
-            if [ ${attempt_counter} -eq ${max_attempts} ]; then
-                echo "Max attempts reached. Failed!"
-                exit 1;
-            fi
+          if [ ${attempt_counter} -eq ${max_attempts} ]; then
+            echo "Max attempts reached. Failed!"
+            exit 1
+          fi
 
-            echo "Current retry count: $attempt_counter"
-            sleep 10
+          echo "Current retry count: $attempt_counter"
+            sleep 20s
           fi
         done
