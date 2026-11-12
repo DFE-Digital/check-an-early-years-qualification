@@ -68,6 +68,8 @@ public class WebViewPage
 
     public Document QualificationLevelPostHeaderContent { get; init; } = new Document();
 
+    public NotificationBanner? NotificationBanner { get; init; }
+
     public OpenGraphData? OpenGraph { get; init; }
 
     public bool IsIndexable { get; init; }

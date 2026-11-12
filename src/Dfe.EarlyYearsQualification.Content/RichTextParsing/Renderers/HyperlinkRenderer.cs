@@ -1,4 +1,5 @@
 using Contentful.Core.Models;
+using Dfe.EarlyYearsQualification.Content.RichTextParsing.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Content.RichTextParsing.Renderers;
 
@@ -6,11 +7,11 @@ public class HyperlinkRenderer : IContentRenderer
 {
     public int Order { get; set; }
 
-    public Task<string> RenderAsync(IContent content)
+    public async Task<string> RenderAsync(IContent content)
     {
-        var hyperlink = content as Hyperlink;
-        var hyperlinkText = hyperlink!.Content[0] as Text;
-        return Task.FromResult($"<a href='{hyperlink.Data.Uri}' class='govuk-link'>{hyperlinkText!.Value}</a>");
+        var hyperlink = (Hyperlink)content;
+        var linkText = await NestedContentHelper.Render(hyperlink.Content);
+        return $"<a href='{hyperlink.Data.Uri}' class='govuk-link'>{linkText}</a>";
     }
 
     public bool SupportsContent(IContent content)
