@@ -271,7 +271,7 @@ const config = {
         standard: 'WCAG2AA',
         hideElements: 'svg[role=presentation], img[id="offline-resources-1x"], img[id="offline-resources-2x"]',
         useIncognitoBrowserContext: true,
-        wait: 2000,
+        wait: 10000,
         timeout: 60000
     }
 };
