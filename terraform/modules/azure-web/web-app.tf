@@ -503,6 +503,12 @@ resource "azapi_resource" "webapp_container" {
       targetPort = "8080"
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      body.properties.image
+    ]
+  }
 }
 
 resource "azapi_resource" "otel_collector" {
