@@ -30,7 +30,7 @@ public class CookieManager(IHttpContextAccessor context) : ICookieManager
         httpContext?.Response.Cookies.Delete(key, new CookieOptions { Domain = $".{httpContext.Request.Host.Host}" });
     }
 
-    public CookieOptions CreateCookieOptions(DateTimeOffset expiration, bool secure = true)
+    public CookieOptions CreateCookieOptions(DateTimeOffset? expiration, bool secure = true)
     {
         return new CookieOptions
                {

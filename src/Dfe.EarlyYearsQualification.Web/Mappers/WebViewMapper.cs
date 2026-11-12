@@ -58,11 +58,21 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             NationFilters = nationFilters,
             SelectedNationFilterLabel = ExtractFilterLabel(nationFilters, webViewFilters.Nation),
             SelectedStartDateFilterLabel = ExtractFilterLabel(startDateFilters, webViewFilters.QualificationStartDate),
-            IsProductionEnvironment = isProductionEnvironment
+            IsProductionEnvironment = isProductionEnvironment,
+            NotificationBanner = await MapNotificationBanner(content.NotificationBanner)
         };
         model.ShowingAllQualificationsLabel = GetShowingAllQualificationsLabel(model.HasFilters, qualifications.Count, content);
 
         return model;
+    }
+
+    private async Task<NotificationBannerModel?> MapNotificationBanner(NotificationBanner? notificationBanner)
+    {
+        if (notificationBanner is null) return null;
+
+        var body = await contentParser.ToHtml(notificationBanner.Body);
+
+        return NotificationBannerMapper.Map(notificationBanner, body, "qualification-list-notification-banner", fullWidth: true);
     }
 
     private static string ExtractFilterLabel(List<IOptionItemModel> filters, string filterValue)

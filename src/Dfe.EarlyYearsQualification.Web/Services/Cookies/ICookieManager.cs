@@ -8,5 +8,5 @@ public interface ICookieManager
 
     void DeleteOutboundCookie(string key);
 
-    CookieOptions CreateCookieOptions(DateTimeOffset expiration, bool secure);
+    CookieOptions CreateCookieOptions(DateTimeOffset? expiration, bool secure);
 }

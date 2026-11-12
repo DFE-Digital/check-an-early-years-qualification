@@ -46,7 +46,8 @@ public abstract class ContentfulContentServiceBase
               { typeof(RatioRequirement), ContentTypes.RatioRequirement },
               { typeof(RadioButtonAndDateInput), ContentTypes.RadioButtonAndDateInput },
               { typeof(WebViewPage), ContentTypes.WebViewPage },
-              { typeof(SearchResultContent), ContentTypes.SearchResultContent }
+              { typeof(SearchResultContent), ContentTypes.SearchResultContent },
+              { typeof(NotificationBanner), ContentTypes.NotificationBanner }
           };
 
     protected readonly ILogger Logger;

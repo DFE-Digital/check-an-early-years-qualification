@@ -1401,6 +1401,11 @@ public class MockContentfulService : IContentService
                     Href = "/",
                     OpenInNewTab = false
                 },
+                NotificationBanner = new NotificationBanner
+                {
+                    Heading = "Important",
+                    Body = ContentfulContentHelper.Paragraph("Notification banner body")
+                },
                 OpenGraph = new OpenGraphData
                 {
                     Title = "EYQL OG Title (page override)",

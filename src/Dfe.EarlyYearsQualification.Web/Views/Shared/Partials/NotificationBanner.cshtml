@@ -1,0 +1,13 @@
+@model Dfe.EarlyYearsQualification.Web.Models.Content.NotificationBannerModel
+
+<div id="@Model.Id" class="govuk-notification-banner @(Model.FullWidth ? "notification-banner--full-width" : "")"
+     role="region" aria-labelledby="@Model.Id-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="@Model.Id-title">
+            @Model.Heading
+        </h2>
+    </div>
+    <div class="govuk-notification-banner__content" id="@Model.Id-content">
+        @Html.Raw(Model.Body)
+    </div>
+</div>
