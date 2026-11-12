@@ -65,7 +65,6 @@ jobs:
 
       # Sets an environment variable to contain the current IP address
       - name: IP address env
-        if: ${{ inputs.action == 'Plan & Apply' }}
         run: echo "CURRENT_IP=$(curl https://api.ipify.org)" >> $GITHUB_ENV
 
       # Login to Azure using OIDC
@@ -80,6 +79,26 @@ jobs:
       - name: Azure Storage IP access
         if: ${{ inputs.action == 'Plan & Apply' }}
         run:  az storage account network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
+        
+      # Allows the current IP address access to the KeyVault for later terraform steps in the workflow
+      - name: Azure KeyVault IP access
+        if: ${{ inputs.action == 'Plan & Apply' }}
+        run: az keyvault network-rule add -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
+        
+      - name: Await Propagation
+        if: ${{ inputs.action == 'Plan & Apply' }}
+        run: |
+          echo "Waiting for firewall propagation..."
+          for i in {1..30}; do
+            # 403 means firewall blocked; 401 means firewall passed (unauthorized at auth layer)
+            CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac.vault.azure.net/secrets?api-version=7.4" || true)
+            if [ "$CODE" -eq 401 ]; then
+              echo "Firewall rule active!"
+              break
+            fi
+            echo "Attempt $i: Still blocked (HTTP $CODE), waiting 5s..."
+            sleep 5
+          done
 
       # Initialise a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
@@ -154,7 +173,7 @@ jobs:
         id: tf-plan
         run: |
           export exitcode=0
-          terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+          terraform plan -var="github_runner_ip=$CURRENT_IP" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
           
           echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
           
@@ -168,7 +187,11 @@ jobs:
       # Terraform Apply
       - name: Terraform Apply
         if: ${{ inputs.action == 'Plan & Apply' }}
-        run: terraform apply -auto-approve tfplan
+        run: |
+          terraform apply \
+            -var="github_runner_ip=$CURRENT_IP" \
+            -auto-approve tfplan
+            
         
       - name: Restart App Service
         if: ${{ inputs.action == 'Plan & Apply' }}
@@ -177,3 +200,10 @@ jobs:
           resource_name_prefix: ${{ vars.RESOURCE_NAME_PREFIX }}
           webapp_name: ${{ vars.WEBAPP_NAME }}        
         
+      # Cleanup the IP addresses
+      - name: Cleanup Runner IP
+        if: always()
+        run: |
+          az storage account network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --account-name ${{ vars.WEBAPP_STORAGE_ACCOUNT_NAME }} --ip-address $CURRENT_IP
+            
+          az keyvault network-rule remove -g ${{ vars.RESOURCE_NAME_PREFIX }}-rg --name ${{ vars.RESOURCE_NAME_PREFIX }}-kvrbac --ip-address $CURRENT_IP
