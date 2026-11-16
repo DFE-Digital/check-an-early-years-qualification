@@ -261,6 +261,11 @@ variable "splunk_realm" {
 }
 
 variable "otel_service_name" {
-  description = "Realm to be used for the Splunk Integration"
+  description = "Service name to be used for the Splunk Integration"
+  type        = string
+}
+
+variable "otel_resource_attributes" {
+  description = "Attributes used by the otel collector for the Splunk Integration"
   type        = string
 }
