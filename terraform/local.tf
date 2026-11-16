@@ -41,6 +41,7 @@ locals {
     "OTEL_SERVICE_NAME"                                 = var.otel_service_name
     "SPLUNK_PORT"                                       = var.splunk_port
     "SPLUNK_REALM"                                      = var.splunk_realm
+    "OTEL_RESOURCE_ATTRIBUTES"                          = var.otel_resource_attributes
   }
 
   webapp_slot_app_settings = {
@@ -59,5 +60,6 @@ locals {
     "OTEL_SERVICE_NAME"                   = var.otel_service_name
     "SPLUNK_PORT"                         = var.splunk_port
     "SPLUNK_REALM"                        = var.splunk_realm
+    "OTEL_RESOURCE_ATTRIBUTES"            = var.otel_resource_attributes
   }
 }
