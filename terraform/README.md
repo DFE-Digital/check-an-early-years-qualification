@@ -72,7 +72,8 @@ This module provisions a new Azure Resource Group that assembles together the in
 | <a name="input_notifications_help_page_form_email_address"></a> [notifications\_help\_page\_form\_email\_address](#input\_notifications\_help\_page\_form\_email\_address) | GovUK Notify Help Page Email Address | `string` | n/a | yes |
 | <a name="input_notifications_help_page_form_template_id"></a> [notifications\_help\_page\_form\_template\_id](#input\_notifications\_help\_page\_form\_template\_id) | GovUK Notify Help Page Email Template Id | `string` | n/a | yes |
 | <a name="input_notifications_is_test_environment"></a> [notifications\_is\_test\_environment](#input\_notifications\_is\_test\_environment) | Flag to indicate if the notification comes from a test environment | `bool` | n/a | yes |
-| <a name="input_otel_service_name"></a> [otel\_service\_name](#input\_otel\_service\_name) | Realm to be used for the Splunk Integration | `string` | n/a | yes |
+| <a name="input_otel_resource_attributes"></a> [otel\_resource\_attributes](#input\_otel\_resource\_attributes) | Attributes used by the otel collector for the Splunk Integration | `string` | n/a | yes |
+| <a name="input_otel_service_name"></a> [otel\_service\_name](#input\_otel\_service\_name) | Service name to be used for the Splunk Integration | `string` | n/a | yes |
 | <a name="input_resource_name_prefix"></a> [resource\_name\_prefix](#input\_resource\_name\_prefix) | Prefix for resource names | `string` | n/a | yes |
 | <a name="input_service_gov_uk_custom_domain_name"></a> [service\_gov\_uk\_custom\_domain\_name](#input\_service\_gov\_uk\_custom\_domain\_name) | Custom domain hostname for the service.gov.uk domain | `string` | n/a | yes |
 | <a name="input_splunk_access_token"></a> [splunk\_access\_token](#input\_splunk\_access\_token) | Secret value to be supplied for the Splunk Access Token | `string` | n/a | yes |
