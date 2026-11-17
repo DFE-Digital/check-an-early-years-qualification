@@ -76,7 +76,7 @@ jobs:
               \"isMain\": true,
               \"targetPort\": \"8080\"
             }
-          }
+          }"
           
           az rest --method PUT \
           --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/slots/${SLOT_NAME}/sitecontainers/${SIDECAR_CONTAINER_NAME}?api-version=2023-12-01" \
@@ -160,7 +160,7 @@ jobs:
               \"isMain\": true,
               \"targetPort\": \"8080\"
             }
-          }
+          }"
           
           az rest --method PUT \
           --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/slots/${SLOT_NAME}/sitecontainers/${SIDECAR_CONTAINER_NAME}?api-version=2023-12-01" \
