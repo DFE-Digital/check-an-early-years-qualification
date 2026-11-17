@@ -65,6 +65,8 @@ jobs:
           SLOT_NAME=${{ vars.WEBAPP_SLOT_NAME }}
           CONTAINER_NAME="early-years-qualification"
           MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          SIDECAR_CONTAINER_NAME="otel-collector"
+          SIDECAR_IMAGE="ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
 
           az rest --method PUT \
           --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/slots/${SLOT_NAME}/sitecontainers/${CONTAINER_NAME}?api-version=2023-12-01" \
@@ -73,6 +75,16 @@ jobs:
               \"image\": \"$MAIN_IMAGE\",
               \"isMain\": true,
               \"targetPort\": \"8080\"
+            }
+          }
+          
+          az rest --method PUT \
+          --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/slots/${SLOT_NAME}/sitecontainers/${SIDECAR_CONTAINER_NAME}?api-version=2023-12-01" \
+          --body "{
+            \"properties\": {
+              \"image\": \"$SIDECAR_IMAGE\",
+              \"isMain\": false,
+              \"targetPort\": \"4318\"
             }
           }"
 
@@ -137,6 +149,8 @@ jobs:
           SLOT_NAME=${{ vars.WEBAPP_SLOT_NAME }}
           CONTAINER_NAME="early-years-qualification"
           MAIN_IMAGE=${{ needs.create-and-publish-image.outputs.dockerImageTag }}
+          SIDECAR_CONTAINER_NAME="otel-collector"
+          SIDECAR_IMAGE="ghcr.io/dfe-digital/early-years-qualification/otel-collector:v1"
 
           az rest --method PUT \
           --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/slots/${SLOT_NAME}/sitecontainers/${CONTAINER_NAME}?api-version=2023-12-01" \
@@ -145,6 +159,16 @@ jobs:
               \"image\": \"$MAIN_IMAGE\",
               \"isMain\": true,
               \"targetPort\": \"8080\"
+            }
+          }
+          
+          az rest --method PUT \
+          --uri "/subscriptions/$SUBSCRIPTION_ID/resourceGroups/${RESOURCE_GROUP}/providers/Microsoft.Web/sites/${WEBAPP_NAME}/slots/${SLOT_NAME}/sitecontainers/${SIDECAR_CONTAINER_NAME}?api-version=2023-12-01" \
+          --body "{
+            \"properties\": {
+              \"image\": \"$SIDECAR_IMAGE\",
+              \"isMain\": false,
+              \"targetPort\": \"4318\"
             }
           }"
 
