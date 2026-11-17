@@ -485,9 +485,6 @@ resource "azapi_update_resource" "enable_sidecar" {
       }
     }
   }
-  lifecycle {
-    replace_triggered_by = [azurerm_linux_web_app.webapp]
-  }
 }
 
 resource "azapi_resource" "webapp_container" {
