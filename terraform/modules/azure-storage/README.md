@@ -23,6 +23,7 @@ No modules.
 |------|------|
 | [azurerm_key_vault_secret.storage_connection_string](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_secret) | resource |
 | [azurerm_monitor_diagnostic_setting.storage_account_diagnostics](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
+| [azurerm_role_assignment.webapp_storage_blob_contributor](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_storage_account.sa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
 | [azurerm_storage_account_network_rules.sa_network_rules](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_network_rules) | resource |
 | [azurerm_storage_account_queue_properties.sa_queue_properties](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_queue_properties) | resource |
@@ -37,6 +38,7 @@ No modules.
 | <a name="input_logs_id"></a> [logs\_id](#input\_logs\_id) | Log Analytics workspace ID | `string` | n/a | yes |
 | <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | Name of the Azure Resource Group to deploy resources | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(string)` | n/a | yes |
+| <a name="input_webapp_principal_id"></a> [webapp\_principal\_id](#input\_webapp\_principal\_id) | Principal ID of the web app's managed identity, for blob data access. | `string` | n/a | yes |
 | <a name="input_webapp_storage_account_name"></a> [webapp\_storage\_account\_name](#input\_webapp\_storage\_account\_name) | Storage Account name | `string` | n/a | yes |
 | <a name="input_webapp_subnet_id"></a> [webapp\_subnet\_id](#input\_webapp\_subnet\_id) | The ID of the WebApp Subnet | `string` | n/a | yes |
 
