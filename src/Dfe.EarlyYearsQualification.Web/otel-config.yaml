@@ -17,6 +17,12 @@ processors:
       - action: upsert
         key: service.name
         value: "${env:OTEL_SERVICE_NAME}"
+        # Adding this to delete the otel attribute as this overwrites the deployment.environment.name attribute we set in AppSettings.
+        # This is because the default behaviour of the collector assumes the environment is Production unless ASPNETCORE_ENVIRONMENT or 
+        # DOTNET_ENVIRONMENT is set in the AppSettings
+      - action: delete
+        key: deployment.environment
+          
         
 
 exporters:
