@@ -10,8 +10,8 @@
     <ItemGroup>
         <PackageReference Include="contentful.csharp" Version="8.6.1" />
         <PackageReference Include="FuzzySharp" Version="2.0.2" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.14" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.14" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="11.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="11.0.0" />
     </ItemGroup>
 
 </Project>

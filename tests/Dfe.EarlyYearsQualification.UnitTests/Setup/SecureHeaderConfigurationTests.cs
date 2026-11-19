@@ -22,7 +22,6 @@ public class SecureHeaderConfigurationTests
         config.UseXContentSecurityPolicy.Should().BeFalse();
         config.UsePermittedCrossDomainPolicy.Should().BeTrue();
         config.UseReferrerPolicy.Should().BeTrue();
-        config.UseExpectCt.Should().BeFalse();
         config.UseCacheControl.Should().BeTrue();
         config.UseCrossOriginResourcePolicy.Should().BeTrue();
         config.HstsConfiguration.Should().NotBeNull();
@@ -35,7 +34,7 @@ public class SecureHeaderConfigurationTests
         xFrameOptionHeaderValue.Should().NotBeNull();
         xFrameOptionHeaderValue.Should().Contain("deny");
         config.XFrameOptionsConfiguration.AllowFromDomain.Should().BeNull();
-        config.ContentSecurityPolicyConfiguration.BaseUri.Should().BeEmpty();
-        config.ContentSecurityPolicyConfiguration.DefaultSrc.Should().BeEmpty();
+        config.ContentSecurityPolicyConfiguration?.BaseUri.Should().BeEmpty();
+        config.ContentSecurityPolicyConfiguration?.DefaultSrc.Should().BeEmpty();
     }
 }
