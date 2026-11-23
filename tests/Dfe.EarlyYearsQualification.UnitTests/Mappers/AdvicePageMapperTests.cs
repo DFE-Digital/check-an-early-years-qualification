@@ -130,4 +130,56 @@ public class AdvicePageMapperTests
               .BeEquivalentTo(cannotFindQualificationPage.BackButton, options => options.Excluding(x => x.Sys));
         result.UserType.Should().Be(expectedUserType);
     }
+
+    [TestMethod]
+    public async Task Map_StaticPageWithBackToTopButton_MapsText()
+    {
+        var page = new StaticPage
+                   {
+                       Heading = "Heading",
+                       Body = ContentfulContentHelper.Paragraph("Body"),
+                       BackToTopButton = new BackToTopButton { Text = "Back to top text" }
+                   };
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new StaticPageMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(page);
+
+        result.BackToTopButton.Should().NotBeNull();
+        result.BackToTopButton!.Text.Should().Be("Back to top text");
+    }
+
+    [TestMethod]
+    public async Task Map_StaticPageWithoutBackToTopButton_MapsToNull()
+    {
+        var page = new StaticPage
+                   {
+                       Heading = "Heading",
+                       Body = ContentfulContentHelper.Paragraph("Body")
+                   };
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new StaticPageMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(page);
+
+        result.BackToTopButton.Should().BeNull();
+    }
+
+    [TestMethod]
+    public async Task Map_CannotFindQualificationPageWithBackToTopButton_MapsText()
+    {
+        var page = new CannotFindQualificationPage
+                   {
+                       Heading = "Heading",
+                       Body = ContentfulContentHelper.Paragraph("Body"),
+                       BackToTopButton = new BackToTopButton { Text = "Back to top text" }
+                   };
+        var mockContentParser = new Mock<IGovUkContentParser>();
+        var mapper = new StaticPageMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(page);
+
+        result.BackToTopButton.Should().NotBeNull();
+        result.BackToTopButton!.Text.Should().Be("Back to top text");
+    }
 }

@@ -12,6 +12,13 @@
     }
 }
 
+@section AfterMainContent {
+    @if (Model.BackToTopButton is not null)
+    {
+        await Html.RenderPartialAsync("Partials/BackToTop", Model.BackToTopButton);
+    }
+}
+
 @{
     await Html.RenderPartialAsync("Partials/BaseStaticPage", Model);
 }

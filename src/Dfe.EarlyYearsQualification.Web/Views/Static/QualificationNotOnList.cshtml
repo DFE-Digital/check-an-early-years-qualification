@@ -10,6 +10,13 @@
     }
 }
 
+@section AfterMainContent {
+    @if (Model.BackToTopButton is not null)
+    {
+        await Html.RenderPartialAsync("Partials/BackToTop", Model.BackToTopButton);
+    }
+}
+
 @section Scripts
 {
     <script src="~/js/pages/qualification-not-on-list-page.js" asp-append-version="true"></script>

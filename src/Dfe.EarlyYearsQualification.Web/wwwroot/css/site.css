@@ -634,3 +634,17 @@ ol.govuk-list.govuk-list--number ol.govuk-list.govuk-list--number {
 .notification-banner--full-width .govuk-notification-banner__content > * {
     max-width: none;
 }
+
+.back-to-top {
+    text-align: left;
+}
+
+.back-to-top__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.back-to-top__icon {
+    flex-shrink: 0;
+}

@@ -19,6 +19,13 @@
     }
 }
 
+@section AfterMainContent {
+    @if (Model.BackToTopButton is not null)
+    {
+        await Html.RenderPartialAsync("Partials/BackToTop", Model.BackToTopButton);
+    }
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         @if (Model.NotificationBanner is not null)

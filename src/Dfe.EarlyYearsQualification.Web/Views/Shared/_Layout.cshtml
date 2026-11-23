@@ -114,6 +114,7 @@
     <main class="govuk-main-wrapper" role="main" id="main-content">
         @RenderBody()
     </main>
+    @await RenderSectionAsync("AfterMainContent", false)
 </div>
 
 @{
