@@ -116,6 +116,7 @@ jobs:
           WEBAPP_E2E_ACCESS_KEY: ${{ secrets.WEBAPP_E2E_ACCESS_KEY }}
           WEBAPP_TEAM_ACCESS_KEY: ${{ secrets.WEBAPP_TEAM_ACCESS_KEY }}
           DOWNLOAD_ENDPOINT_SECRET: ${{ secrets.DOWNLOAD_ENDPOINT_SECRET }}
+          SPLUNK_ACCESS_TOKEN: ${{ secrets.SPLUNK_ACCESS_TOKEN }}
         run: |
           echo "CACHE_ENDPOINT_SECRET"=${{ env.CACHE_ENDPOINT_SECRET }} >> $GITHUB_OUTPUT
           echo "CONTENTFUL_DELIVERY_API_KEY"=${{ env.CONTENTFUL_DELIVERY_API_KEY }} >> $GITHUB_OUTPUT
@@ -135,6 +136,7 @@ jobs:
           echo "WEBAPP_E2E_ACCESS_KEY"=${{ env.WEBAPP_E2E_ACCESS_KEY }} >> $GITHUB_OUTPUT
           echo "WEBAPP_TEAM_ACCESS_KEY"=${{ env.WEBAPP_TEAM_ACCESS_KEY }} >> $GITHUB_OUTPUT
           echo "DOWNLOAD_ENDPOINT_SECRET"=${{ env.DOWNLOAD_ENDPOINT_SECRET }} >> $GITHUB_OUTPUT
+          echo "SPLUNK_ACCESS_TOKEN"=${{ env.SPLUNK_ACCESS_TOKEN }} >> $GITHUB_OUTPUT
 
       # Generates Terraform input variables
       - name: Generate Terraform Variables
