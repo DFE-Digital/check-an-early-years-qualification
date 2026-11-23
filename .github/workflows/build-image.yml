@@ -64,6 +64,15 @@ jobs:
                 tags: |
                     ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}:${{ env.FORMATTED_BRANCH_NAME }}-${{ env.CHECKED_OUT_SHA }}
                 push: true
+                
+            - name: Build OTEL Image & Publish To GCR
+              uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+              with:
+                context: ./
+                file: ./src/Dfe.EarlyYearsQualification.Web/otel.Dockerfile
+                tags: |
+                  ${{ env.GITHUB_CONTAINER_REGISTRY }}/${{ env.ORG_NAME }}/${{ env.DOCKER_IMAGE }}/otel-collector:v1
+                push: true
 
             - name: Output Docker Image Tag
               id: image

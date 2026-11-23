@@ -20,6 +20,8 @@ jobs:
   terraform-formatting:  
     name: Check terraform file format
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Check out repository
