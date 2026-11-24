@@ -4,6 +4,7 @@
     ViewData["Title"] = Model.Heading;
     ViewData["OpenGraph"] = Model.OpenGraphData;
     ViewData["Indexable"] = Model.IsIndexable;
+    ViewData["HasBackToTop"] = Model.BackToTopButton is not null;
 }
 
 @section BeforeMainContent {

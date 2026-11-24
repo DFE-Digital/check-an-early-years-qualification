@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = Model.Heading;
+    ViewData["HasBackToTop"] = Model.BackToTopButton is not null;
 }
 
 @section BeforeMainContent {

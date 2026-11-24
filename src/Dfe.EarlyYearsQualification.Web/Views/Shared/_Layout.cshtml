@@ -111,7 +111,8 @@
 
 <div class="govuk-width-container">
     @await RenderSectionAsync("BeforeMainContent", false)
-    <main class="govuk-main-wrapper" role="main" id="main-content">
+    @* The back to top button follows <main>, so drop main's bottom padding to avoid doubling the gap above it *@
+    <main class="govuk-main-wrapper@(ViewData["HasBackToTop"] is true ?" govuk-!-padding-bottom-0" : "")" role="main" id="main-content">
         @RenderBody()
     </main>
     @await RenderSectionAsync("AfterMainContent", false)
