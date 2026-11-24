@@ -73,10 +73,9 @@ namespace Dfe.EarlyYearsQualification.Web
                 builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
             }
 
-            string? serviceName = builder.Configuration.GetValue<string>("Splunk:OTEL_SERVICE_NAME") ?? "early-years-qualification";
+            var serviceName = builder.Configuration.GetValue<string>("Splunk:OTEL_SERVICE_NAME") ?? "early-years-qualification";
             builder.Services.AddOpenTelemetry()
-            .ConfigureResource(resource => ResourceBuilder.CreateDefault()
-                        .AddService(serviceName: serviceName, serviceVersion: "1.0.0"))
+            .ConfigureResource(resource => resource.AddService(serviceName: serviceName, serviceVersion: "1.0.0"))
             .WithTracing(tracing => tracing
                 .AddAspNetCoreInstrumentation(options =>
                 {
@@ -84,15 +83,12 @@ namespace Dfe.EarlyYearsQualification.Web
                 })
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter())
-
             .WithMetrics(metrics => metrics
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddRuntimeInstrumentation()
                 .AddOtlpExporter());
-
-            builder.Services.AddOpenTelemetry();
-
+            
             bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
 
             if (!useMockContentful)
