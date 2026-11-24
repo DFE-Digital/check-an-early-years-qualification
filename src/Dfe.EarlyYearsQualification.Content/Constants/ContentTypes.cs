@@ -16,6 +16,7 @@ public static class ContentTypes
     public const string ConfirmQualificationPage = "confirmQualificationPage";
     public const string CheckAdditionalRequirementsPage = "checkAdditionalRequirementsPage";
     public const string ChallengePage = "challengePage";
+    public const string BackToTopButton = "backToTopButton";
     public const string CannotFindQualificationPage = "cannotFindQualificationPage";
     public const string CheckAdditionalRequirementsAnswerPage = "checkAdditionalRequirementsAnswerPage";
     public const string OpenGraphData = "openGraphData";

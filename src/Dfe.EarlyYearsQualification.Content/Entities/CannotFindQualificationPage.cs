@@ -15,4 +15,6 @@ public class CannotFindQualificationPage
     public NavigationLink? BackButton { get; init; }
 
     public bool IsPractitionerSpecificPage { get; init; }
+
+    public BackToTopButton? BackToTopButton { get; init; }
 }

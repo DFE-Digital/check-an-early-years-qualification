@@ -59,6 +59,7 @@ public class WebViewMapper(IGovUkContentParser contentParser) : IWebViewPageMapp
             SelectedNationFilterLabel = ExtractFilterLabel(nationFilters, webViewFilters.Nation),
             SelectedStartDateFilterLabel = ExtractFilterLabel(startDateFilters, webViewFilters.QualificationStartDate),
             IsProductionEnvironment = isProductionEnvironment,
+            BackToTopButton = BackToTopButtonMapper.Map(content.BackToTopButton),
             NotificationBanner = await MapNotificationBanner(content.NotificationBanner)
         };
         model.ShowingAllQualificationsLabel = GetShowingAllQualificationsLabel(model.HasFilters, qualifications.Count, content);

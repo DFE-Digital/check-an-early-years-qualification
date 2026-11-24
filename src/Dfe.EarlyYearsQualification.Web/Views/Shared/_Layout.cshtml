@@ -89,7 +89,7 @@
     }
 </head>
 
-<body>
+<body id="top">
 @{
     if (TrackingConfiguration.UseCookies && !string.IsNullOrEmpty(gtmTag))
     {
@@ -111,9 +111,10 @@
 
 <div class="govuk-width-container">
     @await RenderSectionAsync("BeforeMainContent", false)
-    <main class="govuk-main-wrapper" role="main" id="main-content">
+    <main class="govuk-main-wrapper@(ViewData["HasBackToTop"] is true ?" govuk-!-padding-bottom-0" : "")" role="main" id="main-content">
         @RenderBody()
     </main>
+    @await RenderSectionAsync("AfterMainContent", false)
 </div>
 
 @{

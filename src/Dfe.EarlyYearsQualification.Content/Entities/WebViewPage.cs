@@ -73,4 +73,6 @@ public class WebViewPage
     public OpenGraphData? OpenGraph { get; init; }
 
     public bool IsIndexable { get; init; }
+
+    public BackToTopButton? BackToTopButton { get; init; }
 }
