@@ -42,6 +42,8 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OwaspHeaders.Core.Extensions;
 using System.Diagnostics.CodeAnalysis;
+using OwaspHeaders.Core.Enums;
+using OwaspHeaders.Core.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Web
 {
@@ -245,10 +247,8 @@ namespace Dfe.EarlyYearsQualification.Web
             app.UseGovUkFrontend();
 
             app.UseMiddleware<HeadHandlingMiddleware>();
-
-            app.UseSecureHeadersMiddleware(
-                                    SecureHeaderConfiguration.CustomConfiguration(upgradeInsecureRequests)
-                                    );
+            
+            app.UseCustomSecureHeaders(upgradeInsecureRequests);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment() || useMockContentful)
