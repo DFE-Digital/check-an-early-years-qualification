@@ -11,4 +11,6 @@ public class StaticPageModel
     public OpenGraphDataModel? OpenGraphData { get; init; }
 
     public bool IsIndexable { get; init; }
+
+    public BackToTopButtonModel? BackToTopButton { get; init; }
 }

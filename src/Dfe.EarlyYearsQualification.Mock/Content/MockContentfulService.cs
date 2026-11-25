@@ -10,6 +10,8 @@ namespace Dfe.EarlyYearsQualification.Mock.Content;
 
 public class MockContentfulService : IContentService
 {
+    private static readonly BackToTopButton BackToTopButton = new() { Text = "Back to top" };
+
     private const string WhereWasTheQualificationAwardedPath = "/questions/where-was-the-qualification-awarded";
     private const string WhatLevelIsTheQualificationPath = "/questions/what-level-is-the-qualification";
     private const string QualificationsPath = "/select-a-qualification-to-check";
@@ -64,7 +66,8 @@ public class MockContentfulService : IContentService
 
                    StaticPages.QualificationNotOnTheList =>
                        await Task.FromResult(CreateStaticPage("Qualification not on the list",
-                                                              body, QualificationsPath)),
+                                                              body, QualificationsPath,
+                                                              backToTopButton: BackToTopButton)),
                    
                    StaticPages.Level7QualificationStartedBetweenSept2014AndAug2019 =>
                        await
@@ -90,7 +93,8 @@ public class MockContentfulService : IContentService
                    StaticPages.EarlyYearsQualificationLevels =>
                        await Task.FromResult(CreateStaticPage("Early years qualification levels",
                                                               body, WhatLevelIsTheQualificationPath,
-                                                              backButtonText: "Back to what level is the qualification")),
+                                                              backButtonText: "Back to what level is the qualification",
+                                                              backToTopButton: BackToTopButton)),
                    _ => null
                };
     }
@@ -693,6 +697,7 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
+                                             BackToTopButton = BackToTopButton,
                                              IsPractitionerSpecificPage = true
                                          }),
                     3 => Task.FromResult(new CannotFindQualificationPage
@@ -702,6 +707,7 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-14",
                                              ToWhichYear = "Aug-19",
                                              BackButton = backButton,
+                                             BackToTopButton = BackToTopButton,
                                              IsPractitionerSpecificPage = false
                                          }),
                     4 => Task.FromResult(new CannotFindQualificationPage
@@ -711,6 +717,7 @@ public class MockContentfulService : IContentService
                                              FromWhichYear = "Sep-19",
                                              ToWhichYear = string.Empty,
                                              BackButton = backButton,
+                                             BackToTopButton = BackToTopButton,
                                              IsPractitionerSpecificPage = false
                                          }),
                     _ => Task.FromResult<CannotFindQualificationPage>(null!)
@@ -1374,6 +1381,7 @@ public class MockContentfulService : IContentService
             new WebViewPage
             {
                 IsIndexable = true,
+                BackToTopButton = BackToTopButton,
                 Heading = "Early Years Qualification List",
                 DownloadButtonText = "Download qualification list",
                 DownloadHeading = "Download the early years qualification list",
@@ -1712,7 +1720,8 @@ public class MockContentfulService : IContentService
     private static StaticPage CreateStaticPage(string heading, Document body, string backButtonUrl,
                                                OpenGraphData? openGraphData = null, 
                                                string backButtonText = "TEST", 
-                                               bool isIndexable = false)
+                                               bool isIndexable = false,
+                                               BackToTopButton? backToTopButton = null)
     {
         return new StaticPage
                {
@@ -1725,7 +1734,8 @@ public class MockContentfulService : IContentService
                                     OpenInNewTab = false
                                 },
                    OpenGraph = openGraphData,
-                   IsIndexable = isIndexable
+                   IsIndexable = isIndexable,
+                   BackToTopButton = backToTopButton
                };
     }
 }

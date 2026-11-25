@@ -201,6 +201,20 @@ public class WebViewMapperTests
     }
 
     [TestMethod]
+    public async Task Map_MapsBackToTopButton()
+    {
+        var content = CreateContent();
+        var mockContentParser = CreateContentParser();
+
+        var mapper = new WebViewMapper(mockContentParser.Object);
+
+        var result = await mapper.Map(content, new WebViewFilters(), [], true);
+
+        result.BackToTopButton.Should().NotBeNull();
+        result.BackToTopButton!.Text.Should().Be("Back to top text");
+    }
+
+    [TestMethod]
     public async Task Map_WithNotificationBanner_MapsNotificationBanner()
     {
         var notificationBanner = new NotificationBanner
@@ -228,6 +242,7 @@ public class WebViewMapperTests
                {
                    IsIndexable = isIndexable,
                    NotificationBanner = notificationBanner,
+                   BackToTopButton = new BackToTopButton { Text = "Back to top text" },
                    BackButton = new NavigationLink
                                 {
                                     DisplayText = "Back",

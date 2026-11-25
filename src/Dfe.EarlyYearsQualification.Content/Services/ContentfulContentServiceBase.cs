@@ -30,6 +30,7 @@ public abstract class ContentfulContentServiceBase
               { typeof(ConfirmQualificationPage), ContentTypes.ConfirmQualificationPage },
               { typeof(CheckAdditionalRequirementsPage), ContentTypes.CheckAdditionalRequirementsPage },
               { typeof(ChallengePage), ContentTypes.ChallengePage },
+              { typeof(BackToTopButton), ContentTypes.BackToTopButton },
               { typeof(CannotFindQualificationPage), ContentTypes.CannotFindQualificationPage },
               { typeof(CheckAdditionalRequirementsAnswerPage), ContentTypes.CheckAdditionalRequirementsAnswerPage },
               { typeof(OpenGraphData), ContentTypes.OpenGraphData },
