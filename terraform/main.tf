@@ -95,7 +95,9 @@ module "network" {
   log_analytics_workspace_id                = module.monitor.logs_id
   download_endpoint_secret                  = var.download_endpoint_secret
   splunk_access_token                       = var.splunk_access_token
+  github_runner_ip                          = var.github_runner_ip
   depends_on                                = [module.monitor]
+
 }
 
 # Create storage account for web app
@@ -105,10 +107,12 @@ module "storage" {
   location                    = var.azure_region
   resource_group              = azurerm_resource_group.rg.name
   webapp_storage_account_name = var.webapp_storage_account_name
-  kv_id                       = module.network.kv_id
-  webapp_subnet_id            = module.network.webapp_subnet_id
-  tags                        = local.common_tags
-  logs_id                     = module.monitor.logs_id
+  #kv_id                       = module.network.kv_id
+  kv_id               = module.network.rbackv_id
+  webapp_subnet_id    = module.network.webapp_subnet_id
+  tags                = local.common_tags
+  logs_id             = module.monitor.logs_id
+  webapp_principal_id = module.webapp.webapp_principal_id
 }
 
 # Create Redis cache
@@ -159,20 +163,27 @@ module "webapp" {
   insights_connection_string                            = module.monitor.insights_connection_string
   agw_subnet_id                                         = module.network.agw_subnet_id
   agw_pip_id                                            = module.network.agw_pip_id
-  kv_id                                                 = module.network.kv_id
-  kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
-  kv_service_gov_uk_cert_versionless_secret_id          = module.network.kv_service_gov_uk_cert_versionless_secret_id
-  kv_mi_id                                              = module.network.kv_mi_id
-  redis_cache_id                                        = module.cache.redis_cache_id
-  redis_cache_name                                      = module.cache.redis_cache_name
-  cache_endpoint_secret                                 = var.cache_endpoint_secret
-  splunk_port                                           = var.splunk_port
-  splunk_realm                                          = var.splunk_realm
-  splunk_access_token                                   = var.splunk_access_token
-  otel_service_name                                     = var.otel_service_name
-  otel_config_path                                      = "${path.root}/../src/Dfe.EarlyYearsQualification.Web/otel-config.yaml"
-  tags                                                  = local.common_tags
-  depends_on                                            = [module.network]
+  #kv_id                                                 = module.network.kv_id
+  kv_id     = module.network.rbackv_id
+  rbackv_id = module.network.rbackv_id
+
+  #kv_service_gov_uk_cert_secret_id                      = module.network.kv_service_gov_uk_cert_secret_id
+  #kv_service_gov_uk_cert_versionless_secret_id          = module.network.kv_service_gov_uk_cert_versionless_secret_id
+  #kv_mi_id                                              = module.network.kv_mi_id
+  #kv_service_gov_uk_cert_secret_id             = module.network.rbackv.kv_service_gov_uk_cert_secret_id
+  kv_service_gov_uk_cert_secret_id             = module.network.kv_service_gov_uk_cert_secret_id
+  kv_service_gov_uk_cert_versionless_secret_id = module.network.kv_service_gov_uk_cert_versionless_secret_id
+  kv_mi_id                                     = module.network.kv_mi_id
+  redis_cache_id                               = module.cache.redis_cache_id
+  redis_cache_name                             = module.cache.redis_cache_name
+  cache_endpoint_secret                        = var.cache_endpoint_secret
+  splunk_port                                  = var.splunk_port
+  splunk_realm                                 = var.splunk_realm
+  splunk_access_token                          = var.splunk_access_token
+  otel_service_name                            = var.otel_service_name
+  otel_config_path                             = "${path.root}/../src/Dfe.EarlyYearsQualification.Web/otel-config.yaml"
+  tags                                         = local.common_tags
+  depends_on                                   = [module.network]
 }
 
 # Create service alerts

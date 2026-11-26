@@ -269,3 +269,8 @@ variable "otel_resource_attributes" {
   description = "Attributes used by the otel collector for the Splunk Integration"
   type        = string
 }
+
+variable "github_runner_ip" {
+  description = "Public IP address of the GitHub Actions runner"
+  type        = string
+}
