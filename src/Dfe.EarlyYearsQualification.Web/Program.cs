@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Dfe.EarlyYearsQualification.Caching;
 using Dfe.EarlyYearsQualification.Caching.Interfaces;
+using Dfe.EarlyYearsQualification.Content.Download;
 using Dfe.EarlyYearsQualification.Content.RichTextParsing;
 using Dfe.EarlyYearsQualification.Content.Services;
 using Dfe.EarlyYearsQualification.Content.Services.Interfaces;
@@ -24,6 +25,7 @@ using Dfe.EarlyYearsQualification.Web.Services.Notifications;
 using Dfe.EarlyYearsQualification.Web.Services.Notifications.Options;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationDetails;
 using Dfe.EarlyYearsQualification.Web.Services.QualificationSearch;
+using Dfe.EarlyYearsQualification.Web.Services.Questions;
 using Dfe.EarlyYearsQualification.Web.Services.ServiceCollection;
 using Dfe.EarlyYearsQualification.Web.Services.UserJourneyCookieService;
 using Dfe.EarlyYearsQualification.Web.Services.WebView;
@@ -35,10 +37,13 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Notify.Client;
 using Notify.Interfaces;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using OwaspHeaders.Core.Extensions;
 using System.Diagnostics.CodeAnalysis;
-using Dfe.EarlyYearsQualification.Content.Download;
-using Dfe.EarlyYearsQualification.Web.Services.Questions;
+using OwaspHeaders.Core.Enums;
+using OwaspHeaders.Core.Helpers;
 
 namespace Dfe.EarlyYearsQualification.Web
 {
@@ -70,6 +75,22 @@ namespace Dfe.EarlyYearsQualification.Web
                 builder.Services.AddApplicationInsightsTelemetry(new ApplicationInsightsServiceOptions());
             }
 
+            var serviceName = builder.Configuration.GetValue<string>("Splunk:OTEL_SERVICE_NAME") ?? "early-years-qualification";
+            builder.Services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService(serviceName: serviceName, serviceVersion: "1.0.0"))
+            .WithTracing(tracing => tracing
+                .AddAspNetCoreInstrumentation(options =>
+                {
+                    options.Filter = context => !context.Request.Path.Value!.Contains("/health");
+                })
+                .AddHttpClientInstrumentation()
+                .AddOtlpExporter())
+            .WithMetrics(metrics => metrics
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddRuntimeInstrumentation()
+                .AddOtlpExporter());
+            
             bool upgradeInsecureRequests = (builder.Configuration.GetValue<bool?>("UpgradeInsecureRequests") ?? true) || !builder.Environment.IsDevelopment();
 
             if (!useMockContentful)
@@ -226,10 +247,8 @@ namespace Dfe.EarlyYearsQualification.Web
             app.UseGovUkFrontend();
 
             app.UseMiddleware<HeadHandlingMiddleware>();
-
-            app.UseSecureHeadersMiddleware(
-                                    SecureHeaderConfiguration.CustomConfiguration(upgradeInsecureRequests)
-                                    );
+            
+            app.UseCustomSecureHeaders(upgradeInsecureRequests);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment() || useMockContentful)

@@ -2,11 +2,19 @@
 
 @{
     ViewData["Title"] = Model.Heading;
+    ViewData["HasBackToTop"] = Model.BackToTopButton is not null;
 }
 
 @section BeforeMainContent {
     @{
         await Html.RenderPartialAsync("Partials/BackButton", Model.BackButton);
+    }
+}
+
+@section AfterMainContent {
+    @if (Model.BackToTopButton is not null)
+    {
+        await Html.RenderPartialAsync("Partials/BackToTop", Model.BackToTopButton);
     }
 }
 

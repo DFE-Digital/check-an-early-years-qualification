@@ -107,3 +107,8 @@ variable "github_runner_ip" {
   description = "Public IP address of the GitHub Actions runner"
   type        = string
 }
+variable "splunk_access_token" {
+  description = "Secret value to be supplied for the Splunk Access Token"
+  type        = string
+  sensitive   = true
+}
